@@ -4,9 +4,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
-    private Soldier board[7][7];
+    private Soldier board[][];
 
     public Board() {
+        board = new Soldier[7][7];
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 board[i][j] = null;

@@ -4,10 +4,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Game {
-    private Player players[2];
+    private Player players[];
     private Board board;
 
     public Game() {
+        players = new Player[2];
         players[0] = new Player(); //falta pasarle mazo y la vida del castillo
         players[1] = new Player();
         board = new Board();
