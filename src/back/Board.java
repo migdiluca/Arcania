@@ -58,7 +58,7 @@ public class Board {
 
     public void moveSoldier(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
-        board[origin.x][origin.y] == null;
+        board[origin.x][origin.y] = null;
     }
 
     /* En el tablero no me puedo fijar si son enemigos, podriamos hacer que board sea una matriz de
