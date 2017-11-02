@@ -1,4 +1,4 @@
-package TPE;
+package back;
 
 public interface MagicCard {
 

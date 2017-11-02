@@ -1,7 +1,7 @@
-package TPE.MagicCards;
+package back.MagicCards;
 
-import TPE.Magic;
-import TPE.Monster;
+import back.Magic;
+import back.Monster;
 
 public class DescargaElectrica extends Magic {
     public DescargaElectrica(String name, String description){

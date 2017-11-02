@@ -1,4 +1,4 @@
-package TPE;
+package back;
 
 public abstract class Magic extends Card {
     private String description;
