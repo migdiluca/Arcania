@@ -4,17 +4,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
-    private Soldier board[][];
+    private Monster board[][];
 
     public Board() {
-        board = new Soldier[7][7];
+        board = new Monster[7][7];
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 board[i][j] = null;
     }
 
-    public void addSoldier(Soldier soldier, Point p) {
-        board[ p.x][p.y] = soldier;
+    public void addMonster(Monster Monster, Point p) {
+        board[ p.x][p.y] = Monster;
     }
 
     // Los dos no ven su equipo del lado de abajo no?
@@ -41,7 +41,7 @@ public class Board {
                 if (j != 0 || i != 0) {
                     if (isPointValid(p.x + i, p.y + j)) {
                         if (j != 0 && i != 0) {
-                            if (board[p.x][p.y] instanceof heroe) {
+                            if (board[p.x][p.y] instanceof Heroe) {
                                 Point posible = new Point(p.x + i, p.y + j);
                                 posibleMovements.add(posible);
                             }
@@ -56,14 +56,14 @@ public class Board {
         return posibleMovements;
     }
 
-    public void moveSoldier(Point origin, Point dest) {
+    public void moveMonster(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
     }
 
     /* En el tablero no me puedo fijar si son enemigos, podriamos hacer que board sea una matriz de
     * un arreglo que tenga el soldado y el jugador*/
-
+/*
     private Point searchForEnemy(int x, int y) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -82,5 +82,5 @@ public class Board {
                 }
             }
         }
-    }
+    }*/
 }

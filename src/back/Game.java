@@ -9,8 +9,8 @@ public class Game {
 
     public Game() {
         players = new Player[2];
-        players[0] = new Player(); //falta pasarle mazo y la vida del castillo
-        players[1] = new Player();
+       /* players[0] = new Player();
+        players[1] = new Player();*/
         board = new Board();
     }
 
@@ -24,5 +24,6 @@ public class Game {
             return 0;
         if(players[1].castle.getLife() <= 0 || !players[1].canPlay())
             return 1;
+        return -1;
     }
 }

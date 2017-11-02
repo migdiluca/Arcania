@@ -26,9 +26,7 @@ public abstract class Monster extends Card {
    }
 
    public Point getPosition(){
-       Point p;
-       p.x = positionX;
-       p.y = positionY;
+       return new Point(positionX, positionY);
    }
 
 
