@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Game {
     private Soldier[7][7] board;
     private Player[2] players;
-    /* * test * / */
+    /* * testttt * / */
 
     public static final int castleLife = 1000;
 
