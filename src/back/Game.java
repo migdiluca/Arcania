@@ -14,7 +14,7 @@ public class Game {
     }
 
     private void removeDead(Soldier soldier) {
-        
+
     }
 
     public int endTurn() {
