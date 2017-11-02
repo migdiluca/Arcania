@@ -14,7 +14,7 @@ public class Board {
     }
 
     public void addSoldier(Soldier soldier, Point p) {
-        board[p.getX()][p.getY()] = soldier;
+        board[ p.x][p.y] = soldier;
     }
 
     // Los dos no ven su equipo del lado de abajo no?
@@ -34,19 +34,19 @@ public class Board {
 
     public ArrayList<Point> canMove(Point p) {
         ArrayList<Point> posibleMovements = new ArrayList<Point>();
-        if (board[p.getX()][p.getY()] == null)
+        if (board[p.x][p.y] == null)
             return posibleMovements;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (j != 0 || i != 0) {
-                    if (isPointValid(p.getX() + i, p.getY() + j)) {
+                    if (isPointValid(p.x + i, p.y + j)) {
                         if (j != 0 && i != 0) {
-                            if (board[p.getX()][p.getY()] instanceof heroe) {
-                                Point posible = new Point(p.getX() + i, p.getY() + j);
+                            if (board[p.x][p.y] instanceof heroe) {
+                                Point posible = new Point(p.x + i, p.y + j);
                                 posibleMovements.add(posible);
                             }
                         } else {
-                            Point posible = new Point(p.getX() + i, p.getY() + j);
+                            Point posible = new Point(p.x + i, p.y + j);
                             posibleMovements.add(posible);
                         }
                     }
@@ -57,8 +57,8 @@ public class Board {
     }
 
     public void moveSoldier(Point origin, Point dest) {
-        board[dest.getX()][dest.getY()] = board[origin.getX()][origin.getY()];
-        board[origin.getX()][origin.getY()] == null;
+        board[dest.x][dest.y] = board[origin.x][origin.y];
+        board[origin.x][origin.y] == null;
     }
 
     /* En el tablero no me puedo fijar si son enemigos, podriamos hacer que board sea una matriz de
@@ -67,7 +67,7 @@ public class Board {
     private Point searchForEnemy(int x, int y) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                if ((i = 0 || j = 0) && board[x+i][y+j] != null) {
+                if ((i == 0 || j == 0) && board[x+i][y+j] != null) {
                     if(board[x][y] == )
                 }
             }
