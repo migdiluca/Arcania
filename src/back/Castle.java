@@ -6,7 +6,6 @@ public class Castle {
     public Castle(int life) {
         this.life = life;
     }
-
     public void getAttacked(int damage) {
         life -= damage;
     }
