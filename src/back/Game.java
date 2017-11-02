@@ -1,7 +1,7 @@
 package back;
 
 import java.awt.*;
-import java.util.arraylist;
+import java.util.ArrayList;
 
 public class Game {
     private Player players[2];
