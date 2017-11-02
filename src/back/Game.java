@@ -2,10 +2,12 @@ package back;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Game {
     private Player players[];
     private Board board;
+    private Stack<Card> allCards;
 
     public Game() {
         players = new Player[2];
@@ -14,7 +16,7 @@ public class Game {
         board = new Board();
     }
 
-    private void removeDead(Soldier soldier) {
+    private void removeDead(Monster monster) {
 
     }
 

@@ -6,7 +6,7 @@ import java.util.Stack;
 public class Player {
     private Stack<Card> deck;
     private ArrayList<Card> hand;
-    protected ArrayList<Card> aliveCards;
+    protected ArrayList<Monster> aliveCards;
     protected Castle castle;
 
     public Player(ArrayList<Card> cards, int castleLife) {
