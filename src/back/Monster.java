@@ -58,6 +58,10 @@ public abstract class Monster extends Card {
         m.getAttacked(this.attack - m.getDefense());
     }
 
+    public void attackCastle(Castle c){
+        c.getAttacked(this.attack);
+    }
+
     private void getAttacked(int damage) {
         setHealth(this.health -= damage);
     }

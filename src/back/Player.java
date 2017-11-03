@@ -3,7 +3,7 @@ package back;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Player {
+public class Player extends ArrayList<Monster> {
     private Stack<Card> deck;
     private ArrayList<Card> hand;
     protected ArrayList<Monster> aliveCards;
