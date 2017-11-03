@@ -14,7 +14,15 @@ public class Player extends ArrayList<Monster> {
         castle = new Castle(castleLife);
     }
 
-    public boolean takeCard() {
+    public boolean playCard(Monster m) {
+        if(hand.remove(m)){
+            takeCard();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean takeCard() {
         if (deck.empty())
             return false;
         hand.add(deck.pop());

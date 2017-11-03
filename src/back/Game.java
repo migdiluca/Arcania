@@ -37,8 +37,9 @@ public class Game {
     }
 
     public void addMonster(Monster m, Point p) {
-        board[ p.x][p.y] = m;
-        //falta remover el mounstro de la mano del jugador
+        board[p.x][p.y] = m;
+        if(!players[0].playCard(m))
+            players[1].playCard(m);
     }
 
     // Los dos no ven su equipo del lado de abajo no?
