@@ -36,8 +36,9 @@ public class Game {
         return -1;
     }
 
-    public void addMonster(Monster Monster, Point p) {
-        board[ p.x][p.y] = Monster;
+    public void addMonster(Monster m, Point p) {
+        board[ p.x][p.y] = m;
+        //falta remover el mounstro de la mano del jugador
     }
 
     // Los dos no ven su equipo del lado de abajo no?
@@ -101,6 +102,7 @@ public class Game {
                     return new Point(i,j);
             }
         }
+        return null; //esto es medio turbio, lo hice porque me pide un return, pero al mounstro siempre lo encuentra
     }
 
     private void attack(ArrayList<Monster> monsters) {
