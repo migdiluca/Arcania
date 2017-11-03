@@ -3,7 +3,7 @@ package back;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Player {
+public class Player extends ArrayList<Monster> {
     private Stack<Card> deck;
     private ArrayList<Card> hand;
     protected ArrayList<Monster> aliveCards;
@@ -14,7 +14,15 @@ public class Player {
         castle = new Castle(castleLife);
     }
 
-    public boolean takeCard() {
+    public boolean playCard(Monster m) {
+        if(hand.remove(m)){
+            takeCard();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean takeCard() {
         if (deck.empty())
             return false;
         hand.add(deck.pop());
