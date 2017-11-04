@@ -1,6 +1,7 @@
 package back;
 
 import java.awt.*;
+import java.security.acl.Owner;
 
 public abstract class Monster extends Card {
     private int attack;
@@ -9,6 +10,7 @@ public abstract class Monster extends Card {
     private int agility;
     private int positionX;
     private int positionY;
+    private Player owner;
 
     public Monster(String name, int attack, int health, int defense, int agility){
         super(name);
@@ -44,6 +46,9 @@ public abstract class Monster extends Card {
         return health;
     }
 
+    public boolean isAlive() {
+        return health > 0 ? true : false;
+    }
 
     public int getDefense() {
         return defense;
@@ -60,6 +65,14 @@ public abstract class Monster extends Card {
 
     public void attackCastle(Castle c){
         c.getAttacked(this.attack);
+    }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public int getOwnerNumber() {
+        return owner.getPlayerNumber();
     }
 
     private void getAttacked(int damage) {
