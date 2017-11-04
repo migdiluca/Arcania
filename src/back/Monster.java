@@ -1,7 +1,6 @@
 package back;
 
 import java.awt.*;
-import java.security.acl.Owner;
 
 public abstract class Monster extends Card {
     private int attack;
