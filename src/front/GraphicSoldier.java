@@ -1,6 +1,7 @@
 package front;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
@@ -15,6 +16,7 @@ public class GraphicSoldier {
 
     private back.Soldier soldier;
     private Image sprite;
+    private ImageView imageView;
     private int frame = 0;
     private int moveDir = 0;
 
@@ -24,8 +26,8 @@ public class GraphicSoldier {
         this.soldier = s;
         this.mine = mine;
         //this.sprite = new Image("graphics/soldiers/" + soldier.GetID + ".png");
-        if(mine == true) this.sprite = new Image("graphics/soldiers/darkknight.png");
-        if(mine == false) this.sprite = new Image("graphics/soldiers/fausto.png");
+        if(mine) this.sprite = new Image("graphics/soldiers/darkknight.png");
+        if(!mine) this.sprite = new Image("graphics/soldiers/fausto.png");
     }
 
     void move(Point dir) {
@@ -73,8 +75,8 @@ public class GraphicSoldier {
                 xCoord = p.y*CELLWIDTH;
                 yCoord = p.x*CELLHEIGHT;
                 xSprite = 0;
-                if(mine == true) ySprite = SPRITESIZE;
-                if(mine == false) ySprite = 0;
+                if(mine) ySprite = SPRITESIZE;
+                if(!mine) ySprite = 0;
                 break;
             case 1:
                 xCoord = p.y*CELLWIDTH;
@@ -93,7 +95,7 @@ public class GraphicSoldier {
                 break;
             case 4:
                 xCoord = (p.y - 1) * CELLWIDTH + (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = (p.x - 1) * CELLHEIGHT + (CELLHEIGHT*frame)/ANIMFPS;;
+                yCoord = (p.x - 1) * CELLHEIGHT + (CELLHEIGHT*frame)/ANIMFPS;
                 ySprite = 0;
                 break;
             case 5:

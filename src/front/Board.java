@@ -13,10 +13,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.awt.*;
 import java.util.*;
@@ -45,8 +42,13 @@ public class Board extends HBox {
 
     private HashSet<GraphicSoldier> gSoldiers = new HashSet<>();
     private Tile[][] tiles = new Tile[NUMROWS][NUMCOLS];
-    private Canvas canvas;
-    private GraphicsContext graphicsContext;
+
+    private Canvas backgroundCanvas;
+    private GraphicsContext backgroundGC;
+    private Canvas charCanvas;
+    private GraphicsContext charGC;
+
+    private Pane pBoard;
     private Tile auxTile = null;
 
     private VBox createMenu() {
@@ -138,9 +140,10 @@ public class Board extends HBox {
     }
 
     Board() {
-        canvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
-
-        graphicsContext = canvas.getGraphicsContext2D();
+        backgroundCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
+        backgroundGC = backgroundCanvas.getGraphicsContext2D();
+        charCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
+        charGC = charCanvas.getGraphicsContext2D();
 
         for (int i = 0; i < NUMROWS; i++) {
             for (int j = 0; j < NUMCOLS; j++) {
@@ -148,13 +151,19 @@ public class Board extends HBox {
             }
         }
 
-        tiles[2][2].setWhosHere(new GraphicSoldier(new back.Soldier(0), true));
+        pBoard = new Pane();
+        pBoard.setMaxSize(700, 700);
+        pBoard.setMinSize(700, 700);
 
+        pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
+
+
+        tiles[2][2].setWhosHere(new GraphicSoldier(new back.Soldier(0), true));
         tiles[5][5].setWhosHere(new GraphicSoldier(new back.Soldier(1), false));
 
-        getChildren().addAll(canvas, createMenu());
+        getChildren().addAll(pBoard, createMenu());
         //setStyle("-fx-background-color: #5490ff");
-        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Point point = getPointFromCoordinates((int) event.getX(), (int) event.getY());
@@ -202,11 +211,13 @@ public class Board extends HBox {
     private int frame = 0;
 
     private void draw() {
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        backgroundGC.clearRect(0, 0, backgroundCanvas.getWidth(), backgroundCanvas.getHeight());
+        charGC.clearRect(0, 0, charCanvas.getWidth(), charCanvas.getHeight());
+
 
         for (int i = 0; i < NUMROWS; i++) {
             for (int j = 0; j < NUMCOLS; j++) {
-                tiles[i][j].draw(graphicsContext);
+                tiles[i][j].draw(backgroundGC, charGC);
             }
         }
     }

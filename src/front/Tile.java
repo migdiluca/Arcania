@@ -49,7 +49,7 @@ public class Tile {
 
     public ArrayList<Point> getAvailableMovements() {
         //back.Game.canMove(getPos());
-        ArrayList<Point> list = new ArrayList<Point>();
+        ArrayList<Point> list = new ArrayList<>();
         list.add(new Point(row - 1, col));
         list.add(new Point(row - 1, col - 1));
         list.add(new Point(row, col - 1));
@@ -65,7 +65,7 @@ public class Tile {
         whosHere.move(dir);
     }
 
-    void draw(GraphicsContext gc) {
+    void draw(GraphicsContext backgroundGC, GraphicsContext charGC) {
         Color color = Color.TRANSPARENT;
         switch (status) {
             case INACTIVE: color = Color.TRANSPARENT; break;
@@ -73,16 +73,16 @@ public class Tile {
             case SELECTABLE: color = Color.rgb(0, 17, 170, 0.502); break;
         }
 
-        gc.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
+        backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
 
-        gc.setFill(color);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(2);
-        gc.fillRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
-        gc.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
+        backgroundGC.setFill(color);
+        backgroundGC.setStroke(Color.BLACK);
+        backgroundGC.setLineWidth(2);
+        backgroundGC.fillRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
+        backgroundGC.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
 
         if (whosHere != null) {
-            whosHere.drawMyself(getPos(), gc);
+            whosHere.drawMyself(getPos(), charGC);
         }
     }
 }
