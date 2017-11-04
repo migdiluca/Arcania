@@ -16,23 +16,25 @@ public class Player extends ArrayList<Monster> {
         this.playerNumber = playerNumber;
     }
 
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    public boolean playCard(Monster m) {
-        if(hand.remove(m)){
-            takeCard();
-            return true;
-        }
-        return false;
-    }
-
     private boolean takeCard() {
         if (deck.empty())
             return false;
         hand.add(deck.pop());
         return true;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */
+    public boolean playCard(Monster m) {
+        if(hand.remove(m)){
+            aliveCards.add(m);
+            takeCard();
+            return true;
+        }
+        return false;
     }
 
     public boolean canPlay() {

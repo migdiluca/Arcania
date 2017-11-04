@@ -10,9 +10,6 @@ public class Game {
     protected Board board; //esta protected para que directamente puedan hacer game.board.getPoints
                             // para tomar puntos de spawn etc..
     private int turn;
-    
-    protected static final int SPAWN_PLAYER1 = 0;
-    private static final int SPAWN_PLAYER6 = 6;
 
     public Game() {
         turn = players[0].getPlayerNumber();
@@ -28,6 +25,9 @@ public class Game {
         board.removeDeadFromBoard(m);
     }
 
+    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
+    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
+     */
     private void performAttack(ArrayList<Monster> monsters) {
         for (Monster m : monsters) {
             Point attackerPosition = board.searchMonster(m);
@@ -52,15 +52,18 @@ public class Game {
             players[1].playCard(m);
     }
 
+    /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
     public int endTurn() {
         performAttack(players[turn].aliveCards);
         int other;
         other = turn == players[0].getPlayerNumber() ? players[1].getPlayerNumber() : players[0].getPlayerNumber();
         performAttack(players[other].aliveCards);
+
         if(players[other].castle.getLife() <= 0 || !players[other].canPlay())
-            return 0;
+            return turn;
         if(players[turn].castle.getLife() <= 0 || !players[turn].canPlay())
-            return 1;
+            return other;
+
         turn = other;
         return -1;
     }
