@@ -76,8 +76,10 @@ public class Board {
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if (!((z.x != p.x && z.y != p.x && getMonster(p) instanceof Heroe) || getMonster(z) == null))
+            if ((z.x != p.x && z.y != p.x && !(getMonster(p) instanceof Heroe)) || getMonster(z) != null) {
                 iterator.remove();
+                System.out.println("remove diagonal:" + z);
+            }
         }
 
         int closerToBase = getMonster(p).getOwnerNumber() == 0 ? -1 : 1;
