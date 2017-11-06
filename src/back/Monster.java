@@ -11,12 +11,13 @@ public class Monster extends Card {
     private int positionY;
     private Player owner;
 
-    public Monster(String name, int attack, int health, int defense, int agility){
+    public Monster(String name, int attack, int health, int defense, int agility, Player owner){
         super(name);
         this.attack = attack;
         this.agility = agility;
         this.health = health;
         this.defense = defense;
+        this.owner = owner;
     }
 
 
