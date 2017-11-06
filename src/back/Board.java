@@ -2,6 +2,7 @@ package back;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Board {
     private Monster board[][];
@@ -67,9 +68,11 @@ public class Board {
      */
     public ArrayList<Point> validMovePoints(Point p) {
         ArrayList<Point> validMovePoints = nearbyPoints(p);
-        for(Point z : validMovePoints) {
+        Iterator<Point> iterator = validMovePoints.iterator();
+        while(iterator.hasNext()) {
+            Point z = iterator.next();
             if (!((z.x != p.x && z.y != p.x && getMonster(p) instanceof Heroe)) || getMonster(z) != null)
-                validMovePoints.remove(z);
+                iterator.remove();
         }
 
         int closerToBase = getMonster(p).getOwnerNumber() == 0 ? -1 : 1;
