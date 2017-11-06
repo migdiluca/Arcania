@@ -19,7 +19,8 @@ public class Board {
         return false;
     }
 
-    private Monster getMonster(Point p) {
+    /*PRIVATE*/
+    public Monster getMonster(Point p) {
         return board[p.x][p.y];
     }
 
@@ -44,8 +45,9 @@ public class Board {
         return nearbyPoints;
     }
 
+    /*PRIVATE*/
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
-    private ArrayList<Point> validAttackPoints(Point p) {
+    public ArrayList<Point> validAttackPoints(Point p) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
         for(Point z : validAttackPoints) {
             if((z.x != p.x && z.y != p.y) || !areEnemies(getMonster(p), getMonster(z)))
