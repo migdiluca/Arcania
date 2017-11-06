@@ -48,6 +48,7 @@ public class Tile {
     }
 
     public ArrayList<Point> getAvailableMovements() {
+
         //back.Game.canMove(getPos());
         ArrayList<Point> list = new ArrayList<>();
         list.add(new Point(row - 1, col));

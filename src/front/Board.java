@@ -29,6 +29,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.omg.PortableInterceptor.INACTIVE;
+import sun.font.GraphicComponent;
 
 import static front.Tile.INACTIVE;
 import static front.Tile.ACTIVE;
@@ -50,6 +51,8 @@ public class Board extends HBox {
 
     private Pane pBoard;
     private Tile auxTile = null;
+
+    public back.Board b;
 
     private VBox createMenu() {
         VBox v = new VBox();
@@ -83,26 +86,37 @@ public class Board extends HBox {
         dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
 
         ImageView mano[] = new ImageView[30];
+        Canvas hand[] = new Canvas[30];
+        GraphicsContext gc;
+
         for (int i = 0; i < 30; i++) {
-            mano[i] = new ImageView();
+
+            hand[i] = new Canvas(168,155);
+
+            gc = hand[i].getGraphicsContext2D();
+            gc.drawImage(new Image("graphics/ui/MARCO.png"), 0,0);
+            gc.drawImage(new Image("graphics/ui/BANDERA.png"), 18,0);
+
+            /*mano[i] = new ImageView();
             mano[i].setFitHeight(100);
             mano[i].setFitWidth(100);
             mano[i].setImage(new Image("carta.png"));
-            h.getChildren().add(mano[i]);
+            h.getChildren().add(mano[i]);*/
+            h.getChildren().add(hand[i]);
 
-            mano[i].setOnMouseMoved(new EventHandler<MouseEvent>() {
+            hand[i].setOnMouseMoved(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
 
-                    ImageView e = (ImageView) event.getSource();
+                    //ImageView e = (ImageView) event.getSource();
 
                     titleHelp.setText("Caballero Oscuro");
                     infoHelp.setText("Guerrero de descomunal fuerza física, ideal en el combate rápido pero de olvidable destreza.");
 
-                    for (ImageView carta : mano) {
+                    /*for (ImageView carta : mano) {
                         carta.setEffect(null);
                     }
-                    e.setEffect(colorAdjust);
+                    e.setEffect(colorAdjust);*/
 
                 }
             });
@@ -140,6 +154,11 @@ public class Board extends HBox {
     }
 
     Board() {
+
+
+        b = new back.Board();
+
+
         backgroundCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
         backgroundGC = backgroundCanvas.getGraphicsContext2D();
         charCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
@@ -158,7 +177,16 @@ public class Board extends HBox {
         pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
 
 
+
+        //addMonster
+        back.Monster m1 = new back.Monster("Caballero Negro", 100, 100, 25, 4);
+        back.Monster m2 = new back.Monster("Fausto", 150, 80, 25, 4);
+
+        m1.setPosition(new Point(2,2));
+        b.addMonster(m1, new Point(2,2));
         tiles[2][2].setWhosHere(new GraphicSoldier(new back.Soldier(0), true));
+        m1.setPosition(new Point(5,5));
+        b.addMonster(m2, new Point(5,5));
         tiles[5][5].setWhosHere(new GraphicSoldier(new back.Soldier(1), false));
 
         getChildren().addAll(pBoard, createMenu());
@@ -176,16 +204,27 @@ public class Board extends HBox {
                     }
                 }
 
+
                 if (status == SELECTABLE) {
                     //back.Game.moveSoldier(auxTile.getPos(), point);
-                    //System.out.printf("Acción desencadenada en (%d, %d) desde (%d, %d)\n", point.x, point.y, auxTile.getPos().x, auxTile.getPos().y);
                     tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
+
+                    b.moveMonster(auxTile.getPos(), point);
+
                     auxTile.setWhosHere(null);
                     auxTile = null;
                 } else {
                     auxTile = null;
-                    ArrayList<Point> moveAux = tile.getAvailableMovements();
+                    System.out.printf("Acción desencadenada en (%d, %d) \n", point.x, point.y);
+                    //ArrayList<Point> moveAux = tile.getAvailableMovements();
+                    ArrayList<Point> moveAux = b.validMovePoints(point);
+
+                    for(Point pun: moveAux)
+                        System.out.printf("%d %d\n", pun.x, pun.y);
+
+                    System.out.printf("%b\n", moveAux.isEmpty());
+
                     if (status != ACTIVE && !moveAux.isEmpty()) {
                         for (Point p: moveAux) {
                             tiles[p.x][p.y].changeStatus(SELECTABLE);
