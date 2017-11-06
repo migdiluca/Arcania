@@ -2,7 +2,7 @@ package back;
 
 import java.awt.*;
 
-public abstract class Monster extends Card {
+public class Monster extends Card {
     private int attack;
     private int health;
     private int defense;
