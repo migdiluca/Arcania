@@ -31,7 +31,7 @@ public class Game {
     private void performAttack(ArrayList<Monster> monsters) {
         for (Monster m : monsters) {
             Point attackerPosition = board.searchMonster(m);
-            if(board.canAttackCastle(attackerPosition, m.getOwnerNumber())) {
+            /*if(board.canAttackCastle(attackerPosition, m.getOwnerNumber())) {
                 int enemyNumber = m.getOwnerNumber() == 0 ? 1 : 0;
                 m.attackCastle(players[enemyNumber].castle);
             }
@@ -42,7 +42,7 @@ public class Game {
                     if(!m2.isAlive())
                         removeDead(m2);
                 }
-            }
+            }*/
         }
     }
 

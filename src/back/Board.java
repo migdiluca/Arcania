@@ -71,12 +71,12 @@ public class Board {
      */
     public ArrayList<Point> validMovePoints(Point p) {
         if(getMonster(p) == null)
-            return null;
+            return new ArrayList<Point>();
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if ((z.x != p.x && z.y != p.x && !(getMonster(p) instanceof Heroe)) || getMonster(z) != null) {
+            if ((z.x != p.x && z.y != p.y && !(getMonster(p) instanceof Heroe)) || getMonster(z) != null) {
                 iterator.remove();
                 System.out.println("remove diagonal:" + z);
             }
@@ -85,7 +85,7 @@ public class Board {
         int closerToBase = getMonster(p).getOwnerNumber() == 0 ? -1 : 1;
         Point surrenderPoint = new Point(p.x + closerToBase, p.y);
 
-        if(validMovePoints.contains(surrenderPoint) && validAttackPoints(p) != null){
+        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p).isEmpty()){
             surrenderPoint.translate(closerToBase, 0);
             if(isPointValid(surrenderPoint.x , surrenderPoint.y) && board[surrenderPoint.x][surrenderPoint.y] == null)
                 validMovePoints.add(surrenderPoint);

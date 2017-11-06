@@ -179,15 +179,15 @@ public class Board extends HBox {
 
 
         //addMonster
-        back.Monster m1 = new back.Monster("Caballero Negro", 100, 100, 25, 4);
-        back.Monster m2 = new back.Monster("Fausto", 150, 80, 25, 4);
+        back.Heroe m1 = new back.Heroe("Caballero Negro", 100, 100, 25, 4);
+        back.Heroe m2 = new back.Heroe("Fausto", 150, 80, 25, 4);
 
         m1.setPosition(new Point(2,2));
         b.addMonster(m1, new Point(2,2));
-        tiles[2][2].setWhosHere(new GraphicSoldier(new back.Soldier(0), true));
+        tiles[2][2].setWhosHere(new GraphicSoldier(m1, false));
         m1.setPosition(new Point(5,5));
         b.addMonster(m2, new Point(5,5));
-        tiles[5][5].setWhosHere(new GraphicSoldier(new back.Soldier(1), false));
+        tiles[5][5].setWhosHere(new GraphicSoldier(m2, true));
 
         getChildren().addAll(pBoard, createMenu());
         //setStyle("-fx-background-color: #5490ff");
@@ -216,14 +216,7 @@ public class Board extends HBox {
                     auxTile = null;
                 } else {
                     auxTile = null;
-                    System.out.printf("Acción desencadenada en (%d, %d) \n", point.x, point.y);
-                    //ArrayList<Point> moveAux = tile.getAvailableMovements();
                     ArrayList<Point> moveAux = b.validMovePoints(point);
-
-                    for(Point pun: moveAux)
-                        System.out.printf("%d %d\n", pun.x, pun.y);
-
-                    System.out.printf("%b\n", moveAux.isEmpty());
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
                         for (Point p: moveAux) {

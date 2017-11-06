@@ -14,7 +14,7 @@ public class GraphicSoldier {
     private static final int ANIMFPS = 6;
     private static final int SPRITESIZE = 100;
 
-    private back.Soldier soldier;
+    private back.Monster soldier;
     private Image sprite;
     private ImageView imageView;
     private int frame = 0;
@@ -22,7 +22,7 @@ public class GraphicSoldier {
 
     private boolean mine;
 
-    GraphicSoldier(back.Soldier s, boolean mine) {
+    GraphicSoldier(back.Monster s, boolean mine) {
         this.soldier = s;
         this.mine = mine;
         //this.sprite = new Image("graphics/soldiers/" + soldier.GetID + ".png");
