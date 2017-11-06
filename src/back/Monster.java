@@ -9,6 +9,7 @@ public class Monster extends Card {
     private int agility;
     private int positionX;
     private int positionY;
+    private Player owner;
 
     public Monster(String name, int attack, int health, int defense, int agility) {
         super(name);
@@ -64,7 +65,7 @@ public class Monster extends Card {
     public void attackCastle(Castle c){
         c.getAttacked(this.attack);
     }
-/*
+
     public Player getOwner() {
         return owner;
     }
@@ -72,7 +73,7 @@ public class Monster extends Card {
     public int getOwnerNumber() {
         return owner.getPlayerNumber();
     }
-*/
+
     private void getAttacked(int damage) {
         setHealth(this.health -= damage);
     }

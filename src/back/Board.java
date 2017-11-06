@@ -50,9 +50,11 @@ public class Board {
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
     public ArrayList<Point> validAttackPoints(Point p) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
-        for(Point z : validAttackPoints) {
+        Iterator<Point> iterator = validAttackPoints.iterator();
+        while(iterator.hasNext()) {
+            Point z = iterator.next();
             if((z.x != p.x && z.y != p.y) || !areEnemies(getMonster(p), getMonster(z)))
-                validAttackPoints.remove(z);
+                iterator.remove();
         }
         return validAttackPoints;
     }
@@ -71,7 +73,7 @@ public class Board {
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if (!((z.x != p.x && z.y != p.x && getMonster(p) instanceof Heroe)) || getMonster(z) != null)
+            if (!((z.x != p.x && z.y != p.x && getMonster(p) instanceof Heroe) || getMonster(z) == null))
                 iterator.remove();
         }
 
