@@ -1,6 +1,7 @@
 package back;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -69,6 +70,8 @@ public class Board {
     Luego agrega el punto de retirada.
      */
     public ArrayList<Point> validMovePoints(Point p) {
+        if(getMonster(p) == null)
+            return null;
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
@@ -82,7 +85,8 @@ public class Board {
 
         if(validMovePoints.contains(surrenderPoint) && validAttackPoints(p) != null){
             surrenderPoint.translate(closerToBase, 0);
-            validMovePoints.add(surrenderPoint);
+            if(isPointValid(surrenderPoint.x , surrenderPoint.y) && board[surrenderPoint.x][surrenderPoint.y] == null)
+                validMovePoints.add(surrenderPoint);
         }
         return validMovePoints;
     }

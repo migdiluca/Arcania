@@ -71,7 +71,7 @@ public class Monster extends Card {
     }
 
     public int getOwnerNumber() {
-        return owner.getPlayerNumber();
+        return 1;
     }
 
     private void getAttacked(int damage) {
