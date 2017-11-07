@@ -2,14 +2,14 @@ package back;
 
 import java.awt.*;
 
-public class Monster extends Card {
+public class Soldier extends Card {
     private int attack;
     private int health;
     private int defense;
     private int agility;
     private Player owner;
 
-    public Monster(String name, Player owner, int attack, int health, int defense, int agility) {
+    public Soldier(String name, Player owner, int attack, int health, int defense, int agility) {
         super(name);
         this.owner = owner;
         this.attack = attack;
@@ -45,7 +45,7 @@ public class Monster extends Card {
     }
 
     // Estructura de ataque.
-    public void attack(Monster m){
+    public void attack(Soldier m){
         m.getAttacked(this.attack - m.getDefense());
     }
 

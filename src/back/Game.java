@@ -19,14 +19,14 @@ public class Game {
         currentPlayer = player1;
     }
 
-    private void removeDead(Monster m) {
+    private void removeDead(Soldier m) {
         player1.aliveCards.remove(m);
         player2.aliveCards.remove(m);
         board.removeDeadFromBoard(m);
     }
 
-    private Castle canAttackCastle(Monster m){
-        Point attackerPosition = board.searchMonster(m);
+    private Castle canAttackCastle(Soldier m){
+        Point attackerPosition = board.searchSoldier(m);
         if((attackerPosition.x == player1.getCastleRow() && m.getOwner() != player1))
             return player1.castle;
         else if((attackerPosition.x == player2.getCastleRow() && m.getOwner() != player2))
@@ -37,13 +37,13 @@ public class Game {
     /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
     Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
      */
-    private void performAttack(ArrayList<Monster> monsters) {
-        for (Monster m : monsters) {
+    private void performAttack(ArrayList<Soldier> monsters) {
+        for (Soldier m : monsters) {
             Castle castleToAttack = canAttackCastle(m);
             if(castleToAttack != null)
                 m.attackCastle(castleToAttack);
             else {
-                Monster m2 = board.enemyToAttack(board.searchMonster(m));
+                Soldier m2 = board.enemyToAttack(board.searchSoldier(m));
                 if(m2 != null) {
                     m.attack(m2);
                     if(!m2.isAlive())
@@ -53,8 +53,8 @@ public class Game {
         }
     }
 
-    public void addMonster(Monster m, Point p) {
-        board.addMonster(m , p);
+    public void addSoldier(Soldier m, Point p) {
+        board.addSoldier(m , p);
         if(!player1.playCard(m))
             player2.playCard(m);
     }

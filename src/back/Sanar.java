@@ -1,15 +1,14 @@
-package back.MagicCards;
+package back;
 
 import back.Magic;
-import back.Monster;
+import back.Soldier;
 
 public class Sanar extends Magic {
         public Sanar(String name, String description){
             super(name, description);
         }
 
-        @Override
-        public void effect(Monster m){
+        public void effect(Soldier m){
             m.setHealth(m.getHealth() + 25);
         }
 

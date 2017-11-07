@@ -1,4 +1,4 @@
-package back.MagicCards;
+package back;
 
 import back.Magic;
 import back.Monster;
@@ -8,8 +8,7 @@ public class Inspiracion extends Magic {
         super(name, description);
     }
 
-    @Override
-    public void effect(Monster m){
+    public void effect(Soldier m){
         m.setAttack(m.getAttack() + 5);
     }
 }

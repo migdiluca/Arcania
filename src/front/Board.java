@@ -180,13 +180,13 @@ public class Board extends HBox {
 
 
 
-        //addMonster
+        //addSoldier
         back.Heroe m1 = new back.Heroe("Fausto", 100, 100, 25, 4);
-        back.Monster m2 = new back.Monster("Caballero Negro", 150, 80, 25, 4);
+        back.Soldier m2 = new back.Soldier("Caballero Negro", 150, 80, 25, 4);
 
-        b.addMonster(m1, new Point(2,2));
+        b.addSoldier(m1, new Point(2,2));
         tiles[2][2].setWhosHere(new GraphicSoldier(m1, false));
-        b.addMonster(m2, new Point(5,5));
+        b.addSoldier(m2, new Point(5,5));
         tiles[5][5].setWhosHere(new GraphicSoldier(m2, true));
 
         getChildren().addAll(pBoard, createMenu());
@@ -210,7 +210,7 @@ public class Board extends HBox {
                     tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
 
-                    b.moveMonster(auxTile.getPos(), point);
+                    b.moveSoldier(auxTile.getPos(), point);
 
                     auxTile.setWhosHere(null);
                     auxTile = null;

@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class Board {
-    private Monster board[][];
+    private Soldier board[][];
 
     public Board() {
-        board = new Monster[7][7];
+        board = new Soldier[7][7];
         for (int i = 0; i < 7; i++)
             for (int j = 0; j < 7; j++)
                 board[i][j] = null;
@@ -22,11 +22,11 @@ public class Board {
         return false;
     }
 
-    private Monster getMonster(Point p) {
+    private Soldier getSoldier(Point p) {
         return board[p.x][p.y];
     }
 
-    private boolean areEnemies(Monster m1, Monster m2) {
+    private boolean areEnemies(Soldier m1, Soldier m2) {
         if(m1 == null || m2 == null)
             return false;
         if(m1.getOwner() != m2.getOwner())
@@ -49,19 +49,19 @@ public class Board {
 
     /*PRIVATE*/
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
-    private ArrayList<Point> validAttackPoints(Point p, Monster m) {
+    private ArrayList<Point> validAttackPoints(Point p, Soldier m) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
         Iterator<Point> iterator = validAttackPoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if((z.x != p.x && z.y != p.y) || !areEnemies(m, getMonster(z))) {
+            if((z.x != p.x && z.y != p.y) || !areEnemies(m, getSoldier(z))) {
                 iterator.remove();
             }
         }
         return validAttackPoints;
     }
 
-    public void addMonster(Monster m, Point p) {
+    public void addSoldier(Soldier m, Point p) {
         board[p.x][p.y] = m;
     }
 
@@ -71,29 +71,29 @@ public class Board {
     Luego agrega el punto de retirada.
      */
     public HashMap<Point, Boolean> validMovePoints(Point p) {
-        if(getMonster(p) == null)
+        if(getSoldier(p) == null)
             return new HashMap<Point,Boolean>();
         HashMap<Point,Boolean> validMoveMapPoints = new HashMap<>();
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if ((z.x != p.x && z.y != p.y && !(getMonster(p) instanceof Heroe)) || getMonster(z) != null) {
+            if ((z.x != p.x && z.y != p.y && !(getSoldier(p) instanceof Heroe)) || getSoldier(z) != null) {
                 iterator.remove();
                 System.out.println("remove diagonal:" + z);
             }
         }
 
-        int closerToBase = getMonster(p).getOwner().getCastleRow() == 0 ? -1 : 1;
+        int closerToBase = getSoldier(p).getOwner().getCastleRow() == 0 ? -1 : 1;
         Point surrenderPoint = new Point(p.x + closerToBase, p.y);
 
-        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p, getMonster(p)).isEmpty()){
+        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p, getSoldier(p)).isEmpty()){
             surrenderPoint.translate(closerToBase, 0);
             if(isPointValid(surrenderPoint.x , surrenderPoint.y) && board[surrenderPoint.x][surrenderPoint.y] == null)
                 validMovePoints.add(surrenderPoint);
         }
         for(Point z: validMovePoints) {
-            if(!validAttackPoints(z, getMonster(p)).isEmpty())
+            if(!validAttackPoints(z, getSoldier(p)).isEmpty())
                 validMoveMapPoints.put(z, true);
             else
                 validMoveMapPoints.put(z, false);
@@ -112,28 +112,28 @@ public class Board {
     /*ESTO NO SE SI LO TIENE QUE HACER GAME O BOARD, me daria lo mismo pero hay que ponerlo donde tiene que ir.
     Se fija en todos los puntos validos de ataque cual es el de menor vida
      */
-    public Monster enemyToAttack (Point p) {
-        ArrayList<Point> validAttackPoints = validAttackPoints(p, getMonster(p));
-        Monster monsterToAttack = null;
+    public Soldier enemyToAttack (Point p) {
+        ArrayList<Point> validAttackPoints = validAttackPoints(p, getSoldier(p));
+        Soldier SoldierToAttack = null;
         for (Point x : validAttackPoints) {
-            if (areEnemies(getMonster(p), getMonster(x)))
-                if(monsterToAttack == null || monsterToAttack.getHealth() > getMonster(x).getHealth())
-                    monsterToAttack = getMonster(x);
+            if (areEnemies(getSoldier(p), getSoldier(x)))
+                if(SoldierToAttack == null || SoldierToAttack.getHealth() > getSoldier(x).getHealth())
+                    SoldierToAttack = getSoldier(x);
         }
-        return monsterToAttack;
+        return SoldierToAttack;
     }
 
-    public void moveMonster(Point origin, Point dest) {
+    public void moveSoldier(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
     }
 
-    public void removeDeadFromBoard(Monster m) {
-        Point p = searchMonster(m);
+    public void removeDeadFromBoard(Soldier m) {
+        Point p = searchSoldier(m);
         board[p.x][p.y] = null;
     }
 
-    public Point searchMonster(Monster m) {
+    public Point searchSoldier(Soldier m) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
                 if(board[i][j] == m)

@@ -3,10 +3,10 @@ package back;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Player extends ArrayList<Monster> {
+public class Player extends ArrayList<Soldier> {
     private Stack<Card> deck;
     private ArrayList<Card> hand;
-    protected ArrayList<Monster> aliveCards;
+    protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
     private int castleRow;
 
@@ -28,7 +28,7 @@ public class Player extends ArrayList<Monster> {
     }
 
     /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */
-    public boolean playCard(Monster m) {
+    public boolean playCard(Soldier m) {
         if(hand.remove(m)){
             aliveCards.add(m);
             takeCard();

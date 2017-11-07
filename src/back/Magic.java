@@ -8,7 +8,7 @@ public abstract class Magic extends Card {
         this.description = description;
     }
 
-    public void effect(Monster m){};
+    public void effect(Soldier m){}
 }
 
 
