@@ -1,5 +1,6 @@
 package front;
 
+import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,6 +35,7 @@ import sun.font.GraphicComponent;
 import static front.Tile.INACTIVE;
 import static front.Tile.ACTIVE;
 import static front.Tile.SELECTABLE;
+import static front.Tile.ATTACKABLE;
 
 public class Board extends HBox {
     private static final int NUMROWS = 7;
@@ -179,13 +181,11 @@ public class Board extends HBox {
 
 
         //addMonster
-        back.Heroe m1 = new back.Heroe("Caballero Negro", 100, 100, 25, 4);
-        back.Heroe m2 = new back.Heroe("Fausto", 150, 80, 25, 4);
+        back.Heroe m1 = new back.Heroe("Fausto", 100, 100, 25, 4);
+        back.Monster m2 = new back.Monster("Caballero Negro", 150, 80, 25, 4);
 
-        m1.setPosition(new Point(2,2));
         b.addMonster(m1, new Point(2,2));
         tiles[2][2].setWhosHere(new GraphicSoldier(m1, false));
-        m1.setPosition(new Point(5,5));
         b.addMonster(m2, new Point(5,5));
         tiles[5][5].setWhosHere(new GraphicSoldier(m2, true));
 
@@ -205,7 +205,7 @@ public class Board extends HBox {
                 }
 
 
-                if (status == SELECTABLE) {
+                if (status == SELECTABLE || status == ATTACKABLE) {
                     //back.Game.moveSoldier(auxTile.getPos(), point);
                     tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
@@ -216,11 +216,14 @@ public class Board extends HBox {
                     auxTile = null;
                 } else {
                     auxTile = null;
-                    ArrayList<Point> moveAux = b.validMovePoints(point);
+                    HashMap<Point, Boolean> moveAux = b.validMovePoints(point);
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
-                        for (Point p: moveAux) {
-                            tiles[p.x][p.y].changeStatus(SELECTABLE);
+                        for (Point p: moveAux.keySet()) {
+                            if(moveAux.get(p) == Boolean.TRUE)
+                                tiles[p.x][p.y].changeStatus(ATTACKABLE);
+                            else
+                                tiles[p.x][p.y].changeStatus(SELECTABLE);
                         }
                         tile.changeStatus(ACTIVE);
                         auxTile = tile;

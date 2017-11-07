@@ -8,12 +8,12 @@ public class Player extends ArrayList<Monster> {
     private ArrayList<Card> hand;
     protected ArrayList<Monster> aliveCards;
     protected Castle castle;
-    private int playerNumber;
+    private int castleRow;
 
-    public Player(ArrayList<Card> cards, int castleLife, int playerNumber) {
+    public Player(ArrayList<Card> cards, int castleLife, int castleRow) {
         deck.addAll(cards);
         castle = new Castle(castleLife);
-        this.playerNumber = playerNumber;
+        this.castleRow = castleRow;
     }
 
     private boolean takeCard() {
@@ -23,8 +23,8 @@ public class Player extends ArrayList<Monster> {
         return true;
     }
 
-    public int getPlayerNumber() {
-        return playerNumber;
+    public int getCastleRow() {
+        return castleRow;
     }
 
     /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */

@@ -14,6 +14,7 @@ public class Tile {
     static final int INACTIVE = 0;
     static final int ACTIVE = 1;
     static final int SELECTABLE = 2;
+    static final int ATTACKABLE = 3;
 
     private int row;
     private int col;
@@ -72,6 +73,7 @@ public class Tile {
             case INACTIVE: color = Color.TRANSPARENT; break;
             case ACTIVE: color = Color.rgb(0, 170, 41, 0.502); break;
             case SELECTABLE: color = Color.rgb(0, 17, 170, 0.502); break;
+            case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.65); break;
         }
 
         backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);

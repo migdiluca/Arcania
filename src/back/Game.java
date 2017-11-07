@@ -5,24 +5,33 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Game {
-    private Player players[];
+    private Player player1;
+    private Player player2;
     private Stack<Card> allCards; //no se si se necesita, despues veo
     protected Board board; //esta protected para que directamente puedan hacer game.board.getPoints
                             // para tomar puntos de spawn etc..
-    private int turn;
+    private Player currentPlayer;
 
     public Game() {
-        turn = players[0].getPlayerNumber();
         Board board = new Board();
-        players = new Player[2];
        /* players[0] = new Player();
         players[1] = new Player();*/
+        currentPlayer = player1;
     }
 
     private void removeDead(Monster m) {
-        players[0].aliveCards.remove(m);
-        players[1].aliveCards.remove(m);
+        player1.aliveCards.remove(m);
+        player2.aliveCards.remove(m);
         board.removeDeadFromBoard(m);
+    }
+
+    private Castle canAttackCastle(Monster m){
+        Point attackerPosition = board.searchMonster(m);
+        if((attackerPosition.x == player1.getCastleRow() && m.getOwner() != player1))
+            return player1.castle;
+        else if((attackerPosition.x == player2.getCastleRow() && m.getOwner() != player2))
+            return player2.castle;
+        return null;
     }
 
     /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
@@ -30,42 +39,40 @@ public class Game {
      */
     private void performAttack(ArrayList<Monster> monsters) {
         for (Monster m : monsters) {
-            Point attackerPosition = board.searchMonster(m);
-            /*if(board.canAttackCastle(attackerPosition, m.getOwnerNumber())) {
-                int enemyNumber = m.getOwnerNumber() == 0 ? 1 : 0;
-                m.attackCastle(players[enemyNumber].castle);
-            }
+            Castle castleToAttack = canAttackCastle(m);
+            if(castleToAttack != null)
+                m.attackCastle(castleToAttack);
             else {
-                Monster m2 = board.enemyToAttack(attackerPosition);
+                Monster m2 = board.enemyToAttack(board.searchMonster(m));
                 if(m2 != null) {
                     m.attack(m2);
                     if(!m2.isAlive())
                         removeDead(m2);
                 }
-            }*/
+            }
         }
     }
 
     public void addMonster(Monster m, Point p) {
         board.addMonster(m , p);
-        if(!players[0].playCard(m))
-            players[1].playCard(m);
+        if(!player1.playCard(m))
+            player2.playCard(m);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
-    public int endTurn() {
-        performAttack(players[turn].aliveCards);
-        int other;
-        other = turn == players[0].getPlayerNumber() ? players[1].getPlayerNumber() : players[0].getPlayerNumber();
-        performAttack(players[other].aliveCards);
+    public Player endTurn() {
+        performAttack(currentPlayer.aliveCards);
+        Player otherPlayer;
+        otherPlayer = currentPlayer == player1 ? player2 : player1;
+        performAttack(otherPlayer.aliveCards);
 
-        if(players[other].castle.getLife() <= 0 || !players[other].canPlay())
-            return turn;
-        if(players[turn].castle.getLife() <= 0 || !players[turn].canPlay())
-            return other;
+        if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay())
+            return currentPlayer;
+        if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay())
+            return otherPlayer;
 
-        turn = other;
-        return -1;
+        currentPlayer = otherPlayer;
+        return null;
     }
 
 }

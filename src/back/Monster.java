@@ -7,29 +7,16 @@ public class Monster extends Card {
     private int health;
     private int defense;
     private int agility;
-    private int positionX;
-    private int positionY;
     private Player owner;
 
-    public Monster(String name, int attack, int health, int defense, int agility) {
+    public Monster(String name, Player owner, int attack, int health, int defense, int agility) {
         super(name);
+        this.owner = owner;
         this.attack = attack;
         this.agility = agility;
         this.health = health;
         this.defense = defense;
     }
-
-
-   // Posicion en la que se coloca la carta cuando se convoca.
-   public void setPosition(Point p){
-        this.positionX = p.x;
-        this.positionY = p.y;
-   }
-
-   public Point getPosition(){
-       return new Point(positionX, positionY);
-   }
-
 
     public int getAgility() {
         return agility;
@@ -68,10 +55,6 @@ public class Monster extends Card {
 
     public Player getOwner() {
         return owner;
-    }
-
-    public int getOwnerNumber() {
-        return 1;
     }
 
     private void getAttacked(int damage) {

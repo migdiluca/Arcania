@@ -3,6 +3,7 @@ package back;
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Board {
@@ -21,13 +22,12 @@ public class Board {
         return false;
     }
 
-    /*PRIVATE*/
-    public Monster getMonster(Point p) {
+    private Monster getMonster(Point p) {
         return board[p.x][p.y];
     }
 
     private boolean areEnemies(Monster m1, Monster m2) {
-        if(m2 == null)
+        if(m1 == null || m2 == null)
             return false;
         if(m1.getOwner() != m2.getOwner())
             return true;
@@ -49,13 +49,14 @@ public class Board {
 
     /*PRIVATE*/
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
-    public ArrayList<Point> validAttackPoints(Point p) {
+    private ArrayList<Point> validAttackPoints(Point p, Monster m) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
         Iterator<Point> iterator = validAttackPoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if((z.x != p.x && z.y != p.y) || !areEnemies(getMonster(p), getMonster(z)))
+            if((z.x != p.x && z.y != p.y) || !areEnemies(m, getMonster(z))) {
                 iterator.remove();
+            }
         }
         return validAttackPoints;
     }
@@ -69,9 +70,10 @@ public class Board {
         - Se fija en los puntos si son diagonales y es un heroe. Si NO cumple esto lo quita.
     Luego agrega el punto de retirada.
      */
-    public ArrayList<Point> validMovePoints(Point p) {
+    public HashMap<Point, Boolean> validMovePoints(Point p) {
         if(getMonster(p) == null)
-            return new ArrayList<Point>();
+            return new HashMap<Point,Boolean>();
+        HashMap<Point,Boolean> validMoveMapPoints = new HashMap<>();
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
@@ -82,15 +84,22 @@ public class Board {
             }
         }
 
-        int closerToBase = getMonster(p).getOwnerNumber() == 0 ? -1 : 1;
+        int closerToBase = getMonster(p).getOwner().getCastleRow() == 0 ? -1 : 1;
         Point surrenderPoint = new Point(p.x + closerToBase, p.y);
 
-        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p).isEmpty()){
+        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p, getMonster(p)).isEmpty()){
             surrenderPoint.translate(closerToBase, 0);
             if(isPointValid(surrenderPoint.x , surrenderPoint.y) && board[surrenderPoint.x][surrenderPoint.y] == null)
                 validMovePoints.add(surrenderPoint);
         }
-        return validMovePoints;
+        for(Point z: validMovePoints) {
+            if(!validAttackPoints(z, getMonster(p)).isEmpty())
+                validMoveMapPoints.put(z, true);
+            else
+                validMoveMapPoints.put(z, false);
+        }
+
+        return validMoveMapPoints;
     }
 
     public boolean canAttackCastle(Point p, int playerNumber){
@@ -104,7 +113,7 @@ public class Board {
     Se fija en todos los puntos validos de ataque cual es el de menor vida
      */
     public Monster enemyToAttack (Point p) {
-        ArrayList<Point> validAttackPoints = validAttackPoints(p);
+        ArrayList<Point> validAttackPoints = validAttackPoints(p, getMonster(p));
         Monster monsterToAttack = null;
         for (Point x : validAttackPoints) {
             if (areEnemies(getMonster(p), getMonster(x)))
