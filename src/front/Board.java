@@ -53,7 +53,7 @@ public class Board extends HBox {
 
     private Pane pBoard;
     private Tile auxTile = null;
-    
+
     private VBox createMenu() {
         VBox v = new VBox();
 
@@ -91,32 +91,32 @@ public class Board extends HBox {
 
         for (int i = 0; i < 30; i++) {
 
-            hand[i] = new Canvas(168,155);
+            /*hand[i] = new Canvas(168,155);
 
             gc = hand[i].getGraphicsContext2D();
             gc.drawImage(new Image("graphics/ui/MARCO.png"), 0,0);
-            gc.drawImage(new Image("graphics/ui/BANDERA.png"), 18,0);
+            gc.drawImage(new Image("graphics/ui/BANDERA.png"), 18,0);*/
 
-            /*mano[i] = new ImageView();
+            mano[i] = new ImageView();
             mano[i].setFitHeight(100);
             mano[i].setFitWidth(100);
             mano[i].setImage(new Image("carta.png"));
-            h.getChildren().add(mano[i]);*/
-            h.getChildren().add(hand[i]);
+            h.getChildren().add(mano[i]);
+            //h.getChildren().add(hand[i]);
 
-            hand[i].setOnMouseMoved(new EventHandler<MouseEvent>() {
+            mano[i].setOnMouseMoved(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
 
-                    //ImageView e = (ImageView) event.getSource();
+                    ImageView e = (ImageView) event.getSource();
 
                     titleHelp.setText("Caballero Oscuro");
                     infoHelp.setText("Guerrero de descomunal fuerza física, ideal en el combate rápido pero de olvidable destreza.");
 
-                    /*for (ImageView carta : mano) {
+                    for (ImageView carta : mano) {
                         carta.setEffect(null);
                     }
-                    e.setEffect(colorAdjust);*/
+                    e.setEffect(colorAdjust);
 
                 }
             });
@@ -215,6 +215,9 @@ public class Board extends HBox {
 
                     auxTile.setWhosHere(null);
                     auxTile = null;
+
+                    game.endTurn();
+
                 } else {
                     auxTile = null;
                     HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point);
