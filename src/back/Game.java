@@ -2,34 +2,46 @@ package back;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Stack;
 
 public class Game {
     private Player player1;
     private Player player2;
-    private Stack<Card> allCards; //no se si se necesita, despues veo
     protected Board board; //esta protected para que directamente puedan hacer game.board.getPoints
                             // para tomar puntos de spawn etc..
     private Player currentPlayer;
 
-    public Game() {
-        Board board = new Board();
-       /* players[0] = new Player();
-        players[1] = new Player();*/
+    public Game(String player1Name, String player2Name) {
+        board = new Board();
+        ArrayList<Card> deck = createDeck();
+        player1 = new Player(player1Name, deck,6);
+        Collections.shuffle(deck);
+        player2 = new Player(player2Name, deck, 0);
         currentPlayer = player1;
     }
 
-    private void removeDead(Soldier m) {
-        player1.aliveCards.remove(m);
-        player2.aliveCards.remove(m);
-        board.removeDeadFromBoard(m);
+    private void removeDead(Soldier s) {
+        player1.aliveCards.remove(s);
+        player2.aliveCards.remove(s);
+        board.removeDeadFromBoard(s);
     }
 
-    private Castle canAttackCastle(Soldier m){
-        Point attackerPosition = board.searchSoldier(m);
-        if((attackerPosition.x == player1.getCastleRow() && m.getOwner() != player1))
+    private ArrayList<Card> createDeck() {
+        ArrayList<Card> deck = new ArrayList<>();;
+        Soldier s1 = new Soldier("Soldado", 3,5,6,7);
+        deck.add(s1);
+        Soldier s2 = new Soldier("Soldado", 3,5,6,7);
+        deck.add(s2);
+        return deck;
+    }
+
+    private Castle canAttackCastle(Soldier s){
+        Point attackerPosition = board.searchSoldier(s);
+        if((attackerPosition.x == player1.getCastleRow() && s.getOwner() != player1))
             return player1.castle;
-        else if((attackerPosition.x == player2.getCastleRow() && m.getOwner() != player2))
+        else if((attackerPosition.x == player2.getCastleRow() && s.getOwner() != player2))
             return player2.castle;
         return null;
     }
@@ -37,15 +49,15 @@ public class Game {
     /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
     Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
      */
-    private void performAttack(ArrayList<Soldier> monsters) {
-        for (Soldier m : monsters) {
-            Castle castleToAttack = canAttackCastle(m);
+    private void performAttack(ArrayList<Soldier> soldiers) {
+        for (Soldier s : soldiers) {
+            Castle castleToAttack = canAttackCastle(s);
             if(castleToAttack != null)
-                m.attackCastle(castleToAttack);
+                s.attackCastle(castleToAttack);
             else {
-                Soldier m2 = board.enemyToAttack(board.searchSoldier(m));
+                Soldier m2 = board.enemyToAttack(board.searchSoldier(s));
                 if(m2 != null) {
-                    m.attack(m2);
+                    s.attack(m2);
                     if(!m2.isAlive())
                         removeDead(m2);
                 }
@@ -60,16 +72,15 @@ public class Game {
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
-    public Player endTurn() {
+    public String endTurn() {
         performAttack(currentPlayer.aliveCards);
-        Player otherPlayer;
-        otherPlayer = currentPlayer == player1 ? player2 : player1;
+        Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.aliveCards);
 
         if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay())
-            return currentPlayer;
+            return currentPlayer.getName();
         if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay())
-            return otherPlayer;
+            return otherPlayer.getName();
 
         currentPlayer = otherPlayer;
         return null;

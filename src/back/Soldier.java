@@ -7,11 +7,9 @@ public class Soldier extends Card {
     private int health;
     private int defense;
     private int agility;
-    private Player owner;
 
-    public Soldier(String name, Player owner, int attack, int health, int defense, int agility) {
+    public Soldier(String name, int attack, int health, int defense, int agility) {
         super(name);
-        this.owner = owner;
         this.attack = attack;
         this.agility = agility;
         this.health = health;
@@ -51,10 +49,6 @@ public class Soldier extends Card {
 
     public void attackCastle(Castle c){
         c.getAttacked(this.attack);
-    }
-
-    public Player getOwner() {
-        return owner;
     }
 
     private void getAttacked(int damage) {

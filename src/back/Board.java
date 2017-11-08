@@ -26,12 +26,10 @@ public class Board {
         return board[p.x][p.y];
     }
 
-    private boolean areEnemies(Soldier m1, Soldier m2) {
-        if(m1 == null || m2 == null)
+    private boolean areEnemies(Soldier s1, Soldier s2) {
+        if(s1 == null || s2 == null)
             return false;
-        if(m1.getOwner() != m2.getOwner())
-            return true;
-        return false;
+        return s1.getOwner() != s2.getOwner();
     }
 
     /* Devuelve todos los puntos(diagonal incluido) pegados al que se encuentra en el momento, comprobando
@@ -49,20 +47,20 @@ public class Board {
 
     /*PRIVATE*/
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
-    private ArrayList<Point> validAttackPoints(Point p, Soldier m) {
+    private ArrayList<Point> validAttackPoints(Point p, Soldier s) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
         Iterator<Point> iterator = validAttackPoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if((z.x != p.x && z.y != p.y) || !areEnemies(m, getSoldier(z))) {
+            if((z.x != p.x && z.y != p.y) || !areEnemies(s, getSoldier(z))) {
                 iterator.remove();
             }
         }
         return validAttackPoints;
     }
 
-    public void addSoldier(Soldier m, Point p) {
-        board[p.x][p.y] = m;
+    public void addSoldier(Soldier s, Point p) {
+        board[p.x][p.y] = s;
     }
 
     /* Se fija en todos los puntos pegados (incluido diagonales), lo quita si:
@@ -128,15 +126,15 @@ public class Board {
         board[origin.x][origin.y] = null;
     }
 
-    public void removeDeadFromBoard(Soldier m) {
-        Point p = searchSoldier(m);
+    public void removeDeadFromBoard(Soldier s) {
+        Point p = searchSoldier(s);
         board[p.x][p.y] = null;
     }
 
-    public Point searchSoldier(Soldier m) {
+    public Point searchSoldier(Soldier s) {
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
-                if(board[i][j] == m)
+                if(board[i][j] == s)
                     return new Point(i,j);
             }
         }

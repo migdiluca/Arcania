@@ -2,9 +2,10 @@ package back;
 
 public class Castle {
     private int life;
+    private static final int defaultLife = 1000;
 
-    public Castle(int life) {
-        this.life = life;
+    public Castle() {
+        this.life = defaultLife;
     }
     public void getAttacked(int damage) {
         life -= damage;

@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class Player extends ArrayList<Soldier> {
+    private String name;
     private Stack<Card> deck;
     private ArrayList<Card> hand;
     protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
     private int castleRow;
 
-    public Player(ArrayList<Card> cards, int castleLife, int castleRow) {
+    public Player(String name, ArrayList<Card> cards, int castleRow) {
+        for(Card s: cards)
+            s.setOwner(this);
+        this.name = name;
         deck.addAll(cards);
-        castle = new Castle(castleLife);
+        castle = new Castle();
         this.castleRow = castleRow;
     }
 
@@ -22,6 +26,8 @@ public class Player extends ArrayList<Soldier> {
         hand.add(deck.pop());
         return true;
     }
+
+    public String getName() { return name; }
 
     public int getCastleRow() {
         return castleRow;
