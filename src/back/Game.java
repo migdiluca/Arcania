@@ -67,6 +67,10 @@ public class Game implements Serializable{
         }
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     public void addSoldier(Soldier s, Point p) {
         board.addSoldier(s, p);
         if(!player1.playCard(s))
