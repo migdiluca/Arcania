@@ -19,6 +19,8 @@ public class Game implements Serializable{
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
         currentPlayer = player1;
+        board.addSoldier(player1.getPlayer(), new Point(6,0));
+        board.addSoldier(player2.getPlayer(), new Point(0,3));
     }
 
     private void removeDead(Soldier s) {

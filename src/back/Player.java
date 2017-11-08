@@ -27,6 +27,10 @@ public class Player extends ArrayList<Soldier> {
         return true;
     }
 
+    public Soldier getPlayer() {
+        return (Soldier) deck.pop();
+    }
+
     public String getName() { return name; }
 
     public int getCastleRow() {
