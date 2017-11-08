@@ -19,7 +19,7 @@ public class Board {
         return (x >= 0 && x < 7 && y >= 0 && y < 7);
     }
 
-    private Soldier getSoldier(Point p) {
+    public Soldier getSoldier(Point p) {
         return board[p.x][p.y];
     }
 
