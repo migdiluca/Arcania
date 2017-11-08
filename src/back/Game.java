@@ -1,24 +1,23 @@
 package back;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Stack;
 
-public class Game {
+public class Game implements Serializable{
     private Player player1;
     private Player player2;
-    protected Board board; //esta protected para que directamente puedan hacer game.board.getPoints
-                            // para tomar puntos de spawn etc..
+    protected Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
+                             para tomar puntos de spawn etc..*/
     private Player currentPlayer;
 
     public Game(String player1Name, String player2Name) {
         board = new Board();
-        ArrayList<Card> deck = createDeck();
-        player1 = new Player(player1Name, deck,6);
-        Collections.shuffle(deck);
-        player2 = new Player(player2Name, deck, 0);
+        player1 = new Player(player1Name, createDeck(),6);
+        player2 = new Player(player2Name, createDeck(), 0);
         currentPlayer = player1;
     }
 
@@ -29,11 +28,12 @@ public class Game {
     }
 
     private ArrayList<Card> createDeck() {
-        ArrayList<Card> deck = new ArrayList<>();;
+        ArrayList<Card> deck = new ArrayList<>();
         Soldier s1 = new Soldier("Soldado", 3,5,6,7);
         deck.add(s1);
         Soldier s2 = new Soldier("Soldado", 3,5,6,7);
         deck.add(s2);
+        Collections.shuffle(deck);
         return deck;
     }
 

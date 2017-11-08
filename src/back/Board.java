@@ -1,7 +1,6 @@
 package back;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,9 +16,7 @@ public class Board {
     }
 
     private boolean isPointValid(int x, int y) {
-        if (x >= 0 && x < 7 && y >= 0 && y < 7)
-            return true;
-        return false;
+        return (x >= 0 && x < 7 && y >= 0 && y < 7);
     }
 
     private Soldier getSoldier(Point p) {
@@ -35,7 +32,7 @@ public class Board {
     /* Devuelve todos los puntos(diagonal incluido) pegados al que se encuentra en el momento, comprobando
     que sean validos (no se vayan de la matriz) */
     private ArrayList<Point> nearbyPoints(Point p) {
-        ArrayList<Point> nearbyPoints = new ArrayList<Point>();
+        ArrayList<Point> nearbyPoints = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (isPointValid(p.x +i, p.y+j) && (j != 0 || i != 0))
@@ -100,11 +97,21 @@ public class Board {
         return validMoveMapPoints;
     }
 
+    /* Despues vemos si la necesitamos
+    public HashMap<Point, Soldier> returnToMap() {
+        HashMap<Point,Soldier> map= new HashMap<>();
+        for(int i = 0; i < 6; i++) {
+            for(int j = 0; j < 6; j++) {
+                if(board[i][j] != null)
+                    map.put(new Point(i,j), board[i][j]);
+            }
+        }
+        return map;
+    }*/
+
     public boolean canAttackCastle(Point p, int playerNumber){
         int attackRow = playerNumber == 0 ? 6 : 0;
-        if(p.x == attackRow)
-            return true;
-        return false;
+        return p.x == attackRow;
     }
 
     /*ESTO NO SE SI LO TIENE QUE HACER GAME O BOARD, me daria lo mismo pero hay que ponerlo donde tiene que ir.
@@ -142,7 +149,7 @@ public class Board {
     }
 
     public ArrayList<Point> availableSpawns(int playerNumber) {
-        ArrayList<Point> availablePoints = new ArrayList<Point>();
+        ArrayList<Point> availablePoints = new ArrayList<>();
         int spawnRow = playerNumber == 0 ? 0 : 6;
         for (int j = 0; j < 7; j++)
             if (board[spawnRow][j] == null)
