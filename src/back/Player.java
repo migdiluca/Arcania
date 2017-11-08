@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public class Player {
     private String name;
-    private Stack<Card> deck;
+    private Stack<Card> deck ;
     private ArrayList<Card> hand;
     protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
@@ -15,6 +15,8 @@ public class Player {
         for(Card s: cards)
             s.setOwner(this);
         this.name = name;
+        deck = new Stack<>();
+        hand = new ArrayList<>();
         deck.addAll(cards);
         castle = new Castle();
         this.castleRow = castleRow;

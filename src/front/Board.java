@@ -157,10 +157,6 @@ public class Board extends HBox {
 
     Board() {
 
-
-        b = new back.Board();
-
-
         backgroundCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
         backgroundGC = backgroundCanvas.getGraphicsContext2D();
         charCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
@@ -181,13 +177,20 @@ public class Board extends HBox {
 
 
         //addSoldier
-        back.Heroe m1 = new back.Heroe("Fausto", 100, 100, 25, 4);
-        back.Soldier m2 = new back.Soldier("Caballero Negro", 150, 80, 25, 4);
 
-        b.addSoldier(m1, new Point(2,2));
-        tiles[2][2].setWhosHere(new GraphicSoldier(m1, false));
-        b.addSoldier(m2, new Point(5,5));
-        tiles[5][5].setWhosHere(new GraphicSoldier(m2, true));
+        back.Game game = new back.Game("Eze", "Mike");
+
+        for(int i = 0; i < NUMROWS; i++)
+            for(int j = 0; j < NUMCOLS; j++) {
+            back.Soldier s = game.getBoard().getSoldier(new Point(i, j));
+                if(s != null)
+                    tiles[i][j].setWhosHere(new GraphicSoldier(s, true));
+
+            }
+
+
+
+
 
         getChildren().addAll(pBoard, createMenu());
         //setStyle("-fx-background-color: #5490ff");
@@ -210,13 +213,13 @@ public class Board extends HBox {
                     tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
 
-                    b.moveSoldier(auxTile.getPos(), point);
+                    game.getBoard().moveSoldier(auxTile.getPos(), point);
 
                     auxTile.setWhosHere(null);
                     auxTile = null;
                 } else {
                     auxTile = null;
-                    HashMap<Point, Boolean> moveAux = b.validMovePoints(point);
+                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point);
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
                         for (Point p: moveAux.keySet()) {

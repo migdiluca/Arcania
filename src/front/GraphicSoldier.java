@@ -127,7 +127,8 @@ public class GraphicSoldier {
         gc.setStroke(javafx.scene.paint.Color.GREY);
         gc.strokeLine(15 + xCoord, 95 + yCoord, 85 + xCoord, 95 + yCoord);
         gc.setStroke(Color.RED);
-        gc.strokeLine(15 + xCoord, 95 + yCoord, 65 + xCoord, 95 + yCoord);
+        gc.strokeLine(15 + xCoord, 95 + yCoord, 15 + (soldier.getHealthPercent() / 2) + xCoord, 95 + yCoord);
+
     }
 
 }

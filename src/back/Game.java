@@ -31,9 +31,9 @@ public class Game implements Serializable{
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        Soldier s1 = new Soldier("Soldado", 3,5,6,7);
+        Soldier s1 = new Soldier("Soldado", 3,50,6,7);
         deck.add(s1);
-        Soldier s2 = new Soldier("Soldado", 3,5,6,7);
+        Soldier s2 = new Soldier("Soldado", 3,50,6,7);
         deck.add(s2);
         Collections.shuffle(deck);
         return deck;

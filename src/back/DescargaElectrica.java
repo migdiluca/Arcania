@@ -1,7 +1,7 @@
 package back;
 
 import back.Magic;
-import back.Monster;
+import back.Soldier;
 
 public class DescargaElectrica extends Magic {
     public DescargaElectrica(String name, String description){

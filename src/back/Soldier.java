@@ -5,6 +5,7 @@ import java.awt.*;
 public class Soldier extends Card {
     private int attack;
     private int health;
+    private int fullHealth;
     private int defense;
     private int agility;
 
@@ -12,7 +13,7 @@ public class Soldier extends Card {
         super(name);
         this.attack = attack;
         this.agility = agility;
-        this.health = health;
+        this.fullHealth = this.health = health;
         this.defense = defense;
     }
 
@@ -28,6 +29,10 @@ public class Soldier extends Card {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getHealthPercent() {
+        return (int) ((health*100) / (float) fullHealth);
     }
 
     public boolean isAlive() {
