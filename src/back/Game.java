@@ -65,10 +65,10 @@ public class Game {
         }
     }
 
-    public void addSoldier(Soldier m, Point p) {
-        board.addSoldier(m , p);
-        if(!player1.playCard(m))
-            player2.playCard(m);
+    public void addSoldier(Soldier s, Point p) {
+        board.addSoldier(s, p);
+        if(!player1.playCard(s))
+            player2.playCard(s);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */

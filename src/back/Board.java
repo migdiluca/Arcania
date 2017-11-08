@@ -138,7 +138,7 @@ public class Board {
                     return new Point(i,j);
             }
         }
-        return null; //esto es medio turbio, lo hice porque me pide un return, pero al mounstro siempre lo encuentra
+        return null; //Meter una excepcion
     }
 
     public ArrayList<Point> availableSpawns(int playerNumber) {
