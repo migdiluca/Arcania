@@ -53,9 +53,7 @@ public class Board extends HBox {
 
     private Pane pBoard;
     private Tile auxTile = null;
-
-    public back.Board b;
-
+    
     private VBox createMenu() {
         VBox v = new VBox();
 
