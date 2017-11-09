@@ -17,10 +17,17 @@ public class Game implements Serializable{
         player2 = new Player(player2Name, createDeck(), 0);
         player1.cardsToHand(5);
         player2.cardsToHand(5);
+        /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
+        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
+        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
+        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
         currentPlayer = player2;
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 3));
+        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
+        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
+        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 1));
         currentPlayer = player1;
     }
 
@@ -32,10 +39,14 @@ public class Game implements Serializable{
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        Soldier s1 = new Soldier("Soldado", 30,50,6,7);
+        Soldier s1 = new Soldier("Soldado", 300,50,6,7);
         deck.add(s1);
         Soldier s2 = new Soldier("Soldado", 30,50,6,7);
         deck.add(s2);
+        Soldier s3 = new Soldier("Soldadito", 10, 30,1,12);
+        deck.add(s3);
+        Soldier s4 = new Soldier("Soldadito", 10, 30,1,12);
+        deck.add(s4);
         Collections.shuffle(deck);
         return deck;
     }
