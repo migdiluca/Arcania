@@ -2,10 +2,7 @@ package back;
 
 import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Stack;
+import java.util.*;
 
 public class Game implements Serializable{
     private Player player1;
@@ -18,9 +15,13 @@ public class Game implements Serializable{
         board = new Board();
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
+        player1.cardsToHand(5);
+        player2.cardsToHand(5);
         currentPlayer = player1;
-        board.addSoldier(player1.getPlayer(), new Point(6,0));
-        board.addSoldier(player2.getPlayer(), new Point(0,3));
+        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
+        currentPlayer = player2;
+        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 3));
+        currentPlayer = player1;
     }
 
     private void removeDead(Soldier s) {
@@ -31,20 +32,20 @@ public class Game implements Serializable{
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        Soldier s1 = new Soldier("Soldado", 3,50,6,7);
+        Soldier s1 = new Soldier("Soldado", 30,50,6,7);
         deck.add(s1);
-        Soldier s2 = new Soldier("Soldado", 3,50,6,7);
+        Soldier s2 = new Soldier("Soldado", 30,50,6,7);
         deck.add(s2);
         Collections.shuffle(deck);
         return deck;
     }
 
-    private Castle canAttackCastle(Soldier s){
+    private Castle castleToAttack(Soldier s){
         Point attackerPosition = board.searchSoldier(s);
-        if((attackerPosition.x == player1.getCastleRow() && s.getOwner() != player1))
-            return player1.castle;
-        else if((attackerPosition.x == player2.getCastleRow() && s.getOwner() != player2))
-            return player2.castle;
+        Player enemy = s.getOwner() == player1 ? player2 : player1;
+
+        if(attackerPosition.x == enemy.getCastleRow())
+            return enemy.castle;
         return null;
     }
 
@@ -53,7 +54,7 @@ public class Game implements Serializable{
      */
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
-            Castle castleToAttack = canAttackCastle(s);
+            Castle castleToAttack = castleToAttack(s);
             if(castleToAttack != null)
                 s.attackCastle(castleToAttack);
             else {
@@ -67,14 +68,23 @@ public class Game implements Serializable{
         }
     }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public HashMap<Point, Boolean> askPosibleMovements(Point p) {
+        return board.validMovePoints(p, currentPlayer);
+    }
+
     public Board getBoard() {
         return board;
     }
 
     public void addSoldier(Soldier s, Point p) {
-        board.addSoldier(s, p);
-        if(!player1.playCard(s))
-            player2.playCard(s);
+        if(s.getOwner() == currentPlayer) {
+            board.addSoldier(s, p);
+            currentPlayer.playCard(s);
+        }
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */

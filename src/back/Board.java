@@ -19,10 +19,6 @@ public class Board {
         return (x >= 0 && x < 7 && y >= 0 && y < 7);
     }
 
-    public Soldier getSoldier(Point p) {
-        return board[p.x][p.y];
-    }
-
     private boolean areEnemies(Soldier s1, Soldier s2) {
         if(s1 == null || s2 == null)
             return false;
@@ -31,6 +27,7 @@ public class Board {
 
     /* Devuelve todos los puntos(diagonal incluido) pegados al que se encuentra en el momento, comprobando
     que sean validos (no se vayan de la matriz) */
+
     private ArrayList<Point> nearbyPoints(Point p) {
         ArrayList<Point> nearbyPoints = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
@@ -41,8 +38,8 @@ public class Board {
         }
         return nearbyPoints;
     }
-
     /*PRIVATE*/
+
     /* Se fija en todos los puntos pegados, si no hay un enemigo o si son diagonales los quita */
     private ArrayList<Point> validAttackPoints(Point p, Soldier s) {
         ArrayList<Point> validAttackPoints = nearbyPoints(p);
@@ -55,9 +52,12 @@ public class Board {
         }
         return validAttackPoints;
     }
-
     public void addSoldier(Soldier s, Point p) {
         board[p.x][p.y] = s;
+    }
+
+    public Soldier getSoldier(Point p) {
+        return board[p.x][p.y];
     }
 
     /* Se fija en todos los puntos pegados (incluido diagonales), lo quita si:
@@ -65,30 +65,31 @@ public class Board {
         - Se fija en los puntos si son diagonales y es un heroe. Si NO cumple esto lo quita.
     Luego agrega el punto de retirada.
      */
-    public HashMap<Point, Boolean> validMovePoints(Point p) {
-        if(getSoldier(p) == null)
+    public HashMap<Point, Boolean> validMovePoints(Point p, Player currentPlayer) {
+        Soldier soldierAtP = getSoldier(p);
+        if(soldierAtP == null || soldierAtP.getOwner() != currentPlayer)
             return new HashMap<Point,Boolean>();
-        HashMap<Point,Boolean> validMoveMapPoints = new HashMap<>();
+
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
         while(iterator.hasNext()) {
             Point z = iterator.next();
-            if ((z.x != p.x && z.y != p.y && !(getSoldier(p) instanceof Heroe)) || getSoldier(z) != null) {
+            if ((z.x != p.x && z.y != p.y && !(soldierAtP instanceof Hero)) || getSoldier(z) != null)
                 iterator.remove();
-                System.out.println("remove diagonal:" + z);
-            }
         }
 
-        int closerToBase = getSoldier(p).getOwner().getCastleRow() == 0 ? -1 : 1;
+        int closerToBase = soldierAtP.getOwner().getCastleRow() == 0 ? -1 : 1;
         Point surrenderPoint = new Point(p.x + closerToBase, p.y);
 
-        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p, getSoldier(p)).isEmpty()){
+        if(validMovePoints.contains(surrenderPoint) && !validAttackPoints(p, soldierAtP).isEmpty()){
             surrenderPoint.translate(closerToBase, 0);
             if(isPointValid(surrenderPoint.x , surrenderPoint.y) && board[surrenderPoint.x][surrenderPoint.y] == null)
                 validMovePoints.add(surrenderPoint);
         }
+
+        HashMap<Point,Boolean> validMoveMapPoints = new HashMap<>();
         for(Point z: validMovePoints) {
-            if(!validAttackPoints(z, getSoldier(p)).isEmpty())
+            if(!validAttackPoints(z, soldierAtP).isEmpty())
                 validMoveMapPoints.put(z, true);
             else
                 validMoveMapPoints.put(z, false);
@@ -108,11 +109,6 @@ public class Board {
         }
         return map;
     }*/
-
-    public boolean canAttackCastle(Point p, int playerNumber){
-        int attackRow = playerNumber == 0 ? 6 : 0;
-        return p.x == attackRow;
-    }
 
     /*ESTO NO SE SI LO TIENE QUE HACER GAME O BOARD, me daria lo mismo pero hay que ponerlo donde tiene que ir.
     Se fija en todos los puntos validos de ataque cual es el de menor vida
@@ -148,9 +144,9 @@ public class Board {
         return null; //Meter una excepcion
     }
 
-    public ArrayList<Point> availableSpawns(int playerNumber) {
+    public ArrayList<Point> availableSpawns(Player currentPlayer) {
         ArrayList<Point> availablePoints = new ArrayList<>();
-        int spawnRow = playerNumber == 0 ? 0 : 6;
+        int spawnRow = currentPlayer.getCastleRow();
         for (int j = 0; j < 7; j++)
             if (board[spawnRow][j] == null)
                 availablePoints.add(new Point(spawnRow, j));

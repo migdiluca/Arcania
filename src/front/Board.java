@@ -220,7 +220,7 @@ public class Board extends HBox {
 
                 } else {
                     auxTile = null;
-                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point);
+                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point, game.getCurrentPlayer());
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
                         for (Point p: moveAux.keySet()) {

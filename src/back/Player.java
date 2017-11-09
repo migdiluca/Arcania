@@ -6,20 +6,23 @@ import java.util.Stack;
 public class Player {
     private String name;
     private Stack<Card> deck ;
-    private ArrayList<Card> hand;
+    protected ArrayList<Card> hand;
     protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
     private int castleRow;
 
     public Player(String name, ArrayList<Card> cards, int castleRow) {
-        for(Card s: cards)
-            s.setOwner(this);
-        this.name = name;
         deck = new Stack<>();
         hand = new ArrayList<>();
-        deck.addAll(cards);
+        aliveCards = new ArrayList<>();
         castle = new Castle();
         this.castleRow = castleRow;
+
+        for(Card s: cards)
+            s.setOwner(this);
+
+        this.name = name;
+        deck.addAll(cards);
     }
 
     private boolean takeCard() {
@@ -29,8 +32,19 @@ public class Player {
         return true;
     }
 
-    public Soldier getPlayer() {
-        return (Soldier) deck.pop();
+    public void cardsToHand() {
+        cardsToHand(1);
+    }
+
+    public void cardsToHand(int ammount) {
+        int i = 0;
+        while(i <= ammount) {
+            if(!deck.empty())
+                hand.add(deck.pop());
+            else
+                i = ammount;
+            i++;
+        }
     }
 
     public String getName() { return name; }
