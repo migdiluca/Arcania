@@ -3,8 +3,8 @@ package back;
 public abstract class Magic extends Card {
     private String description;
 
-    public Magic(String name, String description){
-        super(name);
+    public Magic(String name, int id, String description){
+        super(name, id);
         this.description = description;
     }
 

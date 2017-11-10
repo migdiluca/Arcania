@@ -39,14 +39,19 @@ public class Game implements Serializable{
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        Soldier s1 = new Soldier("Soldado", 300,50,6,7);
-        deck.add(s1);
-        Soldier s2 = new Soldier("Soldado", 30,50,6,7);
-        deck.add(s2);
-        Soldier s3 = new Soldier("Soldadito", 10, 30,1,12);
-        deck.add(s3);
-        Soldier s4 = new Soldier("Soldadito", 10, 30,1,12);
-        deck.add(s4);
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Soldier("Caballero Negro", 1, 15,50,6,7));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Soldier("Ogro", 2, 15,50,6,7));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Soldier("Gorgona", 3, 15,50,6,7));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Soldier("Guerrero Esqueleto", 4, 15,50,6,7));
+
         Collections.shuffle(deck);
         return deck;
     }
@@ -77,6 +82,14 @@ public class Game implements Serializable{
                 }
             }
         }
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     public Player getCurrentPlayer() {

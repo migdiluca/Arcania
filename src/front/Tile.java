@@ -85,7 +85,10 @@ public class Tile {
         backgroundGC.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
 
         if (whosHere != null) {
-            whosHere.drawMyself(getPos(), charGC);
+            if(!whosHere.stillAlive())
+                whosHere = null;
+            else
+                whosHere.drawMyself(getPos(), charGC);
         }
     }
 }

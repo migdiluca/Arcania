@@ -43,6 +43,8 @@ public class Board extends HBox {
     static final int CELLHEIGHT = 100;
     static final int CELLWIDTH = 100;
 
+    private back.Player player;
+
     private HashSet<GraphicSoldier> gSoldiers = new HashSet<>();
     private Tile[][] tiles = new Tile[NUMROWS][NUMCOLS];
 
@@ -54,8 +56,14 @@ public class Board extends HBox {
     private Pane pBoard;
     private Tile auxTile = null;
 
+    private back.Game game;
+    private back.Player owner;
+
     private VBox createMenu() {
         VBox v = new VBox();
+
+        Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
+        v.backgroundProperty().setValue(vBackground);
 
         v.setPadding(new Insets(10));
 
@@ -76,35 +84,31 @@ public class Board extends HBox {
 
         FlowPane h = new FlowPane();
 
+        /*Background hBackground = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY));
+        h.backgroundProperty().setValue(hBackground);*/
+
+        h.setMaxSize(400, 500);
+        h.setMinSize(400, 500);
+
+
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(0.2);
 
-        DropShadow dropShadow = new DropShadow();
-        dropShadow.setRadius(5.0);
-        dropShadow.setOffsetX(3.0);
-        dropShadow.setOffsetY(3.0);
-        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
-
-        ImageView mano[] = new ImageView[30];
-        Canvas hand[] = new Canvas[30];
+        ArrayList<ImageView> mano = new ArrayList<>();
         GraphicsContext gc;
 
-        for (int i = 0; i < 30; i++) {
+        ArrayList<back.Card> cardsInHand = owner.getHand();
 
-            /*hand[i] = new Canvas(168,155);
+        int count = 0;
+        for(back.Card c: cardsInHand) {
+            ImageView elem = new ImageView();
+            elem.setFitHeight(100);
+            elem.setFitWidth(100);
+            elem.setImage(new Image("carta.png"));
+            h.getChildren().add(elem);
+            mano.add(elem);
 
-            gc = hand[i].getGraphicsContext2D();
-            gc.drawImage(new Image("graphics/ui/MARCO.png"), 0,0);
-            gc.drawImage(new Image("graphics/ui/BANDERA.png"), 18,0);*/
-
-            mano[i] = new ImageView();
-            mano[i].setFitHeight(100);
-            mano[i].setFitWidth(100);
-            mano[i].setImage(new Image("carta.png"));
-            h.getChildren().add(mano[i]);
-            //h.getChildren().add(hand[i]);
-
-            mano[i].setOnMouseMoved(new EventHandler<MouseEvent>() {
+            elem.setOnMouseMoved(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
 
@@ -121,8 +125,9 @@ public class Board extends HBox {
                 }
             });
 
-
+            count++;
         }
+
 
         ScrollPane scrollPane = new ScrollPane(h);
         scrollPane.setPrefSize(450, 450);
@@ -153,7 +158,9 @@ public class Board extends HBox {
         return v;
     }
 
-    Board() {
+    Board(back.Game game, back.Player owner) {
+
+        this.owner = owner;
 
         backgroundCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
         backgroundGC = backgroundCanvas.getGraphicsContext2D();
@@ -176,13 +183,11 @@ public class Board extends HBox {
 
         //addSoldier
 
-        back.Game game = new back.Game("Eze", "Mike");
-
         for(int i = 0; i < NUMROWS; i++)
             for(int j = 0; j < NUMCOLS; j++) {
             back.Soldier s = game.getBoard().getSoldier(new Point(i, j));
                 if(s != null)
-                    tiles[i][j].setWhosHere(new GraphicSoldier(s, true));
+                    tiles[i][j].setWhosHere(new GraphicSoldier(s, owner.equals(s.getOwner())));
 
             }
 

@@ -25,9 +25,13 @@ public class GraphicSoldier {
     GraphicSoldier(back.Soldier s, boolean mine) {
         this.soldier = s;
         this.mine = mine;
-        //this.sprite = new Image("graphics/soldiers/" + soldier.GetID + ".png");
-        if(mine) this.sprite = new Image("graphics/soldiers/darkknight.png");
-        if(!mine) this.sprite = new Image("graphics/soldiers/fausto.png");
+
+        this.sprite = new Image("graphics/soldiers/" + s.getID() + ".png");
+
+    }
+
+    public boolean stillAlive() {
+        return soldier.isAlive();
     }
 
     void move(Point dir) {
@@ -60,6 +64,7 @@ public class GraphicSoldier {
     }
 
     void drawMyself(Point p, GraphicsContext gc) {
+
         frame++;
         if (frame > ANIMFPS) {
             stop();
@@ -75,8 +80,7 @@ public class GraphicSoldier {
                 xCoord = p.y*CELLWIDTH;
                 yCoord = p.x*CELLHEIGHT;
                 xSprite = 0;
-                if(mine) ySprite = SPRITESIZE;
-                if(!mine) ySprite = 0;
+                if(mine) ySprite = SPRITESIZE; else ySprite = 0;
                 break;
             case 1:
                 xCoord = p.y*CELLWIDTH;
@@ -124,10 +128,10 @@ public class GraphicSoldier {
         gc.setEffect(null);
 
         gc.setLineWidth(4);
-        gc.setStroke(javafx.scene.paint.Color.GREY);
+        gc.setStroke(Color.grayRgb(25, 0.5922));
         gc.strokeLine(15 + xCoord, 95 + yCoord, 85 + xCoord, 95 + yCoord);
-        gc.setStroke(Color.RED);
-        gc.strokeLine(15 + xCoord, 95 + yCoord, 15 + (soldier.getHealthPercent() / 2) + xCoord, 95 + yCoord);
+        if(!mine) gc.setStroke(Color.rgb(255,0,0,0.9)); else gc.setStroke(Color.rgb(27, 255, 108,0.9));
+        gc.strokeLine(15 + xCoord, 95 + yCoord, 15 + soldier.getHealthPercent() + xCoord, 95 + yCoord);
 
     }
 

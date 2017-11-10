@@ -9,8 +9,8 @@ public class Soldier extends Card {
     private int defense;
     private int agility;
 
-    public Soldier(String name, int attack, int health, int defense, int agility) {
-        super(name);
+    public Soldier(String name, int id, int attack, int health, int defense, int agility) {
+        super(name, id);
         this.attack = attack;
         this.agility = agility;
         this.fullHealth = this.health = health;
@@ -32,7 +32,7 @@ public class Soldier extends Card {
     }
 
     public int getHealthPercent() {
-        return (int) ((health*100) / (float) fullHealth);
+        return (int) ((health*70) / (float) fullHealth);
     }
 
     public boolean isAlive() {
@@ -43,13 +43,13 @@ public class Soldier extends Card {
         return defense;
     }
 
-    public void setHealth(int helath){
+    public void setHealth(int health){
        this.health = health;
     }
 
     // Estructura de ataque.
     public void attack(Soldier m){
-        m.getAttacked(this.attack - m.getDefense());
+            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
     }
 
     public void attackCastle(Castle c){
@@ -57,7 +57,11 @@ public class Soldier extends Card {
     }
 
     private void getAttacked(int damage) {
-        setHealth(this.health -= damage);
+
+        int missChance = java.util.concurrent.ThreadLocalRandom.current().nextInt(agility, 100 + 1);
+
+        if(missChance < 75)
+            setHealth(this.health - damage);
     }
 
 }

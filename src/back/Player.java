@@ -47,6 +47,10 @@ public class Player {
         }
     }
 
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
     public String getName() { return name; }
 
     public int getCastleRow() {
