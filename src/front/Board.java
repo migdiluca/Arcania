@@ -2,6 +2,9 @@ package front;
 
 import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
 
@@ -136,8 +140,6 @@ public class Board extends HBox {
 
         v.getChildren().add(scrollPane);
 
-
-
         v.getChildren().add(info);
 
 
@@ -177,7 +179,21 @@ public class Board extends HBox {
         pBoard.setMaxSize(700, 700);
         pBoard.setMinSize(700, 700);
 
-        pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
+
+        ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
+
+        im.setX(80);
+        im.setY(90);
+
+        pBoard.getChildren().addAll(backgroundCanvas, charCanvas, im);
+
+        KeyFrame startFadeOut = new KeyFrame(Duration.seconds(0), new KeyValue(im.opacityProperty(), 1.0));
+        KeyFrame endFadeOut = new KeyFrame(Duration.seconds(5), new KeyValue(im.opacityProperty(), 0.0));
+        Timeline timelineOn = new Timeline(startFadeOut, endFadeOut);
+
+        timelineOn.playFromStart();
+
+
 
 
 
@@ -190,8 +206,6 @@ public class Board extends HBox {
                     tiles[i][j].setWhosHere(new GraphicSoldier(s, owner.equals(s.getOwner())));
 
             }
-
-
 
 
 
