@@ -44,13 +44,13 @@ public class Game implements Serializable{
             deck.add(new Soldier("Caballero Negro", 1, 15,50,6,7));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Ogro", 2, 15,50,6,7));
+            deck.add(new Soldier("Ogro", 3, 15,50,6,15));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Gorgona", 3, 15,50,6,7));
+            deck.add(new Soldier("Gorgona", 2, 15,50,6,7));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Guerrero Esqueleto", 4, 15,50,6,7));
+            deck.add(new Soldier("Guerrero Esqueleto", 4, 15,50,6,22));
 
         Collections.shuffle(deck);
         return deck;

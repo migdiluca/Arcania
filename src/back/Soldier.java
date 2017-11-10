@@ -1,6 +1,7 @@
 package back;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Soldier extends Card {
     private int attack;
@@ -36,7 +37,7 @@ public class Soldier extends Card {
     }
 
     public boolean isAlive() {
-        return health > 0 ? true : false;
+        return health > 0;
     }
 
     public int getDefense() {
@@ -58,9 +59,15 @@ public class Soldier extends Card {
 
     private void getAttacked(int damage) {
 
-        int missChance = java.util.concurrent.ThreadLocalRandom.current().nextInt(agility, 100 + 1);
+        //int missChance = java.util.concurrent.ThreadLocalRandom.current().nextInt(agility, 100 + 1);
 
-        if(missChance < 75)
+        Random r = new Random();
+        int missChance = r.nextInt((100 - agility) + 1) + agility;
+
+        System.out.println(getName());
+        System.out.println(missChance);
+
+        if(missChance < 85)
             setHealth(this.health - damage);
     }
 
