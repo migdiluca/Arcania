@@ -129,6 +129,17 @@ public class Game implements Serializable{
         return board;
     }
 
+    /* Aca no se si playedBy se lo tenes que pasar porque los jugadores los tiene game
+    pero no me acuerdo porque era playedBy y no currentPlayer
+     */
+    public HashMap<Point, Boolean> validMovePoints(Point p, Player playedBy) {
+        return board.validMovePoints(p,playedBy);
+    }
+
+    public Soldier getSoldier(Point p) {
+        return board.getSoldier(p);
+    }
+
     public void addSoldier(Soldier s, Point p) {
         if(s.getOwner() == currentPlayer) {
             invokeSoldier(s, p);
@@ -138,6 +149,14 @@ public class Game implements Serializable{
 
     public void invokeSoldier(Soldier s, Point p) {
         board.addSoldier(s, p);
+    }
+
+    public void moveSoldier(Point origin, Point dest) {
+        board.moveSoldier(origin,dest);
+    }
+
+    public Point searchSoldier(Soldier s) {
+        return board.searchSoldier(s);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */

@@ -133,7 +133,6 @@ public class Board {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
         game.registerAction(new pendingDrawing(origin, dest, getSoldier(origin), 0));
-
     }
 
     public void removeDeadFromBoard(Soldier s) {
