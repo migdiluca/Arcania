@@ -37,12 +37,13 @@ import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
 
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 import static front.Tile.INACTIVE;
 import static front.Tile.ACTIVE;
 import static front.Tile.SELECTABLE;
 import static front.Tile.ATTACKABLE;
 
-public class Board extends HBox {
+public class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
     static final int CELLHEIGHT = 100;
@@ -62,21 +63,23 @@ public class Board extends HBox {
     private back.Game game;
     private back.Player owner;
 
+    private Label infoHelp;
+    private Text titleHelp;
+
     private VBox createMenu() {
-        VBox v = new VBox();
+        VBox v = new VBox(30);
 
         Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
         v.backgroundProperty().setValue(vBackground);
 
         v.setPadding(new Insets(10));
 
-
         GridPane info = new GridPane();
-        Text titleHelp = new Text("Información de selección");
+        titleHelp = new Text("Información de selección");
         titleHelp.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         info.add(titleHelp, 1, 1);
 
-        Label infoHelp = new Label("Seleccione una carta para ver información de la misma.");
+        infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         info.add(infoHelp, 1, 2);
 
@@ -160,6 +163,18 @@ public class Board extends HBox {
     }
 
     Board(back.Game game, back.Player owner) {
+
+
+        ImageView background = new ImageView(new Image("/graphics/map/fondo.png", 1300, 820, false, false));
+
+        HBox hb = new HBox(80);
+
+        hb.setLayoutX(78);
+        hb.setLayoutY(75);
+
+        getChildren().addAll(background, hb);
+
+
         this.game = game;
 
         this.owner = owner;
@@ -178,6 +193,9 @@ public class Board extends HBox {
         pBoard = new Pane();
         pBoard.setMaxSize(700, 700);
         pBoard.setMinSize(700, 700);
+
+
+
 
 
         ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
@@ -209,7 +227,7 @@ public class Board extends HBox {
 
 
 
-        getChildren().addAll(pBoard, createMenu());
+        hb.getChildren().addAll(pBoard, createMenu());
         //setStyle("-fx-background-color: #5490ff");
         charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -241,6 +259,10 @@ public class Board extends HBox {
                     HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point, owner);
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
+
+                        titleHelp.setText(tile.getWhosHere().getSoldier().getName());
+                        infoHelp.setText(tile.getWhosHere().getSoldier().getDescription());
+
                         for (Point p: moveAux.keySet()) {
                             if(moveAux.get(p) == Boolean.TRUE)
                                 tiles[p.x][p.y].changeStatus(ATTACKABLE);

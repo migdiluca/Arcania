@@ -2,12 +2,15 @@ package back;
 
 public abstract class Card {
     private String name;
-    private Player owner;
+    private String description;
     private int id;
+    private Player owner;
 
-    public Card(String name, int id) {
+
+    public Card(String name, int id, String description) {
           this.name = name;
           this.id = id;
+          this.description = description;
     }
 
     public String getName(){
@@ -25,4 +28,7 @@ public abstract class Card {
     public Player getOwner() {
         return owner;
     }
+
+    public String getDescription() { return description; }
+
 }

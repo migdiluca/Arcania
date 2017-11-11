@@ -10,8 +10,8 @@ public class Soldier extends Card {
     private int defense;
     private int agility;
 
-    public Soldier(String name, int id, int attack, int health, int defense, int agility) {
-        super(name, id);
+    public Soldier(String name, int id, int attack, int health, int defense, int agility, String description) {
+        super(name, id, description);
         this.attack = attack;
         this.agility = agility;
         this.fullHealth = this.health = health;

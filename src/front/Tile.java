@@ -79,7 +79,7 @@ public class Tile {
         //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
 
         backgroundGC.setFill(color);
-        backgroundGC.setStroke(Color.BLACK);
+        backgroundGC.setStroke(Color.rgb(0,0,0,0.3));
         backgroundGC.setLineWidth(2);
         backgroundGC.fillRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
         backgroundGC.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);

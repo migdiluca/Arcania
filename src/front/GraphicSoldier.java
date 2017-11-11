@@ -16,7 +16,6 @@ public class GraphicSoldier {
 
     private back.Soldier soldier;
     private Image sprite;
-    private ImageView imageView;
     private int frame = 0;
     private int moveDir = 0;
 
@@ -28,6 +27,10 @@ public class GraphicSoldier {
 
         this.sprite = new Image("graphics/soldiers/" + s.getID() + ".png");
 
+    }
+
+    public back.Soldier getSoldier() {
+        return soldier;
     }
 
     void move(Point dir) {

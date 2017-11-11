@@ -17,14 +17,26 @@ public class Game implements Serializable{
         player2 = new Player(player2Name, createDeck(), 0);
         player1.cardsToHand(5);
         player2.cardsToHand(5);
+
+        //Invocacion de los heroes  ////COMO LO INVOCAMOS SIN QUE PASE POR LA MANO????
+        Hero h1 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
+        Hero h2 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
+
+        invokeSoldier(h1, new Point(player1.getCastleRow(), 3));
+        invokeSoldier(h2, new Point(player2.getCastleRow(), 3));
+
+
+
+
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
+
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
         currentPlayer = player2;
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 3));
+        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 6));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 1));
@@ -41,16 +53,16 @@ public class Game implements Serializable{
         ArrayList<Card> deck = new ArrayList<>();
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Caballero Negro", 1, 15,50,6,7));
+            deck.add(new Soldier("Caballero Negro", 1, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Ogro", 3, 15,50,6,15));
+            deck.add(new Soldier("Ogro", 3, 30,60,5,15, "Bestias de gran fuerza física. Leales por sobre todas las cosas, los Ogros que se prestan a tu causa lucharán hasta el último aliento... de sus enemigos."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Gorgona", 2, 15,50,6,7));
+            deck.add(new Soldier("Gorgona", 4, 20,45,6,45, "Bestia antigua de tiempos ya olvidados, la Gorgona se destaca por su celeridad y su mordida siempre certera."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Guerrero Esqueleto", 4, 15,50,6,22));
+            deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
         Collections.shuffle(deck);
         return deck;
@@ -119,9 +131,13 @@ public class Game implements Serializable{
 
     public void addSoldier(Soldier s, Point p) {
         if(s.getOwner() == currentPlayer) {
-            board.addSoldier(s, p);
+            invokeSoldier(s, p);
             currentPlayer.playCard(s);
         }
+    }
+
+    public void invokeSoldier(Soldier s, Point p) {
+        board.addSoldier(s, p);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
