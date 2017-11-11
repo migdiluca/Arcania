@@ -1,5 +1,6 @@
 package front;
 
+import back.Soldier;
 import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -46,8 +47,6 @@ public class Board extends HBox {
     private static final int NUMCOLS = 7;
     static final int CELLHEIGHT = 100;
     static final int CELLWIDTH = 100;
-
-    private back.Player player;
 
     private HashSet<GraphicSoldier> gSoldiers = new HashSet<>();
     private Tile[][] tiles = new Tile[NUMROWS][NUMCOLS];
@@ -161,6 +160,7 @@ public class Board extends HBox {
     }
 
     Board(back.Game game, back.Player owner) {
+        this.game = game;
 
         this.owner = owner;
 
@@ -227,19 +227,18 @@ public class Board extends HBox {
 
                 if (status == SELECTABLE || status == ATTACKABLE) {
                     //back.Game.moveSoldier(auxTile.getPos(), point);
-                    tile.setWhosHere(auxTile.getWhosHere());
+                    /*tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
-
+*/
                     game.getBoard().moveSoldier(auxTile.getPos(), point);
 
-                    auxTile.setWhosHere(null);
                     auxTile = null;
 
                     game.endTurn();
 
                 } else {
                     auxTile = null;
-                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point, game.getCurrentPlayer());
+                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point, owner);
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
                         for (Point p: moveAux.keySet()) {
@@ -275,7 +274,7 @@ public class Board extends HBox {
 
         for (int i = 0; i < NUMROWS; i++) {
             for (int j = 0; j < NUMCOLS; j++) {
-                tiles[i][j].draw(backgroundGC, charGC);
+                tiles[i][j].draw(backgroundGC, charGC, game.getPlayer1());
             }
         }
     }
@@ -284,11 +283,41 @@ public class Board extends HBox {
     AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            if (fps == 0 || fps == 3) {
+            if (fps == 0 || fps == 5) {
+                back.pendingDrawing action;
+
+                while((action = owner.getActionRegistry()) != null) {
+                    switch(action.getType()) {
+                        case 0: //movimiento
+                            if(action.getOrigin() == null) {//invocar
+                                Tile dest = tiles[action.getDestination().x][action.getDestination().y];
+                                dest.setWhosHere(new GraphicSoldier((back.Soldier) action.getCard(), action.getCard().getOwner().equals(owner)));
+
+                            } else if(action.getDestination() == null) { //morir
+                                Tile origin = tiles[action.getOrigin().x][action.getOrigin().y];
+                                origin.setWhosHere(null);
+
+                            } else { //mover
+                                Tile origin = tiles[action.getOrigin().x][action.getOrigin().y];
+                                Tile dest = tiles[action.getDestination().x][action.getDestination().y];
+
+                                dest.setWhosHere( origin.getWhosHere() );
+
+                                dest.moveSoldier(new Point(dest.getPos().x - origin.getPos().x, dest.getPos().y - origin.getPos().y));
+
+                                origin.setWhosHere(null);
+                            }
+                            break;
+                    }
+                }
+
                 draw();
+
                 fps = 0;
+
             }
             fps++;
+
         }
     };
 }

@@ -8,11 +8,15 @@ import java.util.Iterator;
 public class Board {
     private Soldier board[][];
 
-    public Board() {
+    private Game game;
+
+    public Board(Game game) {
         board = new Soldier[7][7];
         for (int i = 0; i < 7; i++)
             for (int j = 0; j < 7; j++)
                 board[i][j] = null;
+
+        this.game = game;
     }
 
     private boolean isPointValid(int x, int y) {
@@ -54,6 +58,7 @@ public class Board {
     }
     public void addSoldier(Soldier s, Point p) {
         board[p.x][p.y] = s;
+        game.registerAction(new pendingDrawing(null, p, s, 0));
     }
 
     public Soldier getSoldier(Point p) {
@@ -65,9 +70,9 @@ public class Board {
         - Se fija en los puntos si son diagonales y es un heroe. Si NO cumple esto lo quita.
     Luego agrega el punto de retirada.
      */
-    public HashMap<Point, Boolean> validMovePoints(Point p, Player currentPlayer) {
+    public HashMap<Point, Boolean> validMovePoints(Point p, Player playedBy) {
         Soldier soldierAtP = getSoldier(p);
-        if(soldierAtP == null || soldierAtP.getOwner() != currentPlayer)
+        if(playedBy == game.getCurrentPlayer() || soldierAtP == null || soldierAtP.getOwner() != playedBy)
             return new HashMap<Point,Boolean>();
 
         ArrayList<Point> validMovePoints = nearbyPoints(p);
@@ -127,11 +132,15 @@ public class Board {
     public void moveSoldier(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
+        game.registerAction(new pendingDrawing(origin, dest, getSoldier(origin), 0));
+
     }
 
     public void removeDeadFromBoard(Soldier s) {
         Point p = searchSoldier(s);
         board[p.x][p.y] = null;
+
+        game.registerAction(new pendingDrawing(p, null, s, 0));
     }
 
     public Point searchSoldier(Soldier s) {

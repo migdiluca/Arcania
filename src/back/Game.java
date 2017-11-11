@@ -12,7 +12,7 @@ public class Game implements Serializable{
     private Player currentPlayer;
 
     public Game(String player1Name, String player2Name) {
-        board = new Board();
+        board = new Board(this);
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
         player1.cardsToHand(5);
@@ -65,6 +65,11 @@ public class Game implements Serializable{
         return null;
     }
 
+    protected void registerAction(pendingDrawing pd) {
+        getPlayer1().registerAction(pd);
+        getPlayer2().registerAction(pd);
+    }
+
     /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
     Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
      */
@@ -76,9 +81,17 @@ public class Game implements Serializable{
             else {
                 Soldier m2 = board.enemyToAttack(board.searchSoldier(s));
                 if(m2 != null) {
-                    s.attack(m2);
-                    if(!m2.isAlive())
-                        removeDead(m2);
+                    if(s.attack(m2) == 1) {
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 1));
+                        if(!m2.isAlive()) {
+                            registerAction(new pendingDrawing(board.searchSoldier(m2), null, m2, 0));
+                            removeDead(m2);
+                        }
+
+                    } else {
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 2));
+                    }
+
                 }
             }
         }

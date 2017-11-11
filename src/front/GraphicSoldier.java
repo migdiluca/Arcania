@@ -30,10 +30,6 @@ public class GraphicSoldier {
 
     }
 
-    public boolean stillAlive() {
-        return soldier.isAlive();
-    }
-
     void move(Point dir) {
         if(dir.x == 0 && dir.y == 0) {
             moveDir = 0;
@@ -63,7 +59,7 @@ public class GraphicSoldier {
         moveDir = 0;
     }
 
-    void drawMyself(Point p, GraphicsContext gc) {
+    void drawMyself(Point p, GraphicsContext gc, back.Player player1) {
 
         frame++;
         if (frame > ANIMFPS) {
@@ -80,7 +76,7 @@ public class GraphicSoldier {
                 xCoord = p.y*CELLWIDTH;
                 yCoord = p.x*CELLHEIGHT;
                 xSprite = 0;
-                if(mine) ySprite = SPRITESIZE; else ySprite = 0;
+                if(soldier.getOwner().equals(player1)) ySprite = SPRITESIZE; else ySprite = 0;
                 break;
             case 1:
                 xCoord = p.y*CELLWIDTH;

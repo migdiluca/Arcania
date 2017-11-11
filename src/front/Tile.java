@@ -67,7 +67,7 @@ public class Tile {
         whosHere.move(dir);
     }
 
-    void draw(GraphicsContext backgroundGC, GraphicsContext charGC) {
+    void draw(GraphicsContext backgroundGC, GraphicsContext charGC, back.Player player1) {
         Color color = Color.TRANSPARENT;
         switch (status) {
             case INACTIVE: color = Color.TRANSPARENT; break;
@@ -76,7 +76,7 @@ public class Tile {
             case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.65); break;
         }
 
-        backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
+        //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
 
         backgroundGC.setFill(color);
         backgroundGC.setStroke(Color.BLACK);
@@ -84,11 +84,10 @@ public class Tile {
         backgroundGC.fillRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
         backgroundGC.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
 
+
+
         if (whosHere != null) {
-            if(!whosHere.stillAlive())
-                whosHere = null;
-            else
-                whosHere.drawMyself(getPos(), charGC);
+            whosHere.drawMyself(getPos(), charGC, player1);
         }
     }
 }

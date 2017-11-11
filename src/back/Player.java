@@ -1,5 +1,6 @@
 package back;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -10,6 +11,9 @@ public class Player {
     protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
     private int castleRow;
+    private int actionsLeft;
+
+    private ArrayDeque<pendingDrawing> actionRegistry;
 
     public Player(String name, ArrayList<Card> cards, int castleRow) {
         deck = new Stack<>();
@@ -23,6 +27,18 @@ public class Player {
 
         this.name = name;
         deck.addAll(cards);
+
+        actionRegistry = new ArrayDeque<>();
+
+
+    }
+
+    public void registerAction(pendingDrawing pd) {
+        actionRegistry.add(pd);
+    }
+
+    public pendingDrawing getActionRegistry() {
+        return actionRegistry.poll();
     }
 
     private boolean takeCard() {

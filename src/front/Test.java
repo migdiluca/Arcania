@@ -19,17 +19,17 @@ public class Test extends Application {
         back.Game game = new back.Game("Eze", "Mike");
 
         Board board = new Board(game, game.getPlayer1());
-        //Board board2 = new Board(game, game.getPlayer2());
+        Board board2 = new Board(game, game.getPlayer2());
 
         Scene scene1 = new Scene(board);
-        //Scene scene2 = new Scene(board2);
+        Scene scene2 = new Scene(board2);
 
         scene1.getStylesheets().add("css/scrollbar.css");
-        //scene2.getStylesheets().add("css/scrollbar.css");
+        scene2.getStylesheets().add("css/scrollbar.css");
 
-        /*Stage secondStage = new Stage();
+        Stage secondStage = new Stage();
         secondStage.setScene(scene2);
-        secondStage.show();*/
+        secondStage.show();
 
         primaryStage.setScene(scene1);
         primaryStage.show();

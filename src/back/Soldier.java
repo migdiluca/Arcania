@@ -49,26 +49,28 @@ public class Soldier extends Card {
     }
 
     // Estructura de ataque.
-    public void attack(Soldier m){
-            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
+    public int attack(Soldier m){
+
+        Random r = new Random();
+        int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
+
+        if(missChance < 85) {
+            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)), this);
+            return 1;
+        } else {
+            return 0;
+        }
+
     }
 
     public void attackCastle(Castle c){
         c.getAttacked(this.attack);
     }
 
-    private void getAttacked(int damage) {
+    private void getAttacked(int damage, Soldier attacker) {
 
-        //int missChance = java.util.concurrent.ThreadLocalRandom.current().nextInt(agility, 100 + 1);
 
-        Random r = new Random();
-        int missChance = r.nextInt((100 - agility) + 1) + agility;
-
-        System.out.println(getName());
-        System.out.println(missChance);
-
-        if(missChance < 85)
-            setHealth(this.health - damage);
+                 setHealth(this.health - damage);
     }
 
 }
