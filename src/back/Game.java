@@ -19,23 +19,23 @@ public class Game implements Serializable{
         player2.cardsToHand(5);
 
         //Invocacion de los heroes  ////COMO LO INVOCAMOS SIN QUE PASE POR LA MANO????
-        Hero h1 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
-        Hero h2 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
+        Soldier h1 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
+        Soldier h2 = new Hero("Avatar de la Oscuridad", 2, 35,150,20,30, "Los héroes dirigen la batalla y conjuran los hechizos.");
 
-        invokeSoldier(h1, new Point(player1.getCastleRow(), 3));
-        invokeSoldier(h2, new Point(player2.getCastleRow(), 3));
 
 
 
 
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
+        addSoldier(h1, new Point(player1.getCastleRow(),3));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
 
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
         currentPlayer = player2;
+        addSoldier(h2, new Point(player1.getCastleRow(),3));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 6));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
