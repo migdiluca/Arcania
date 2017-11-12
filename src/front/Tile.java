@@ -16,14 +16,15 @@ public class Tile {
     static final int SELECTABLE = 2;
     static final int ATTACKABLE = 3;
 
+    private static final Image corpseSprite = new Image("/graphics/soldiers/corpse.png");
+
     private int row;
     private int col;
-    private int status;
-    private GraphicSoldier whosHere;
+    private int status = INACTIVE;
+    private GraphicSoldier whosHere = null;
+    private int corpseCount = 0;
 
     Tile(int row, int col) {
-        this.status = INACTIVE;
-        this.whosHere = null;
         this.row = row;
         this.col = col;
     }
@@ -46,6 +47,10 @@ public class Tile {
 
     public GraphicSoldier getWhosHere() {
         return whosHere;
+    }
+
+    public void addCorpse() {
+        this.corpseCount++;
     }
 
     public ArrayList<Point> getAvailableMovements() {
@@ -77,6 +82,9 @@ public class Tile {
         }
 
         //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
+
+        for(int i = 0; i < corpseCount; i++)
+            backgroundGC.drawImage(new Image("graphics/soldiers/corpse.png"), col*CELLWIDTH + 10 * i, row*CELLHEIGHT + 10 * i);
 
         backgroundGC.setFill(color);
         backgroundGC.setStroke(Color.rgb(0,0,0,0.3));

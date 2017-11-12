@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.List;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
 
@@ -49,6 +51,9 @@ public class Board extends Pane {
     static final int CELLHEIGHT = 100;
     static final int CELLWIDTH = 100;
 
+    private Map<Canvas, back.Card> cardsInHand = new HashMap<>();
+    private Canvas selectedCard = null;
+
     private HashSet<GraphicSoldier> gSoldiers = new HashSet<>();
     private Tile[][] tiles = new Tile[NUMROWS][NUMCOLS];
 
@@ -69,8 +74,8 @@ public class Board extends Pane {
     private VBox createMenu() {
         VBox v = new VBox(30);
 
-        Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
-        v.backgroundProperty().setValue(vBackground);
+        /*Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
+        v.backgroundProperty().setValue(vBackground);*/
 
         v.setPadding(new Insets(10));
 
@@ -81,6 +86,7 @@ public class Board extends Pane {
 
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
+        infoHelp.setPrefWidth(300);
         info.add(infoHelp, 1, 2);
 
 
@@ -96,37 +102,95 @@ public class Board extends Pane {
         h.setMaxSize(400, 500);
         h.setMinSize(400, 500);
 
+        //Background bHand = new Background(new BackgroundImage(new Image("graphics/ui/hand.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
 
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(0.2);
-
-        ArrayList<ImageView> mano = new ArrayList<>();
-        GraphicsContext gc;
-
-        ArrayList<back.Card> cardsInHand = owner.getHand();
+        ArrayList<back.Card> cardsAux = owner.getHand();
 
         int count = 0;
-        for(back.Card c: cardsInHand) {
-            ImageView elem = new ImageView();
-            elem.setFitHeight(100);
-            elem.setFitWidth(100);
-            elem.setImage(new Image("carta.png"));
-            h.getChildren().add(elem);
-            mano.add(elem);
+        for(back.Card c: cardsAux) {
 
-            elem.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            Canvas cardCanvas = new Canvas(100,100);
+            GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
+
+            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 100, 100, true, true), 0, 0);
+            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 10, 0);
+
+            h.getChildren().add(cardCanvas);
+
+            cardsInHand.put(cardCanvas, c);
+
+            cardCanvas.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
 
-                    ImageView e = (ImageView) event.getSource();
+                    Canvas e = (Canvas) event.getSource();
+                    if(e != selectedCard ) e.setEffect(new Glow(0.7));
 
-                    titleHelp.setText("Caballero Oscuro");
-                    infoHelp.setText("Guerrero de descomunal fuerza física, ideal en el combate rápido pero de olvidable destreza.");
+                    if(selectedCard != null) return;
 
-                    for (ImageView carta : mano) {
-                        carta.setEffect(null);
+                    back.Card card = cardsInHand.get(e);
+
+                    titleHelp.setText(card.getName());
+                    infoHelp.setText(card.getDescription());
+
+
+                }
+            });
+
+            cardCanvas.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    Canvas e = (Canvas) event.getSource();
+
+                    if(e != selectedCard) e.setEffect(null);
+
+                    if(selectedCard != null) return;
+
+                    titleHelp.setText("Información de selección");
+                    infoHelp.setText("Seleccione una carta para ver información de la misma.");
+
+
+
+                }
+            });
+
+            cardCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if(game.getCurrentPlayer() != owner) return;
+
+                    Canvas e = (Canvas) event.getSource();
+                    if(e == selectedCard) {
+                        e.setEffect(new Glow(0.7));
+
+                        selectedCard = null;
+                    } else {
+
+                        Glow glow = new Glow(0.7);
+
+                        if(selectedCard != null) selectedCard.setEffect(null);
+
+                        DropShadow borderGlow = new DropShadow();
+
+                        back.Card card = cardsInHand.get(e);
+
+                        titleHelp.setText(card.getName());
+                        infoHelp.setText(card.getDescription());
+
+                        borderGlow.setInput(glow);
+
+                        borderGlow.setOffsetY(0f);
+                        borderGlow.setOffsetX(0f);
+                        borderGlow.setColor(Color.rgb(255, 222, 107, 0.5));
+
+                        borderGlow.setWidth(30);
+                        borderGlow.setHeight(30);
+
+                        e.setEffect(borderGlow);
+
+                        selectedCard = e;
                     }
-                    e.setEffect(colorAdjust);
+
 
                 }
             });
@@ -139,6 +203,9 @@ public class Board extends Pane {
         scrollPane.setPrefSize(450, 450);
         scrollPane.setContent(h);
         scrollPane.setPadding(new Insets(5));
+
+        /*h.setBackground(bHand);
+        scrollPane.setBackground(bHand);*/
 
         v.getChildren().add(scrollPane);
 
@@ -317,6 +384,7 @@ public class Board extends Pane {
 
                             } else if(action.getDestination() == null) { //morir
                                 Tile origin = tiles[action.getOrigin().x][action.getOrigin().y];
+                                origin.addCorpse();
                                 origin.setWhosHere(null);
 
                             } else { //mover

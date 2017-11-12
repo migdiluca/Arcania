@@ -19,17 +19,22 @@ public class Game implements Serializable{
         player1.cardsToHand(5);
         player2.cardsToHand(5);
 
-        Hero h1 = new Hero ("Caballero Negro", 3, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h1.setOwner(player1);
+
+        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        h2.setOwner(player2);
 
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
         addSoldier(h1,new Point(player1.getCastleRow(), 3));
+        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
+
         currentPlayer = player2;
+        addSoldier(h2,new Point(player2.getCastleRow(), 3));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 6));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
@@ -40,6 +45,7 @@ public class Game implements Serializable{
     private void removeDead(Soldier s) {
         player1.aliveCards.remove(s);
         player2.aliveCards.remove(s);
+        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, 0));
         board.removeDeadFromBoard(s);
     }
 
@@ -90,7 +96,6 @@ public class Game implements Serializable{
                     if(s.attack(m2) == 1) {
                         registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 1));
                         if(!m2.isAlive()) {
-                            registerAction(new pendingDrawing(board.searchSoldier(m2), null, m2, 0));
                             removeDead(m2);
                         }
 

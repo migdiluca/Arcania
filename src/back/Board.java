@@ -138,8 +138,6 @@ public class Board {
     public void removeDeadFromBoard(Soldier s) {
         Point p = searchSoldier(s);
         board[p.x][p.y] = null;
-
-        game.registerAction(new pendingDrawing(p, null, s, 0));
     }
 
     public Point searchSoldier(Soldier s) {

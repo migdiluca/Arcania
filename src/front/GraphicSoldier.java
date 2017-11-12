@@ -1,6 +1,8 @@
 package front;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
@@ -122,9 +124,23 @@ public class GraphicSoldier {
                 ySprite = SPRITESIZE;
         }
 
-        gc.drawImage(sprite, xSprite, ySprite,SPRITESIZE,SPRITESIZE,xCoord,yCoord - 10,CELLWIDTH,CELLHEIGHT);
+        if(soldier instanceof back.Hero) {
+            DropShadow borderGlow= new DropShadow();
+            borderGlow.setOffsetY(0f);
+            borderGlow.setOffsetX(0f);
+            if(mine)
+                borderGlow.setColor(Color.rgb(27, 255, 108,0.9));
+            else
+                borderGlow.setColor(Color.rgb(255,0,0,0.9));
 
-        gc.setEffect(null);
+            borderGlow.setWidth(70);
+            borderGlow.setHeight(70);
+
+            gc.setEffect(borderGlow);
+        } else
+            gc.setEffect(null);
+
+        gc.drawImage(sprite, xSprite, ySprite,SPRITESIZE,SPRITESIZE,xCoord,yCoord - 10,CELLWIDTH,CELLHEIGHT);
 
         gc.setLineWidth(4);
         gc.setStroke(Color.grayRgb(25, 0.5922));
