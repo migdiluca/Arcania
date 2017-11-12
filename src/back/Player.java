@@ -75,7 +75,7 @@ public class Player {
 
     /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */
     public boolean playCard(Soldier m) {
-        if(hand.remove(m)){
+        if(hand.remove(m) || m instanceof Hero){
             aliveCards.add(m);
             takeCard();
             return true;

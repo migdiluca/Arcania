@@ -2,6 +2,7 @@ package back;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game implements Serializable{
@@ -18,13 +19,13 @@ public class Game implements Serializable{
         player1.cardsToHand(5);
         player2.cardsToHand(5);
 
-
-
+        Hero h1 = new Hero ("Caballero Negro", 3, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        h1.setOwner(player1);
 
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
-
+        addSoldier(h1,new Point(player1.getCastleRow(), 3));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
         addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
@@ -118,15 +119,14 @@ public class Game implements Serializable{
         return board.validMovePoints(p, currentPlayer);
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
     /* Aca no se si playedBy se lo tenes que pasar porque los jugadores los tiene game
     pero no me acuerdo porque era playedBy y no currentPlayer
      */
-    public HashMap<Point, Boolean> validMovePoints(Point p, Player playedBy) {
-        return board.validMovePoints(p,playedBy);
+    public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
+        if(windowOwner != currentPlayer) {
+            return new HashMap<>();
+        }
+        return board.validMovePoints(p,currentPlayer);
     }
 
     public Soldier getSoldier(Point p) {
@@ -150,6 +150,10 @@ public class Game implements Serializable{
 
     public Point searchSoldier(Soldier s) {
         return board.searchSoldier(s);
+    }
+
+    public ArrayList<Point> availableSpawns() {
+        return board.availableSpawns(currentPlayer);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */

@@ -219,7 +219,7 @@ public class Board extends Pane {
 
         for(int i = 0; i < NUMROWS; i++)
             for(int j = 0; j < NUMCOLS; j++) {
-            back.Soldier s = game.getBoard().getSoldier(new Point(i, j));
+            back.Soldier s = game.getSoldier(new Point(i, j));
                 if(s != null)
                     tiles[i][j].setWhosHere(new GraphicSoldier(s, owner.equals(s.getOwner())));
 
@@ -248,7 +248,7 @@ public class Board extends Pane {
                     /*tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
 */
-                    game.getBoard().moveSoldier(auxTile.getPos(), point);
+                    game.moveSoldier(auxTile.getPos(), point);
 
                     auxTile = null;
 
@@ -256,7 +256,7 @@ public class Board extends Pane {
 
                 } else {
                     auxTile = null;
-                    HashMap<Point, Boolean> moveAux = game.getBoard().validMovePoints(point, owner);
+                    HashMap<Point, Boolean> moveAux = game.validMovePoints(point, owner);
 
                     if (status != ACTIVE && !moveAux.isEmpty()) {
 

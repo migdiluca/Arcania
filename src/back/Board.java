@@ -72,7 +72,7 @@ public class Board {
      */
     public HashMap<Point, Boolean> validMovePoints(Point p, Player playedBy) {
         Soldier soldierAtP = getSoldier(p);
-        if(playedBy == game.getCurrentPlayer() || soldierAtP == null || soldierAtP.getOwner() != playedBy)
+        if(playedBy != game.getCurrentPlayer() || soldierAtP == null || soldierAtP.getOwner() != playedBy)
             return new HashMap<Point,Boolean>();
 
         ArrayList<Point> validMovePoints = nearbyPoints(p);
