@@ -140,7 +140,7 @@ public class GraphicSoldier {
         } else
             gc.setEffect(null);
 
-        gc.drawImage(sprite, xSprite, ySprite,SPRITESIZE,SPRITESIZE,xCoord,yCoord - 10,CELLWIDTH,CELLHEIGHT);
+        gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLWIDTH, CELLHEIGHT);
 
         gc.setLineWidth(4);
         gc.setStroke(Color.grayRgb(25, 0.5922));

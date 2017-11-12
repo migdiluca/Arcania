@@ -11,16 +11,11 @@ import static front.Board.CELLHEIGHT;
 import static front.Board.CELLWIDTH;
 
 public class Tile {
-    static final int INACTIVE = 0;
-    static final int ACTIVE = 1;
-    static final int SELECTABLE = 2;
-    static final int ATTACKABLE = 3;
-
     private static final Image corpseSprite = new Image("/graphics/soldiers/corpse.png");
 
     private int row;
     private int col;
-    private int status = INACTIVE;
+    private TileStates status = TileStates.INACTIVE;
     private GraphicSoldier whosHere = null;
     private int corpseCount = 0;
 
@@ -33,11 +28,11 @@ public class Tile {
         return new Point(row, col);
     }
 
-    void changeStatus(int status) {
+    void changeStatus(TileStates status) {
         this.status = status;
     }
 
-    int getStatus() {
+    TileStates getStatus() {
         return status;
     }
 

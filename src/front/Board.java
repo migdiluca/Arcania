@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -38,12 +39,6 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
-
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
-import static front.Tile.INACTIVE;
-import static front.Tile.ACTIVE;
-import static front.Tile.SELECTABLE;
-import static front.Tile.ATTACKABLE;
 
 public class Board extends Pane {
     private static final int NUMROWS = 7;
@@ -90,17 +85,17 @@ public class Board extends Pane {
         info.add(infoHelp, 1, 2);
 
 
-        Text title = new Text("Mano");
-        title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        v.getChildren().add(title);
+        //Text title = new Text("Mano");
+        //title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        //v.getChildren().add(title);
 
         FlowPane h = new FlowPane();
 
         /*Background hBackground = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY));
         h.backgroundProperty().setValue(hBackground);*/
 
-        h.setMaxSize(400, 500);
-        h.setMinSize(400, 500);
+        h.setMaxSize(350, 600);
+        h.setMinSize(350, 600);
 
         //Background bHand = new Background(new BackgroundImage(new Image("graphics/ui/hand.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
 
@@ -109,11 +104,11 @@ public class Board extends Pane {
         int count = 0;
         for(back.Card c: cardsAux) {
 
-            Canvas cardCanvas = new Canvas(100,100);
+            Canvas cardCanvas = new Canvas(115,115);
             GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
 
-            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 100, 100, true, true), 0, 0);
-            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 10, 0);
+            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 100, 100, true, true), 10, 10);
+            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 20, 10);
 
             h.getChildren().add(cardCanvas);
 
@@ -200,9 +195,9 @@ public class Board extends Pane {
 
 
         ScrollPane scrollPane = new ScrollPane(h);
-        scrollPane.setPrefSize(450, 450);
+        scrollPane.setPrefSize(400,  600);
         scrollPane.setContent(h);
-        scrollPane.setPadding(new Insets(5));
+        scrollPane.setPadding(new Insets(90, 0, 10, 20));
 
         /*h.setBackground(bHand);
         scrollPane.setBackground(bHand);*/
@@ -292,25 +287,26 @@ public class Board extends Pane {
 
             }
 
+        VBox menu = createMenu();
+        menu.setTranslateY(-60);
+        hb.getChildren().addAll(pBoard, menu);
 
-
-        hb.getChildren().addAll(pBoard, createMenu());
         //setStyle("-fx-background-color: #5490ff");
         charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Point point = getPointFromCoordinates((int) event.getX(), (int) event.getY());
                 Tile tile = tiles[point.x][point.y];
-                int status = tile.getStatus();
+                TileStates status = tile.getStatus();
 
                 for (int i = 0; i < NUMROWS; i++) {
                     for (int j = 0; j < NUMCOLS; j++) {
-                        tiles[i][j].changeStatus(INACTIVE);
+                        tiles[i][j].changeStatus(TileStates.INACTIVE);
                     }
                 }
 
 
-                if (status == SELECTABLE || status == ATTACKABLE) {
+                if (status == TileStates.SELECTABLE || status == TileStates.ATTACKABLE) {
                     //back.Game.moveSoldier(auxTile.getPos(), point);
                     /*tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
@@ -325,18 +321,18 @@ public class Board extends Pane {
                     auxTile = null;
                     HashMap<Point, Boolean> moveAux = game.validMovePoints(point, owner);
 
-                    if (status != ACTIVE && !moveAux.isEmpty()) {
+                    if (status != TileStates.ACTIVE && !moveAux.isEmpty()) {
 
                         titleHelp.setText(tile.getWhosHere().getSoldier().getName());
                         infoHelp.setText(tile.getWhosHere().getSoldier().getDescription());
 
                         for (Point p: moveAux.keySet()) {
                             if(moveAux.get(p) == Boolean.TRUE)
-                                tiles[p.x][p.y].changeStatus(ATTACKABLE);
+                                tiles[p.x][p.y].changeStatus(TileStates.ATTACKABLE);
                             else
-                                tiles[p.x][p.y].changeStatus(SELECTABLE);
+                                tiles[p.x][p.y].changeStatus(TileStates.SELECTABLE);
                         }
-                        tile.changeStatus(ACTIVE);
+                        tile.changeStatus(TileStates.ACTIVE);
                         auxTile = tile;
                     }
                 }

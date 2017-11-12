@@ -1,7 +1,8 @@
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-background-image: url("../graphics/ui/hand.png");
-
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 385, 600;
 }
 
 .scroll-pane > .viewport {
