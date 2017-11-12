@@ -9,8 +9,7 @@ import javafx.scene.image.Image;
 
 import java.awt.*;
 
-import static front.Board.CELLHEIGHT;
-import static front.Board.CELLWIDTH;
+import static front.Board.CELLSIZE;
 
 public class GraphicSoldier {
     private static final int ANIMFPS = 6;
@@ -78,49 +77,49 @@ public class GraphicSoldier {
 
         switch(moveDir) {
             case 0:
-                xCoord = p.y*CELLWIDTH;
-                yCoord = p.x*CELLHEIGHT;
+                xCoord = p.y*CELLSIZE;
+                yCoord = p.x*CELLSIZE;
                 xSprite = 0;
                 if(soldier.getOwner().equals(player1)) ySprite = SPRITESIZE; else ySprite = 0;
                 break;
             case 1:
-                xCoord = p.y*CELLWIDTH;
-                yCoord = (p.x + 1) * CELLHEIGHT - (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = p.y*CELLSIZE;
+                yCoord = (p.x + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
                 ySprite = SPRITESIZE;
                 break;
             case 2:
-                xCoord = (p.y - 1) * CELLWIDTH + (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = (p.x + 1) * CELLHEIGHT - (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = (p.y - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
+                yCoord = (p.x + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
                 ySprite = SPRITESIZE;
                 break;
             case 3:
-                xCoord = (p.y - 1) * CELLWIDTH + (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = p.x*CELLHEIGHT;
+                xCoord = (p.y - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
+                yCoord = p.x*CELLSIZE;
                 ySprite = 3*SPRITESIZE;
                 break;
             case 4:
-                xCoord = (p.y - 1) * CELLWIDTH + (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = (p.x - 1) * CELLHEIGHT + (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = (p.y - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
+                yCoord = (p.x - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
                 ySprite = 0;
                 break;
             case 5:
-                xCoord = p.y*CELLWIDTH;
-                yCoord = (p.x - 1) * CELLHEIGHT + (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = p.y*CELLSIZE;
+                yCoord = (p.x - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
                 ySprite = 0;
                 break;
             case 6:
-                xCoord = (p.y + 1) * CELLWIDTH - (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = (p.x - 1) * CELLHEIGHT + (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = (p.y + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
+                yCoord = (p.x - 1) * CELLSIZE + (CELLSIZE*frame)/ANIMFPS;
                 ySprite = 0;
                 break;
             case 7:
-                xCoord = (p.y + 1) * CELLWIDTH - (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = p.x*CELLHEIGHT;
+                xCoord = (p.y + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
+                yCoord = p.x*CELLSIZE;
                 ySprite = 2*SPRITESIZE;
                 break;
             case 8:
-                xCoord = (p.y + 1) * CELLWIDTH - (CELLWIDTH*frame)/ANIMFPS;
-                yCoord = (p.x + 1) * CELLHEIGHT - (CELLHEIGHT*frame)/ANIMFPS;
+                xCoord = (p.y + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
+                yCoord = (p.x + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
                 ySprite = SPRITESIZE;
         }
 
@@ -140,7 +139,7 @@ public class GraphicSoldier {
         } else
             gc.setEffect(null);
 
-        gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLWIDTH, CELLHEIGHT);
+        gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
 
         gc.setLineWidth(4);
         gc.setStroke(Color.grayRgb(25, 0.5922));

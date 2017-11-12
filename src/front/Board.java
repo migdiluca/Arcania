@@ -43,8 +43,7 @@ import sun.font.GraphicComponent;
 public class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
-    static final int CELLHEIGHT = 100;
-    static final int CELLWIDTH = 100;
+    static final int CELLSIZE = 100;
 
     private Map<Canvas, back.Card> cardsInHand = new HashMap<>();
     private Canvas selectedCard = null;
@@ -241,9 +240,9 @@ public class Board extends Pane {
 
         this.owner = owner;
 
-        backgroundCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
+        backgroundCanvas = new Canvas(NUMCOLS * CELLSIZE, NUMROWS * CELLSIZE);
         backgroundGC = backgroundCanvas.getGraphicsContext2D();
-        charCanvas = new Canvas(NUMCOLS * CELLWIDTH, NUMROWS * CELLHEIGHT);
+        charCanvas = new Canvas(NUMCOLS * CELLSIZE, NUMROWS * CELLSIZE);
         charGC = charCanvas.getGraphicsContext2D();
 
         for (int i = 0; i < NUMROWS; i++) {
@@ -255,9 +254,6 @@ public class Board extends Pane {
         pBoard = new Pane();
         pBoard.setMaxSize(700, 700);
         pBoard.setMinSize(700, 700);
-
-
-
 
 
         ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
@@ -342,9 +338,9 @@ public class Board extends Pane {
     }
 
     private Point getPointFromCoordinates(int x, int y) {
-        int i = x / CELLWIDTH;
-        int j = y / CELLHEIGHT;
-        if(i < 0 || i > NUMROWS * CELLWIDTH || j < 0 || j > NUMCOLS * CELLWIDTH) {
+        int i = x / CELLSIZE;
+        int j = y / CELLSIZE;
+        if(i < 0 || i > NUMROWS * CELLSIZE || j < 0 || j > NUMCOLS * CELLSIZE) {
             throw new IllegalArgumentException();
         }
         return new Point(j, i);

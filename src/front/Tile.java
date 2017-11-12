@@ -7,8 +7,7 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static front.Board.CELLHEIGHT;
-import static front.Board.CELLWIDTH;
+import static front.Board.CELLSIZE;
 
 public class Tile {
     private static final Image corpseSprite = new Image("/graphics/soldiers/corpse.png");
@@ -76,16 +75,16 @@ public class Tile {
             case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.65); break;
         }
 
-        //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLWIDTH, row*CELLHEIGHT);
+        //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLSIZE, row*CELLSIZE);
 
         for(int i = 0; i < corpseCount; i++)
-            backgroundGC.drawImage(new Image("graphics/soldiers/corpse.png"), col*CELLWIDTH + 10 * i, row*CELLHEIGHT + 10 * i);
+            backgroundGC.drawImage(new Image("graphics/soldiers/corpse.png"), col*CELLSIZE + 10 * i, row*CELLSIZE + 10 * i);
 
         backgroundGC.setFill(color);
         backgroundGC.setStroke(Color.rgb(0,0,0,0.3));
         backgroundGC.setLineWidth(2);
-        backgroundGC.fillRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
-        backgroundGC.strokeRect(col*CELLWIDTH, row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT);
+        backgroundGC.fillRect(col*CELLSIZE, row*CELLSIZE, CELLSIZE, CELLSIZE);
+        backgroundGC.strokeRect(col*CELLSIZE, row*CELLSIZE, CELLSIZE, CELLSIZE);
 
 
 
