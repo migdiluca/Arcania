@@ -32,10 +32,14 @@ public class Game implements Serializable{
 
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
-        addSoldier(h1,new Point(player1.getCastleRow(), 3));
+
+        player1.playSoldier(h1);
+        player2.playSoldier(h2);
+
+        board.addSoldier(h1,new Point(player1.getCastleRow(), 3));
 
         currentPlayer = player2;
-        addSoldier(h2,new Point(player2.getCastleRow(), 3));
+        board.addSoldier(h2,new Point(player2.getCastleRow(), 3));
 
         currentPlayer = player1;
         actionsLeft = 5;
@@ -140,20 +144,23 @@ public class Game implements Serializable{
         return board.getSoldier(p);
     }
 
-    public void addSoldier(Soldier s, Point p) {
-        if(s.getOwner() == currentPlayer /*&& actionsLeft != 0*/) {
-            invokeSoldier(s, p);
-            currentPlayer.playCard(s);
-            actionsLeft--;
+    public void playCard(Card c, Point p) {
+        if( c instanceof Soldier ) {
+            board.addSoldier((Soldier) c, p);
+            currentPlayer.playSoldier((Soldier) c);
+        } else if( c instanceof Magic ) {
+            ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
+
+            for(Soldier s: affectedBySpell)
+                s.curse((Magic) c);
+
         }
+        currentPlayer.discardCard(c);
+        actionsLeft--;
     }
 
     public int getActionsLeft() {
         return actionsLeft;
-    }
-
-    public void invokeSoldier(Soldier s, Point p) {
-        board.addSoldier(s, p);
     }
 
     public void moveSoldier(Point origin, Point dest) {
@@ -175,13 +182,18 @@ public class Game implements Serializable{
         return board.searchSoldier(s);
     }
 
-    public ArrayList<Point> availableSpawns() {
-        return board.availableSpawns(currentPlayer);
+    public ArrayList<Point> availableSpawns(Card c) {
+        return board.availableSpawns(currentPlayer, c);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
     public String endTurn() {
         performAttack(currentPlayer.aliveCards);
+
+        for(Soldier s: currentPlayer.aliveCards)
+            s.applyMagic();
+
+
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.aliveCards);
 

@@ -173,17 +173,13 @@ public class Board extends Pane {
                     if(game.getCurrentPlayer() != owner) return;
 
                     resetTileStatus();
-                    Canvas e = (Canvas) event.getSource();
 
+                    Canvas e = (Canvas) event.getSource();
                     if(e == selectedCard) {
-                        if (cardsInHand.get(e) instanceof back.Magic) {
-                            //ACA VA LO QUE HAY QUE HACER
-                        } else {
-                            e.setEffect(new Glow(0.7));
-                            selectedCard = null;
-                        }
+                        e.setEffect(new Glow(0.7));
+                        selectedCard = null;
                     } else {
-                        ArrayList<Point> moveAux = game.availableSpawns();
+                        ArrayList<Point> moveAux = game.availableSpawns(cardsInHand.get(e));
                         for (Point p: moveAux) {
                             tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
                         }
@@ -348,7 +344,7 @@ public class Board extends Pane {
 
                 } else if(status == TileStates.INVOKABLE) {
                     back.Card card = cardsInHand.get(selectedCard);
-                    game.addSoldier((back.Soldier) card, point);
+                    game.playCard(card, point);
 
                     h.getChildren().remove(selectedCard);
 

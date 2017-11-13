@@ -66,6 +66,21 @@ public class Board {
         game.registerAction(new pendingDrawing(null, p, s, 0));
     }
 
+    public ArrayList<Soldier> affectedBySpell(Point p) {
+        ArrayList<Point> spellArea = nearbyPoints(p);
+        ArrayList<Soldier> affectedBySpell = new ArrayList<>();
+
+        Iterator<Point> iterator = spellArea.iterator();
+        while (iterator.hasNext()) {
+
+            Soldier s = getSoldier(iterator.next());
+            if( s != null )
+                affectedBySpell.add(s);
+        }
+
+        return affectedBySpell;
+    }
+
     public Soldier getSoldier(Point p) {
         return board[p.x][p.y];
     }
@@ -155,13 +170,23 @@ public class Board {
         return null; //Meter una excepcion
     }
 
-    public ArrayList<Point> availableSpawns(Player currentPlayer) {
+    public ArrayList<Point> availableSpawns(Player currentPlayer, Card c) {
         ArrayList<Point> availablePoints = new ArrayList<>();
-        int spawnRow = currentPlayer.getCastleRow();
-        for (int j = 0; j < 7; j++)
-            if (board[spawnRow][j] == null)
-                availablePoints.add(new Point(spawnRow, j));
+
+        if(c instanceof Soldier) {
+            int spawnRow = currentPlayer.getCastleRow();
+            for (int j = 0; j < 7; j++)
+                if (board[spawnRow][j] == null)
+                    availablePoints.add(new Point(spawnRow, j));
+        } else if(c instanceof Magic) {
+
+            Hero h = currentPlayer.getHero();
+            if( h != null)
+                availablePoints.add(game.searchSoldier(h));
+        }
+
         return availablePoints;
+
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {
