@@ -11,6 +11,7 @@ public class Game implements Serializable{
     protected Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
                              para tomar puntos de spawn etc..*/
     private Player currentPlayer;
+    private int actionsLeft;
 
     public Game(String player1Name, String player2Name) {
         board = new Board(this);
@@ -40,6 +41,7 @@ public class Game implements Serializable{
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
         addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 1));
         currentPlayer = player1;
+        actionsLeft = 5;
     }
 
     private void removeDead(Soldier s) {
@@ -147,10 +149,20 @@ public class Game implements Serializable{
 
     public void invokeSoldier(Soldier s, Point p) {
         board.addSoldier(s, p);
+        actionsLeft--;
     }
 
     public void moveSoldier(Point origin, Point dest) {
         board.moveSoldier(origin,dest);
+        actionsLeft--;
+    }
+
+    /* no se si corroborar que es el current player por como se llamaria desde el front */
+    public void flipCard(Player player) {
+        if(player == currentPlayer) {
+            currentPlayer.cardsToHand();
+            actionsLeft--;
+        }
     }
 
     public Point searchSoldier(Soldier s) {
@@ -173,6 +185,7 @@ public class Game implements Serializable{
             return otherPlayer.getName();
 
         currentPlayer = otherPlayer;
+        actionsLeft = 5;
         return null;
     }
 
