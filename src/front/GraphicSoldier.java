@@ -53,6 +53,10 @@ public class GraphicSoldier {
             moveDir = 7;
         } else if (dir.x == -1 && dir.y == -1) {
             moveDir = 8;
+        } else if (dir.x == -2 && dir.y == 0) {
+            moveDir = 9;
+        } else if (dir.x == 2 && dir.y == 0) {
+            moveDir = 10;
         }
 
         frame = 0;
@@ -121,6 +125,17 @@ public class GraphicSoldier {
                 xCoord = (p.y + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
                 yCoord = (p.x + 1) * CELLSIZE - (CELLSIZE*frame)/ANIMFPS;
                 ySprite = SPRITESIZE;
+                break;
+            case 9:
+                xCoord = p.y*CELLSIZE;
+                yCoord = (p.x + 2) * CELLSIZE - 2 * (CELLSIZE*frame)/ANIMFPS;
+                ySprite = SPRITESIZE;
+                break;
+            case 10:
+                xCoord = p.y*CELLSIZE;
+                yCoord = (p.x - 2) * CELLSIZE + 2 * (CELLSIZE*frame)/ANIMFPS;
+                ySprite = 0;
+                break;
         }
 
         if(soldier instanceof back.Hero) {
