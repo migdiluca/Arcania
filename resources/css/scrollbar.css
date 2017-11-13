@@ -2,9 +2,27 @@
     -fx-background-color: transparent;
     -fx-background-image: url("../graphics/ui/hand.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 385, 600;
+    -fx-background-size: 382, 600;
 }
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:derive(black,20%);
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: derive(black,20%);
+    -fx-border-color: derive(black,20%);
+}
+
+.scroll-bar:vertical .track{
+    -fx-background-color: derive(black,50%);
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black,30%);
+    -fx-background-radius: 1em;
 }

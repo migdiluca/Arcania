@@ -194,7 +194,7 @@ public class Board extends Pane {
 
 
         ScrollPane scrollPane = new ScrollPane(h);
-        scrollPane.setPrefSize(400,  600);
+        scrollPane.setPrefSize(400,  590);
         scrollPane.setContent(h);
         scrollPane.setPadding(new Insets(90, 0, 10, 20));
 
