@@ -59,7 +59,7 @@ public class Soldier extends Card {
         int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
 
         if(missChance < 85) {
-            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)), this);
+            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
             return 1;
         } else {
             return 0;
@@ -71,10 +71,8 @@ public class Soldier extends Card {
         c.getAttacked(this.attack);
     }
 
-    private void getAttacked(int damage, Soldier attacker) {
-
-
-                 setHealth(this.health - damage);
+    private void getAttacked(int damage) {
+        setHealth(this.health - damage);
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {

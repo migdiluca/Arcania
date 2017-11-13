@@ -16,6 +16,7 @@ public class Game implements Serializable{
                              para tomar puntos de spawn etc..*/
     private Player currentPlayer;
     private int actionsLeft;
+    private Set<Magic> magicCards = new HashSet<>();
 
     public Game(String player1Name, String player2Name) {
         board = new Board(this);
@@ -53,6 +54,10 @@ public class Game implements Serializable{
         player2.aliveCards.remove(s);
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, 0));
         board.removeDeadFromBoard(s);
+    }
+
+    private void removeMagicCard(Magic m) {
+        magicCards.remove(m);
     }
 
     private ArrayList<Card> createDeck() {
@@ -150,6 +155,10 @@ public class Game implements Serializable{
             currentPlayer.playCard(s);
             actionsLeft--;
         }
+    }
+
+    public void addMagicCard(Magic m) {
+        magicCards.add(m);
     }
 
     public int getActionsLeft() {

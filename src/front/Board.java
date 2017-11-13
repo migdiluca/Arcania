@@ -149,7 +149,6 @@ public class Board extends Pane {
                     titleHelp.setText(card.getName());
                     infoHelp.setText(card.getDescription());
 
-
                 }
             });
 
@@ -164,8 +163,6 @@ public class Board extends Pane {
 
                     titleHelp.setText("Información de selección");
                     infoHelp.setText("Seleccione una carta para ver información de la misma.");
-
-
 
                 }
             });
@@ -183,12 +180,14 @@ public class Board extends Pane {
                     }
 
 
-
                     Canvas e = (Canvas) event.getSource();
                     if(e == selectedCard) {
-                        e.setEffect(new Glow(0.7));
-
-                        selectedCard = null;
+                        if (cardsInHand.get(e) instanceof back.Magic) {
+                            game.addMagicCard((back.Magic)cardsInHand.get(e));
+                        } else {
+                            e.setEffect(new Glow(0.7));
+                            selectedCard = null;
+                        }
                     } else {
 
                         Glow glow = new Glow(0.7);
