@@ -141,7 +141,7 @@ public class Game implements Serializable{
     }
 
     public void addSoldier(Soldier s, Point p) {
-        if(s.getOwner() == currentPlayer && actionsLeft != 0) {
+        if(s.getOwner() == currentPlayer /*&& actionsLeft != 0*/) {
             invokeSoldier(s, p);
             currentPlayer.playCard(s);
             actionsLeft--;
@@ -157,15 +157,15 @@ public class Game implements Serializable{
     }
 
     public void moveSoldier(Point origin, Point dest) {
-        if(actionsLeft != 0) {
+        //if(actionsLeft != 0) {
             board.moveSoldier(origin, dest);
-            actionsLeft--;
-        }
+        /*    actionsLeft--;
+        }*/
     }
 
     /* no se si corroborar que es el current player por como se llamaria desde el front */
     public void flipCard(Player player) {
-        if(player == currentPlayer && actionsLeft != 0) {
+        if(player == currentPlayer) {
             currentPlayer.cardsToHand();
             actionsLeft--;
         }
