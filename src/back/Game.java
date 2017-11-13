@@ -79,14 +79,6 @@ public class Game implements Serializable{
         return null;
     }
 
-    protected void registerAction(pendingDrawing pd) {
-        getPlayer1().registerAction(pd);
-        getPlayer2().registerAction(pd);
-    }
-
-    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
-    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
-     */
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
             Castle castleToAttack = castleToAttack(s);
@@ -109,6 +101,14 @@ public class Game implements Serializable{
             }
         }
     }
+
+    protected void registerAction(pendingDrawing pd) {
+        getPlayer1().registerAction(pd);
+        getPlayer2().registerAction(pd);
+    }
+    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
+    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
+     */
 
     public Player getPlayer1() {
         return player1;
@@ -145,6 +145,10 @@ public class Game implements Serializable{
             invokeSoldier(s, p);
             currentPlayer.playCard(s);
         }
+    }
+
+    public int getActionsLeft() {
+        return actionsLeft;
     }
 
     public void invokeSoldier(Soldier s, Point p) {
