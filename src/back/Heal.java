@@ -1,15 +1,25 @@
 package back;
 
+import java.util.Iterator;
+import java.util.Map;
+
 public class Heal extends Magic {
-    public Heal(String name, int id, String description){
-        super("Sanar", 120, "Esta carta cura vida.", 1);
+    public Heal(String name, int id, String description, boolean isNegative){
+        super(name, id, description, 0, isNegative);
     }
 
-    public void effect(Soldier s){
-        if (!s.isAlive()) {
-            removeSoldier(s);
-            return;
-        }
+    @Override
+    public void startEffect(Soldier s){
         s.setHealth(s.getHealth() + 25);
+        Map<Magic, Integer> effectList = s.getAffectedBy();
+
+        Iterator<Magic> i = effectList.keySet().iterator();
+
+        while(i.hasNext()) {
+            Magic m = i.next();
+            if (m.getIsNegative()) {
+                i.remove();
+            }
+        }
     }
 }

@@ -5,4 +5,6 @@ public class Hero extends Soldier {
         super(name,id,attack,health,defense,agility, description);
     }
 
+    @Override
+    public void curse (Magic m) {}
 }

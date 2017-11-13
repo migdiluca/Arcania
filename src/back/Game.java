@@ -16,7 +16,6 @@ public class Game implements Serializable{
                              para tomar puntos de spawn etc..*/
     private Player currentPlayer;
     private int actionsLeft;
-    private Set<Magic> magicCards = new HashSet<>();
 
     public Game(String player1Name, String player2Name) {
         board = new Board(this);
@@ -34,17 +33,10 @@ public class Game implements Serializable{
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
         addSoldier(h1,new Point(player1.getCastleRow(), 3));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
 
         currentPlayer = player2;
         addSoldier(h2,new Point(player2.getCastleRow(), 3));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 6));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 1));
+
         currentPlayer = player1;
         actionsLeft = 5;
     }
@@ -54,10 +46,6 @@ public class Game implements Serializable{
         player2.aliveCards.remove(s);
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, 0));
         board.removeDeadFromBoard(s);
-    }
-
-    private void removeMagicCard(Magic m) {
-        magicCards.remove(m);
     }
 
     private ArrayList<Card> createDeck() {
@@ -74,6 +62,9 @@ public class Game implements Serializable{
 
         for(int i = 0; i < 5; i++)
             deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Poison("Envenenar", 5, "Envenena a los soldados aledaños al héroe durante cinco turnos",true));
 
         Collections.shuffle(deck);
         return deck;
@@ -155,10 +146,6 @@ public class Game implements Serializable{
             currentPlayer.playCard(s);
             actionsLeft--;
         }
-    }
-
-    public void addMagicCard(Magic m) {
-        magicCards.add(m);
     }
 
     public int getActionsLeft() {

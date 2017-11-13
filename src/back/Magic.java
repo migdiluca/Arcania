@@ -1,37 +1,32 @@
 package back;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public abstract class Magic extends Card {
     private int duration;
-    private Set<Soldier> affectedSoldiers = new HashSet<>();
-    private String description;
+    private boolean isNegative;
 
-    public Magic(String name, int id, String description, int duration){
+    public Magic(String name, int id, String description, int duration, boolean isNegative){
         super(name, id, description);
-        this.description = description;
         this.duration = duration;
+        this.isNegative = isNegative;
     }
 
-    public void applyEffect() {
-        for (Soldier s: affectedSoldiers) {
-            effect(s);
-        }
-        duration--;
+    public boolean getIsNegative() {
+        return isNegative;
     }
 
-    public int getDuration () {
+    public int getDuration() {
         return duration;
     }
 
-    public void addSoldier(Soldier s) {
-        affectedSoldiers.add(s);
+    public void startEffect(Soldier s) {
+        return;
     }
 
-    public void removeSoldier(Soldier s) {
-        affectedSoldiers.remove(s);
+    public void effect(Soldier s){
+        return;
     }
 
-    abstract public void effect(Soldier s);
+    public void lift(Soldier s) {
+        return;
+    }
 }

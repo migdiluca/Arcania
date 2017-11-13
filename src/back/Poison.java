@@ -1,15 +1,12 @@
 package back;
 
 public class Poison extends Magic {
-    public Poison(String name, int id, String description){
-        super("Veneno", 121, "Esta carta genera daño", 5);
+    public Poison(String name, int id, String description, boolean isNegative){
+        super(name, id, description, 5, isNegative);
     }
 
-    public void effect(Soldier m){
-        if (!m.isAlive()) {
-            removeSoldier(m);
-            return;
-        }
-        m.setHealth(m.getHealth() - 5);
+    @Override
+    public void effect(Soldier s){
+        s.setHealth(s.getHealth() - 5);
     }
 }

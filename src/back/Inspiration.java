@@ -1,19 +1,20 @@
 package back;
 
 public class Inspiration extends Magic {
-    public Inspiration(String name, int id, String description){
-        super("Inspiración", 123, "Aumenta el ataque durante 5 turnos", 5);
+    private int buff;
+
+    public Inspiration(String name, int id, String description, boolean isNegative){
+        super(name, id, description, 5, isNegative);
+        this.buff = buff;
     }
 
-    public void effect(Soldier s){
-        if (!s.isAlive()) {
-            removeSoldier(s);
-            return;
-        }
-        if (getDuration() == 5) {
-            s.setAttack(s.getAttack() + 5);
-        } else if (getDuration() == 1) {
-            s.setAttack(s.getAttack() - 5);
-        }
+    @Override
+    public void startEffect(Soldier s){
+        s.setAttack(s.getAttack() + buff);
+    }
+
+    @Override
+    public void lift(Soldier s) {
+        s.setAttack(s.getAttack() - buff);
     }
 }

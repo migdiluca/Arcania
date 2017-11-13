@@ -173,22 +173,20 @@ public class Board extends Pane {
                     if(game.getCurrentPlayer() != owner) return;
 
                     resetTileStatus();
-
-                    ArrayList<Point> moveAux = game.availableSpawns();
-                    for (Point p: moveAux) {
-                        tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
-                    }
-
-
                     Canvas e = (Canvas) event.getSource();
+
                     if(e == selectedCard) {
                         if (cardsInHand.get(e) instanceof back.Magic) {
-                            game.addMagicCard((back.Magic)cardsInHand.get(e));
+                            //ACA VA LO QUE HAY QUE HACER
                         } else {
                             e.setEffect(new Glow(0.7));
                             selectedCard = null;
                         }
                     } else {
+                        ArrayList<Point> moveAux = game.availableSpawns();
+                        for (Point p: moveAux) {
+                            tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
+                        }
 
                         Glow glow = new Glow(0.7);
 

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Random;
+import java.util.*;
 
 public class Soldier extends Card {
     private static final long serialVersionUID = 1L;
@@ -13,6 +13,32 @@ public class Soldier extends Card {
     private int fullHealth;
     private int defense;
     private int agility;
+    private Map<Magic, Integer> affectedBy = new HashMap<>();
+
+    public void curse(Magic m) {
+        m.startEffect(this);
+        if (m.getDuration() > 0) {
+            affectedBy.put(m, m.getDuration());
+        }
+    }
+
+    public Map<Magic, Integer> getAffectedBy () {
+        return affectedBy;
+    }
+
+    public void applyMagic() {
+        for (Magic m: affectedBy.keySet()) {
+            m.effect(this);
+
+            int turnsLeft = affectedBy.get(m);
+            if (affectedBy.get(m) == 0) {
+                m.lift(this);
+                affectedBy.remove(m);
+            } else {
+                affectedBy.replace(m, turnsLeft - 1);
+            }
+        }
+    }
 
     public Soldier(String name, int id, int attack, int health, int defense, int agility, String description) {
         super(name, id, description);

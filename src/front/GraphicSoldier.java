@@ -139,7 +139,7 @@ public class GraphicSoldier {
         }
 
         if(soldier instanceof back.Hero) {
-            DropShadow borderGlow= new DropShadow();
+            DropShadow borderGlow = new DropShadow();
             borderGlow.setOffsetY(0f);
             borderGlow.setOffsetX(0f);
 
@@ -149,8 +149,7 @@ public class GraphicSoldier {
             borderGlow.setHeight(70);
 
             gc.setEffect(borderGlow);
-        } else
-            gc.setEffect(null);
+        }
 
         gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
 
@@ -159,6 +158,8 @@ public class GraphicSoldier {
         gc.strokeLine(15 + xCoord, 95 + yCoord, 85 + xCoord, 95 + yCoord);
         if(!mine) gc.setStroke(Color.rgb(255,0,0,0.9)); else gc.setStroke(Color.rgb(27, 255, 108,0.9));
         gc.strokeLine(15 + xCoord, 95 + yCoord, 15 + soldier.getHealthPercent() + xCoord, 95 + yCoord);
+
+        gc.setEffect(null);
 
     }
 
