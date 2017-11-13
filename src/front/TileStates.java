@@ -1,5 +1,5 @@
 package front;
 
 public enum TileStates {
-    INACTIVE, ACTIVE, SELECTABLE, ATTACKABLE;
+    INACTIVE, ACTIVE, MOVABLE, INVOKABLE, ATTACKABLE;
 }

@@ -142,10 +142,8 @@ public class GraphicSoldier {
             DropShadow borderGlow= new DropShadow();
             borderGlow.setOffsetY(0f);
             borderGlow.setOffsetX(0f);
-            if(mine)
-                borderGlow.setColor(Color.rgb(27, 255, 108,0.9));
-            else
-                borderGlow.setColor(Color.rgb(255,0,0,0.9));
+
+            borderGlow.setColor(Color.rgb(255, 228, 34, 0.902));
 
             borderGlow.setWidth(70);
             borderGlow.setHeight(70);

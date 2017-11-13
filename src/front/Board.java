@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -36,6 +37,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
@@ -65,6 +67,8 @@ public class Board extends Pane {
     private Label infoHelp;
     private Text titleHelp;
 
+    private FlowPane h;
+
     private VBox createMenu() {
         VBox v = new VBox(20);
 
@@ -90,7 +94,7 @@ public class Board extends Pane {
         //title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         //v.getChildren().add(title);
 
-        FlowPane h = new FlowPane();
+        h = new FlowPane();
 
         /*Background hBackground = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY));
         h.backgroundProperty().setValue(hBackground);*/
@@ -109,7 +113,23 @@ public class Board extends Pane {
             GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
 
             cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
-            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 20, 10);
+            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
+
+            cardGC.setFill(Color.WHITE);
+            //cardGC.setFont(titleHelp.getFont());
+
+
+            if( c instanceof back.Soldier ) {
+                back.Soldier s = (back.Soldier) c;
+                cardGC.fillText(String.valueOf(s.getAttack()), 53, 24);
+                cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
+                cardGC.fillText(String.valueOf(s.getAgility()), 53, 56);
+                cardGC.fillText(String.valueOf(s.getDefense()), 53, 72);
+
+            }
+
+            cardGC.setFont(titleHelp.getFont());
+            cardGC.fillText(c.getName(), 43, 145);
 
             h.getChildren().add(cardCanvas);
 
@@ -154,6 +174,15 @@ public class Board extends Pane {
                 @Override
                 public void handle(MouseEvent event) {
                     if(game.getCurrentPlayer() != owner) return;
+
+                    resetTileStatus();
+
+                    ArrayList<Point> moveAux = game.availableSpawns();
+                    for (Point p: moveAux) {
+                        tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
+                    }
+
+
 
                     Canvas e = (Canvas) event.getSource();
                     if(e == selectedCard) {
@@ -223,6 +252,14 @@ public class Board extends Pane {
 
 
         return v;
+    }
+
+    void resetTileStatus() {
+        for (int i = 0; i < NUMROWS; i++) {
+            for (int j = 0; j < NUMCOLS; j++) {
+                tiles[i][j].changeStatus(TileStates.INACTIVE);
+            }
+        }
     }
 
     Board(back.Game game, back.Player owner) {
@@ -297,14 +334,11 @@ public class Board extends Pane {
                 Tile tile = tiles[point.x][point.y];
                 TileStates status = tile.getStatus();
 
-                for (int i = 0; i < NUMROWS; i++) {
-                    for (int j = 0; j < NUMCOLS; j++) {
-                        tiles[i][j].changeStatus(TileStates.INACTIVE);
-                    }
-                }
+                resetTileStatus();
+                if(selectedCard != null) selectedCard.setEffect(null);
 
 
-                if (status == TileStates.SELECTABLE || status == TileStates.ATTACKABLE) {
+                if (status == TileStates.MOVABLE || status == TileStates.ATTACKABLE) {
                     //back.Game.moveSoldier(auxTile.getPos(), point);
                     /*tile.setWhosHere(auxTile.getWhosHere());
                     tile.moveSoldier(new Point(point.x - auxTile.getPos().x, point.y - auxTile.getPos().y));
@@ -315,6 +349,17 @@ public class Board extends Pane {
 
                     game.endTurn();
 
+                } else if(status == TileStates.INVOKABLE) {
+                    back.Card card = cardsInHand.get(selectedCard);
+                    game.addSoldier((back.Soldier) card, point);
+
+                    h.getChildren().remove(selectedCard);
+
+                    titleHelp.setText("Información de selección");
+                    infoHelp.setText("Seleccione una carta para ver información de la misma.");
+
+                    selectedCard = null;
+                    auxTile = null;
                 } else {
                     auxTile = null;
                     HashMap<Point, Boolean> moveAux = game.validMovePoints(point, owner);
@@ -328,7 +373,7 @@ public class Board extends Pane {
                             if(moveAux.get(p) == Boolean.TRUE)
                                 tiles[p.x][p.y].changeStatus(TileStates.ATTACKABLE);
                             else
-                                tiles[p.x][p.y].changeStatus(TileStates.SELECTABLE);
+                                tiles[p.x][p.y].changeStatus(TileStates.MOVABLE);
                         }
                         tile.changeStatus(TileStates.ACTIVE);
                         auxTile = tile;
