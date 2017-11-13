@@ -66,7 +66,7 @@ public class Board extends Pane {
     private Text titleHelp;
 
     private VBox createMenu() {
-        VBox v = new VBox(30);
+        VBox v = new VBox(20);
 
         /*Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
         v.backgroundProperty().setValue(vBackground);*/
@@ -95,8 +95,8 @@ public class Board extends Pane {
         /*Background hBackground = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY));
         h.backgroundProperty().setValue(hBackground);*/
 
-        h.setMaxSize(350, 600);
-        h.setMinSize(350, 600);
+        h.setMaxSize(350, 1200);
+        h.setMinSize(350, 1200);
 
         //Background bHand = new Background(new BackgroundImage(new Image("graphics/ui/hand.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
 
@@ -105,10 +105,10 @@ public class Board extends Pane {
         int count = 0;
         for(back.Card c: cardsAux) {
 
-            Canvas cardCanvas = new Canvas(115,115);
+            Canvas cardCanvas = new Canvas(170,170);
             GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
 
-            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 100, 100, true, true), 10, 10);
+            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
             cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 20, 10);
 
             h.getChildren().add(cardCanvas);
@@ -198,7 +198,7 @@ public class Board extends Pane {
         ScrollPane scrollPane = new ScrollPane(h);
         scrollPane.setPrefSize(400,  590);
         scrollPane.setContent(h);
-        scrollPane.setPadding(new Insets(90, 0, 10, 15));
+        scrollPane.setPadding(new Insets(80, 0, 30, 15));
 
         /*h.setBackground(bHand);
         scrollPane.setBackground(bHand);*/
