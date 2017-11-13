@@ -68,7 +68,7 @@ public class Game implements Serializable{
             deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Poison("Envenenar", 5, "Envenena a los soldados aledaños al héroe durante cinco turnos",true));
+            deck.add(new Heal("Curar", 5, "Envenena a los soldados aledaños al héroe durante cinco turnos",true));
 
         Collections.shuffle(deck);
         return deck;

@@ -76,6 +76,8 @@ public class Soldier extends Card {
 
     public void setHealth(int health){
        this.health = health;
+       if (this.health > fullHealth)
+           this.health = fullHealth;
     }
 
     // Estructura de ataque.
