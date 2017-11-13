@@ -129,12 +129,12 @@ public class GraphicSoldier {
             case 9:
                 xCoord = p.y*CELLSIZE;
                 yCoord = (p.x + 2) * CELLSIZE - 2 * (CELLSIZE*frame)/ANIMFPS;
-                ySprite = SPRITESIZE;
+                ySprite = 0;
                 break;
             case 10:
                 xCoord = p.y*CELLSIZE;
                 yCoord = (p.x - 2) * CELLSIZE + 2 * (CELLSIZE*frame)/ANIMFPS;
-                ySprite = 0;
+                ySprite = SPRITESIZE;
                 break;
         }
 

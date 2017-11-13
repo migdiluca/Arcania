@@ -76,11 +76,13 @@ public class Board extends Pane {
         GridPane info = new GridPane();
         titleHelp = new Text("Información de selección");
         titleHelp.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        titleHelp.setFill(Color.WHITE);
         info.add(titleHelp, 1, 1);
 
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         infoHelp.setPrefWidth(300);
+        infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
 
 
