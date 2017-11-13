@@ -1,5 +1,8 @@
 package back;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -12,6 +15,7 @@ public class Player {
     protected Castle castle;
     private int castleRow;
     private int actionsLeft;
+    private static final long serialVersionUID = 1L;
 
     private ArrayDeque<pendingDrawing> actionRegistry;
 
@@ -87,5 +91,25 @@ public class Player {
         if(aliveCards.isEmpty() && hand.isEmpty() && deck.isEmpty())
             return false;
         return true;
+    }
+
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(name);
+        out.writeObject(deck);
+        out.writeObject(hand);
+        out.writeObject(aliveCards);
+        out.writeObject(castle);
+        out.writeObject(castleRow);
+    }
+
+    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        ois.defaultReadObject();
+        name = (String) ois.readObject();
+        deck = (Stack<Card>) ois.readObject();
+        hand = (ArrayList<Card>) ois.readObject();
+        aliveCards = (ArrayList<Soldier>) ois.readObject();
+        castle = (Castle) ois.readObject();
+        castleRow = (int) ois.readObject();
     }
 }

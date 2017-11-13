@@ -1,12 +1,16 @@
 package back;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game implements Serializable{
     private Player player1;
+    private static final long serialVersionUID = 1L;
     private Player player2;
     protected Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
                              para tomar puntos de spawn etc..*/
@@ -193,6 +197,23 @@ public class Game implements Serializable{
         currentPlayer = otherPlayer;
         actionsLeft = 5;
         return null;
+    }
+
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(player1);
+        out.writeObject(player2);
+        out.writeObject(currentPlayer);
+        out.writeObject(board);
+    }
+
+
+    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        ois.defaultReadObject();
+        player1 = (Player) ois.readObject();
+        player2 = (Player) ois.readObject();
+        currentPlayer = (Player) ois.readObject();
+        board = (Board) ois.readObject();
     }
 
 }
