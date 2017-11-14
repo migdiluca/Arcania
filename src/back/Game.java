@@ -224,16 +224,15 @@ public class Game implements Serializable{
 
     }
 
-    File file;
 
-    public void writeGame() throws IOException {
+    public void writeGame(File file) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
         oos.writeObject(this);
         oos.close();
     }
 
 
-   public void loadGame() throws IOException, ClassNotFoundException {
+   public void loadGame(File file) throws IOException, ClassNotFoundException {
        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
        Game saveGame = (Game) ois.readObject();
        this.currentPlayer = saveGame.currentPlayer;

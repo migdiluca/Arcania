@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -17,6 +18,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
@@ -27,6 +31,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -43,6 +49,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
@@ -51,6 +59,8 @@ public class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
     static final int CELLSIZE = 100;
+    private Stage primaryStage;
+    private FileChooser fileChooser = new FileChooser();
 
     private Map<Canvas, back.Card> cardsInHand = new HashMap<>();
     private Canvas selectedCard = null;
@@ -183,6 +193,46 @@ public class Board extends Pane {
         }*/
 
 
+        MenuBar mainMenu = new MenuBar();
+        Menu file = new Menu("File");
+        MenuItem save = new MenuItem("Save");
+        MenuItem load = new MenuItem("Load");
+
+        file.getItems().addAll(load,save);
+        mainMenu.getMenus().add(file);
+        getChildren().add(mainMenu);
+
+        load.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    File selectedFile = fileChooser.showOpenDialog(Board.this.primaryStage);
+                    game.loadGame(selectedFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        save.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    File selectedFile = fileChooser.showSaveDialog(Board.this.primaryStage);
+                    game.writeGame(selectedFile);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+
+
 
         return v;
     }
@@ -306,9 +356,10 @@ public class Board extends Pane {
         }
     }
 
-    Board(back.Game game, back.Player owner) {
+    Board(back.Game game, back.Player owner,Stage primaryStage) {
 
 
+        this.primaryStage = primaryStage;
         ImageView background = new ImageView(new Image("/graphics/map/fondo.png", 1300, 820, false, false));
 
         HBox hb = new HBox(80);

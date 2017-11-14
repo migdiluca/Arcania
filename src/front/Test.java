@@ -21,8 +21,8 @@ public class Test extends Application {
 
         back.Game game = new back.Game("Eze", "Mike");
 
-        Board board = new Board(game, game.getPlayer1());
-        Board board2 = new Board(game, game.getPlayer2());
+        Board board = new Board(game, game.getPlayer1(),primaryStage);
+        Board board2 = new Board(game, game.getPlayer2(),primaryStage);
 
         Scene scene1 = new Scene(board);
         Scene scene2 = new Scene(board2);
