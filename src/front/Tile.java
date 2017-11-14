@@ -70,9 +70,9 @@ public class Tile {
         Color color = Color.TRANSPARENT;
         switch (status) {
             case INACTIVE: color = Color.TRANSPARENT; break;
-            case ACTIVE: color = Color.rgb(0, 170, 41, 0.502); break;
-            case MOVABLE: case INVOKABLE: color = Color.rgb(0, 17, 170, 0.502); break;
-            case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.65); break;
+            case ACTIVE: color = Color.rgb(0, 170, 41, 0.4); break;
+            case MOVABLE: case INVOKABLE: color = Color.rgb(0, 17, 170, 0.3); break;
+            case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.4); break;
         }
 
         //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLSIZE, row*CELLSIZE);

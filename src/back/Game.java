@@ -21,8 +21,10 @@ public class Game implements Serializable{
         board = new Board(this);
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
-        player1.cardsToHand(5);
-        player2.cardsToHand(5);
+        for(int i = 0; i < 5; i++) {
+            player1.cardsToHand();
+            player2.cardsToHand();
+        }
 
         Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h1.setOwner(player1);
@@ -48,7 +50,7 @@ public class Game implements Serializable{
     private void removeDead(Soldier s) {
         player1.aliveCards.remove(s);
         player2.aliveCards.remove(s);
-        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, 0));
+        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
 
@@ -68,7 +70,10 @@ public class Game implements Serializable{
             deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Heal("Curar", 5, "Envenena a los soldados aledaños al héroe durante cinco turnos",true));
+            deck.add(new Heal("Sanación Superior", 5, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Poison("Envenenar", 5, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",false, 10, 3));
 
         Collections.shuffle(deck);
         return deck;
@@ -83,6 +88,11 @@ public class Game implements Serializable{
         return null;
     }
 
+    private void performAction() {
+        actionsLeft--;
+        if(actionsLeft == 0)
+            endTurn();
+    }
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
             Castle castleToAttack = castleToAttack(s);
@@ -92,13 +102,13 @@ public class Game implements Serializable{
                 Soldier m2 = board.enemyToAttack(board.searchSoldier(s));
                 if(m2 != null) {
                     if(s.attack(m2) == 1) {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 1));
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.STRIKE));
                         if(!m2.isAlive()) {
                             removeDead(m2);
                         }
 
                     } else {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 2));
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.EVADE));
                     }
 
                 }
@@ -134,7 +144,8 @@ public class Game implements Serializable{
     pero no me acuerdo porque era playedBy y no currentPlayer
      */
     public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
-        if(windowOwner != currentPlayer) {
+        Soldier s = board.getSoldier(p);
+        if(s == null || windowOwner != currentPlayer || !s.canMove()) {
             return new HashMap<>();
         }
         return board.validMovePoints(p,currentPlayer);
@@ -156,7 +167,7 @@ public class Game implements Serializable{
 
         }
         currentPlayer.discardCard(c);
-        actionsLeft--;
+        performAction();
     }
 
     public int getActionsLeft() {
@@ -164,18 +175,22 @@ public class Game implements Serializable{
     }
 
     public void moveSoldier(Point origin, Point dest) {
-        //if(actionsLeft != 0) {
+        Soldier s = board.getSoldier(origin);
+        if(s.canMove()) {
             board.moveSoldier(origin, dest);
-        /*    actionsLeft--;
-        }*/
+            s.disableMovement();
+            performAction();
+        }
     }
 
     /* no se si corroborar que es el current player por como se llamaria desde el front */
-    public void flipCard(Player player) {
+    public Card flipCard(Player player) {
+        Card c = null;
         if(player == currentPlayer) {
-            currentPlayer.cardsToHand();
-            actionsLeft--;
+            c = currentPlayer.cardsToHand();
+            performAction();
         }
+        return c;
     }
 
     public Point searchSoldier(Soldier s) {
@@ -190,9 +205,10 @@ public class Game implements Serializable{
     public String endTurn() {
         performAttack(currentPlayer.aliveCards);
 
-        for(Soldier s: currentPlayer.aliveCards)
+        for(Soldier s: currentPlayer.aliveCards) {
+            s.enableMovement();
             s.applyMagic();
-
+        }
 
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.aliveCards);

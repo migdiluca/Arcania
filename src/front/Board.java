@@ -1,5 +1,6 @@
 package front;
 
+import back.ActionType;
 import back.Soldier;
 import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
@@ -13,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
@@ -27,6 +29,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
@@ -69,6 +73,8 @@ public class Board extends Pane {
 
     private FlowPane h;
 
+    private Label movesLeft;
+
     private VBox createMenu() {
         VBox v = new VBox(20);
 
@@ -86,6 +92,7 @@ public class Board extends Pane {
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         infoHelp.setPrefWidth(300);
+        //infoHelp.setPrefHeight(80);
         infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
 
@@ -107,114 +114,8 @@ public class Board extends Pane {
         ArrayList<back.Card> cardsAux = owner.getHand();
 
         int count = 0;
-        for(back.Card c: cardsAux) {
-
-            Canvas cardCanvas = new Canvas(170,170);
-            GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
-
-            cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
-            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
-
-            cardGC.setFill(Color.WHITE);
-            //cardGC.setFont(titleHelp.getFont());
-
-
-            if( c instanceof back.Soldier ) {
-                back.Soldier s = (back.Soldier) c;
-                cardGC.fillText(String.valueOf(s.getAttack()), 53, 24);
-                cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
-                cardGC.fillText(String.valueOf(s.getAgility()), 53, 56);
-                cardGC.fillText(String.valueOf(s.getDefense()), 53, 72);
-
-            }
-
-            cardGC.setFont(titleHelp.getFont());
-            cardGC.fillText(c.getName(), 43, 145);
-
-            h.getChildren().add(cardCanvas);
-
-            cardsInHand.put(cardCanvas, c);
-
-            cardCanvas.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-
-                    Canvas e = (Canvas) event.getSource();
-                    if(e != selectedCard ) e.setEffect(new Glow(0.7));
-
-                    if(selectedCard != null) return;
-
-                    back.Card card = cardsInHand.get(e);
-
-                    titleHelp.setText(card.getName());
-                    infoHelp.setText(card.getDescription());
-
-                }
-            });
-
-            cardCanvas.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Canvas e = (Canvas) event.getSource();
-
-                    if(e != selectedCard) e.setEffect(null);
-
-                    if(selectedCard != null) return;
-
-                    titleHelp.setText("Información de selección");
-                    infoHelp.setText("Seleccione una carta para ver información de la misma.");
-
-                }
-            });
-
-            cardCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if(game.getCurrentPlayer() != owner) return;
-
-                    resetTileStatus();
-
-                    Canvas e = (Canvas) event.getSource();
-                    if(e == selectedCard) {
-                        e.setEffect(new Glow(0.7));
-                        selectedCard = null;
-                    } else {
-                        ArrayList<Point> moveAux = game.availableSpawns(cardsInHand.get(e));
-                        for (Point p: moveAux) {
-                            tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
-                        }
-
-                        Glow glow = new Glow(0.7);
-
-                        if(selectedCard != null) selectedCard.setEffect(null);
-
-                        DropShadow borderGlow = new DropShadow();
-
-                        back.Card card = cardsInHand.get(e);
-
-                        titleHelp.setText(card.getName());
-                        infoHelp.setText(card.getDescription());
-
-                        borderGlow.setInput(glow);
-
-                        borderGlow.setOffsetY(0f);
-                        borderGlow.setOffsetX(0f);
-                        borderGlow.setColor(Color.rgb(255, 222, 107, 0.5));
-
-                        borderGlow.setWidth(30);
-                        borderGlow.setHeight(30);
-
-                        e.setEffect(borderGlow);
-
-                        selectedCard = e;
-                    }
-
-
-                }
-            });
-
-            count++;
-        }
+        for(back.Card c: cardsAux)
+            addCardToHand(c);
 
 
         ScrollPane scrollPane = new ScrollPane(h);
@@ -228,6 +129,32 @@ public class Board extends Pane {
         v.getChildren().add(scrollPane);
 
         v.getChildren().add(info);
+
+        movesLeft = new Label("Movimientos restantes: 5");
+        movesLeft.setTextFill(Color.WHITE);
+
+        Button drawCardBtn = new Button("Sacar carta");
+        drawCardBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                back.Card c = game.flipCard(owner);
+                if( c != null) addCardToHand(c);
+
+                updateActionsLeft();
+            }
+        });
+
+        Button endTurnBtn = new Button("Finalizar turno");
+        endTurnBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                game.endTurn();
+            }
+        });
+
+        v.getChildren().addAll(movesLeft, drawCardBtn, endTurnBtn);
+
+
 
 
 
@@ -247,7 +174,118 @@ public class Board extends Pane {
         return v;
     }
 
-    void resetTileStatus() {
+    private void addCardToHand(back.Card c) {
+        Canvas cardCanvas = new Canvas(170,170);
+        GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
+
+        cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
+        cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
+
+        cardGC.setFill(Color.WHITE);
+        //cardGC.setFont(titleHelp.getFont());
+
+
+        if( c instanceof back.Soldier ) {
+            back.Soldier s = (back.Soldier) c;
+            cardGC.fillText(String.valueOf(s.getAttack()), 53, 24);
+            cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
+            cardGC.fillText(String.valueOf(s.getAgility()), 53, 56);
+            cardGC.fillText(String.valueOf(s.getDefense()), 53, 72);
+
+        }
+
+        cardGC.setFont(titleHelp.getFont());
+        cardGC.fillText(c.getName(), 43, 145);
+
+        h.getChildren().add(cardCanvas);
+
+        cardsInHand.put(cardCanvas, c);
+
+        cardCanvas.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Canvas e = (Canvas) event.getSource();
+                if(e != selectedCard ) e.setEffect(new Glow(0.7));
+
+                if(selectedCard != null) return;
+
+                back.Card card = cardsInHand.get(e);
+
+                titleHelp.setText(card.getName());
+                infoHelp.setText(card.getDescription());
+
+            }
+        });
+
+        cardCanvas.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Canvas e = (Canvas) event.getSource();
+
+                if(e != selectedCard) e.setEffect(null);
+
+                if(selectedCard != null) return;
+
+                titleHelp.setText("Información de selección");
+                infoHelp.setText("Seleccione una carta para ver información de la misma.");
+
+            }
+        });
+
+        cardCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(game.getCurrentPlayer() != owner) return;
+
+                resetTileStatus();
+
+                Canvas e = (Canvas) event.getSource();
+                if(e == selectedCard) {
+                    e.setEffect(new Glow(0.7));
+                    selectedCard = null;
+                } else {
+                    ArrayList<Point> moveAux = game.availableSpawns(cardsInHand.get(e));
+                    for (Point p: moveAux) {
+                        tiles[p.x][p.y].changeStatus(TileStates.INVOKABLE);
+                    }
+
+                    Glow glow = new Glow(0.7);
+
+                    if(selectedCard != null) selectedCard.setEffect(null);
+
+                    DropShadow borderGlow = new DropShadow();
+
+                    back.Card card = cardsInHand.get(e);
+
+                    titleHelp.setText(card.getName());
+                    infoHelp.setText(card.getDescription());
+
+                    borderGlow.setInput(glow);
+
+                    borderGlow.setOffsetY(0f);
+                    borderGlow.setOffsetX(0f);
+                    borderGlow.setColor(Color.rgb(255, 222, 107, 0.5));
+
+                    borderGlow.setWidth(30);
+                    borderGlow.setHeight(30);
+
+                    e.setEffect(borderGlow);
+
+                    selectedCard = e;
+                }
+
+
+            }
+        });
+
+    }
+
+    private void updateActionsLeft() {
+        movesLeft.setText("Movimientos restantes: " + game.getActionsLeft());
+    }
+
+    private void resetTileStatus() {
         for (int i = 0; i < NUMROWS; i++) {
             for (int j = 0; j < NUMCOLS; j++) {
                 tiles[i][j].changeStatus(TileStates.INACTIVE);
@@ -319,6 +357,17 @@ public class Board extends Pane {
         menu.setTranslateY(-60);
         hb.getChildren().addAll(pBoard, menu);
 
+
+        /*Música
+        MediaPlayer mp = new MediaPlayer(new Media(getClass().getResource("sounds/bg-music.mp3").toString()));
+        mp.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                mp.seek(Duration.ZERO);
+            }
+        });
+        mp.play();*/
+
+
         //setStyle("-fx-background-color: #5490ff");
         charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -340,7 +389,7 @@ public class Board extends Pane {
 
                     auxTile = null;
 
-                    game.endTurn();
+                    updateActionsLeft();
 
                 } else if(status == TileStates.INVOKABLE) {
                     back.Card card = cardsInHand.get(selectedCard);
@@ -353,6 +402,8 @@ public class Board extends Pane {
 
                     selectedCard = null;
                     auxTile = null;
+
+                    updateActionsLeft();
                 } else {
                     auxTile = null;
                     HashMap<Point, Boolean> moveAux = game.validMovePoints(point, owner);
@@ -409,7 +460,7 @@ public class Board extends Pane {
 
                 while((action = owner.getActionRegistry()) != null) {
                     switch(action.getType()) {
-                        case 0: //movimiento
+                        case MOVEMENT: //movimiento
                             if(action.getOrigin() == null) {//invocar
                                 Tile dest = tiles[action.getDestination().x][action.getDestination().y];
                                 dest.setWhosHere(new GraphicSoldier((back.Soldier) action.getCard(), action.getCard().getOwner().equals(owner)));

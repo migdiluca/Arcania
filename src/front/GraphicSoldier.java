@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.HashSet;
 
 import static front.Board.CELLSIZE;
 
@@ -152,6 +153,25 @@ public class GraphicSoldier {
         }
 
         gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
+
+        HashSet<String> states = soldier.GetAffectedBy();
+        for(String s: states) {
+            if(s == "Poison") {
+                DropShadow borderGlow = new DropShadow();
+                borderGlow.setOffsetY(0f);
+                borderGlow.setOffsetX(0f);
+
+                borderGlow.setColor(Color.rgb(94, 134, 9));
+
+                borderGlow.setWidth(70);
+                borderGlow.setHeight(70);
+
+                gc.setEffect(borderGlow);
+            }
+
+        }
+
+
 
         gc.setLineWidth(4);
         gc.setStroke(Color.grayRgb(25, 0.5922));

@@ -59,19 +59,14 @@ public class Player {
         return true;
     }
 
-    public void cardsToHand() {
-        cardsToHand(1);
-    }
-
-    public void cardsToHand(int ammount) {
-        int i = 0;
-        while(i <= ammount) {
-            if(!deck.empty())
-                hand.add(deck.pop());
-            else
-                i = ammount;
-            i++;
+    public Card cardsToHand() {
+        Card c = null;
+        if(!deck.empty()) {
+            c = deck.pop();
+            hand.add(c);
         }
+
+        return c;
     }
 
     public ArrayList<Card> getHand() {

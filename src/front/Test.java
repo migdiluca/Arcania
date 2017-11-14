@@ -28,11 +28,14 @@ public class Test extends Application {
         scene2.getStylesheets().add("css/scrollbar.css");
 
         Stage secondStage = new Stage();
+        secondStage.setResizable(false);
         secondStage.setTitle(game.getPlayer2().getName() + " - Arcania");
         secondStage.setScene(scene2);
         secondStage.show();
 
         primaryStage.setScene(scene1);
+        //primaryStage.setHeight(); PENDIENTE!!!
+        primaryStage.setResizable(false);
         primaryStage.setTitle(game.getPlayer1().getName() + " - Arcania");
         primaryStage.show();
     }

@@ -13,6 +13,7 @@ public class Soldier extends Card {
     private int fullHealth;
     private int defense;
     private int agility;
+    public boolean alreadyMoved;
     private Map<Magic, Integer> affectedBy = new HashMap<>();
 
     public void curse(Magic m) {
@@ -20,6 +21,14 @@ public class Soldier extends Card {
         if (m.getDuration() > 0) {
             affectedBy.put(m, m.getDuration());
         }
+    }
+
+    public HashSet<String> GetAffectedBy() {
+        HashSet<String> GetAffectedBy = new HashSet<>();
+        for(Magic m: affectedBy.keySet())
+            GetAffectedBy.add(m.getClass().toString());
+
+        return GetAffectedBy;
     }
 
     public Map<Magic, Integer> getAffectedBy () {
@@ -46,6 +55,19 @@ public class Soldier extends Card {
         this.agility = agility;
         this.fullHealth = this.health = health;
         this.defense = defense;
+        this.alreadyMoved = false;
+    }
+
+    public void enableMovement() {
+        alreadyMoved = false;
+    }
+
+    public void disableMovement() {
+        alreadyMoved = true;
+    }
+
+    public boolean canMove() {
+        return !alreadyMoved;
     }
 
     public int getAgility() {
