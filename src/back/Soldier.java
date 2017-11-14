@@ -141,7 +141,5 @@ public class Soldier extends Card {
         agility = (int) ois.readObject();
 
     }
-
-
 }
 

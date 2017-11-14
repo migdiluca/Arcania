@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -75,6 +76,14 @@ public class Board extends Pane {
 
     private Label movesLeft;
 
+    private Button drawCardBtn;
+    private Button endTurnBtn;
+
+    private Timer timeLeft;
+
+    ProgressBar scrollTimeLeft;
+
+
     private VBox createMenu() {
         VBox v = new VBox(20);
 
@@ -133,7 +142,7 @@ public class Board extends Pane {
         movesLeft = new Label("Movimientos restantes: 5");
         movesLeft.setTextFill(Color.WHITE);
 
-        Button drawCardBtn = new Button("Sacar carta");
+        drawCardBtn = new Button("Sacar carta");
         drawCardBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -144,17 +153,21 @@ public class Board extends Pane {
             }
         });
 
-        Button endTurnBtn = new Button("Finalizar turno");
+        endTurnBtn = new Button("Finalizar turno");
         endTurnBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                game.endTurn();
+                endTurn();
             }
         });
 
-        v.getChildren().addAll(movesLeft, drawCardBtn, endTurnBtn);
+
+        scrollTimeLeft = new ProgressBar();
+        scrollTimeLeft.setProgress(0.9);
+        scrollTimeLeft.setPrefWidth(150);
 
 
+        v.getChildren().addAll(movesLeft, scrollTimeLeft, drawCardBtn, endTurnBtn);
 
 
 
@@ -341,8 +354,6 @@ public class Board extends Pane {
 
 
 
-
-
         //addSoldier
 
         for(int i = 0; i < NUMROWS; i++)
@@ -425,7 +436,46 @@ public class Board extends Pane {
                 }
             }
         });
+
+        drawCardBtn.setDisable(true);
+        endTurnBtn.setDisable(true);
+
+        timeLeft = new Timer();
+        if (game.getCurrentPlayer() == owner) {
+            startTurn();
+        }
+
         timer.start();
+    }
+
+    private void startTurn() {
+        drawCardBtn.setDisable(false);
+        endTurnBtn.setDisable(false);
+
+        timeLeft = new Timer();
+
+        TimerTask task = new TimerTask() {
+            private int remainingTime = 30;
+
+            @Override
+            public void run() {
+                scrollTimeLeft.setProgress((double)remainingTime/30);
+                if (remainingTime-- == 0) {
+                    remainingTime = 30;
+                    endTurn();
+                }
+            }
+        };
+
+        timeLeft.scheduleAtFixedRate(task, 0, 1000);
+    }
+
+    private void endTurn() {
+        drawCardBtn.setDisable(true);
+        endTurnBtn.setDisable(true);
+        scrollTimeLeft.setDisable(true);
+        timeLeft.cancel();
+        game.endTurn();
     }
 
     private Point getPointFromCoordinates(int x, int y) {
@@ -451,6 +501,7 @@ public class Board extends Pane {
         }
     }
 
+
     private int fps = 0;
     AnimationTimer timer = new AnimationTimer() {
         @Override
@@ -461,7 +512,7 @@ public class Board extends Pane {
                 while((action = owner.getActionRegistry()) != null) {
                     switch(action.getType()) {
                         case MOVEMENT: //movimiento
-                            if(action.getOrigin() == null) {//invocar
+                            if(action.getOrigin() == null) { //invocar
                                 Tile dest = tiles[action.getDestination().x][action.getDestination().y];
                                 dest.setWhosHere(new GraphicSoldier((back.Soldier) action.getCard(), action.getCard().getOwner().equals(owner)));
 
@@ -483,14 +534,12 @@ public class Board extends Pane {
                             break;
                     }
                 }
-
                 draw();
 
                 fps = 0;
 
             }
             fps++;
-
         }
     };
 }
