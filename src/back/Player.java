@@ -3,11 +3,12 @@ package back;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Player {
+public class Player implements Serializable {
     private String name;
     private Stack<Card> deck ;
     protected ArrayList<Card> hand;
@@ -87,23 +88,23 @@ public class Player {
         return true;
     }
 
-    public void writeObject(ObjectOutputStream out) throws IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeObject(name);
+        out.writeUTF(name);
         out.writeObject(deck);
         out.writeObject(hand);
         out.writeObject(aliveCards);
         out.writeObject(castle);
-        out.writeObject(castleRow);
+        out.writeInt(castleRow);
     }
 
-    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
         ois.defaultReadObject();
-        name = (String) ois.readObject();
+        name = ois.readUTF();
         deck = (Stack<Card>) ois.readObject();
         hand = (ArrayList<Card>) ois.readObject();
         aliveCards = (ArrayList<Soldier>) ois.readObject();
         castle = (Castle) ois.readObject();
-        castleRow = (int) ois.readObject();
+        castleRow = ois.readInt();
     }
 }

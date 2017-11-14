@@ -4,9 +4,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 
-public class Soldier extends Card {
+public class Soldier extends Card implements Serializable{
     private static final long serialVersionUID = 1L;
     private int attack;
     private int health;
@@ -127,18 +128,20 @@ public class Soldier extends Card {
 
     public void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeObject(attack);
-        out.writeObject(health);
-        out.writeObject(defense);
-        out.writeObject(agility);
+        out.writeInt(attack);
+        out.writeInt(health);
+        out.writeInt(defense);
+        out.writeInt(agility);
+        out.writeObject(affectedBy);
     }
 
     public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
         ois.defaultReadObject();
-        attack = (int) ois.readObject();
-        health = (int) ois.readObject();
-        defense = (int) ois.readObject();
-        agility = (int) ois.readObject();
+        attack =  ois.readInt();
+        health =  ois.readInt();
+        defense = ois.readInt();
+        agility = ois.readInt();
+        affectedBy = (Map<Magic,Integer>) ois.readObject();
 
     }
 

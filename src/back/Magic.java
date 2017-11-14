@@ -11,7 +11,7 @@ public abstract class Magic extends Card {
     }
 
     public void effect(){}
-}
+
     public boolean getIsNegative() {
         return isNegative;
     }

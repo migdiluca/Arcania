@@ -1,8 +1,14 @@
 package back;
 
-public class Castle {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class Castle implements Serializable{
     private int life;
     private static final int defaultLife = 1000;
+    private static final long serialVersionUID = 1L;
 
     public Castle() {
         this.life = defaultLife;
@@ -13,5 +19,15 @@ public class Castle {
 
     public int getLife() {
         return life;
+    }
+
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(life);
+    }
+
+    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        life = (int) ois.readObject();
     }
 }

@@ -1,11 +1,12 @@
 package front;
 
+import back.Game;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Test extends Application {
 
@@ -14,7 +15,9 @@ public class Test extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
+
+        File file = null;
 
         back.Game game = new back.Game("Eze", "Mike");
 
@@ -38,6 +41,8 @@ public class Test extends Application {
         primaryStage.setResizable(false);
         primaryStage.setTitle(game.getPlayer1().getName() + " - Arcania");
         primaryStage.show();
+
+
     }
 
 }

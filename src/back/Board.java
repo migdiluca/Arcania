@@ -4,11 +4,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Board {
+public class Board implements Serializable {
     private Soldier board[][];
     private static final long serialVersionUID = 1L;
 
@@ -183,12 +184,12 @@ public class Board {
         return availablePoints;
     }
 
-    public void writeObject(ObjectOutputStream out) throws IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeObject(board);
     }
 
-    public void readObject(ObjectInputStream ois) throws IOException , ClassNotFoundException {
+    private void readObject(ObjectInputStream ois) throws IOException , ClassNotFoundException {
         ois.defaultReadObject();
         board = (Soldier[][]) ois.readObject();
     }

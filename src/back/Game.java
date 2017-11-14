@@ -1,10 +1,8 @@
 package back;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game implements Serializable{
@@ -214,7 +212,26 @@ public class Game implements Serializable{
         actionsLeft = 5;
     }
 
-    public void writeObject(ObjectOutputStream out) throws IOException {
+    File file;
+
+    public void writeGame() throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+        oos.writeObject(this);
+        oos.close();
+    }
+
+
+   public void loadGame() throws IOException, ClassNotFoundException {
+       ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+       Game saveGame = (Game) ois.readObject();
+       this.currentPlayer = saveGame.currentPlayer;
+       this.player1 = saveGame.player1;
+       this.player2 = saveGame.player2;
+       this.board = saveGame.board;
+       ois.close();
+   }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeObject(player1);
         out.writeObject(player2);
@@ -223,7 +240,7 @@ public class Game implements Serializable{
     }
 
 
-    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
         ois.defaultReadObject();
         player1 = (Player) ois.readObject();
         player2 = (Player) ois.readObject();
