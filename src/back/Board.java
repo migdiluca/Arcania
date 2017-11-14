@@ -1,6 +1,5 @@
 package back;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,17 +10,13 @@ import java.util.Iterator;
 
 public class Board {
     private Soldier board[][];
-
-    private Game game;
     private static final long serialVersionUID = 1L;
 
-    public Board(Game game) {
+    public Board() {
         board = new Soldier[7][7];
         for (int i = 0; i < 7; i++)
             for (int j = 0; j < 7; j++)
                 board[i][j] = null;
-
-        this.game = game;
     }
 
     private boolean isPointValid(int x, int y) {
@@ -64,7 +59,7 @@ public class Board {
 
     public void addSoldier(Soldier s, Point p) {
         board[p.x][p.y] = s;
-        game.registerAction(new pendingDrawing(null, p, s, ActionType.MOVEMENT));
+
     }
 
     public ArrayList<Soldier> affectedBySpell(Point p) {
@@ -93,8 +88,8 @@ public class Board {
      */
     public HashMap<Point, Boolean> validMovePoints(Point p, Player playedBy) {
         Soldier soldierAtP = getSoldier(p);
-        if (playedBy != game.getCurrentPlayer() || soldierAtP == null || soldierAtP.getOwner() != playedBy)
-            return new HashMap<Point, Boolean>();
+        if (soldierAtP == null || soldierAtP.getOwner() != playedBy)
+            return new HashMap<>();
 
         ArrayList<Point> validMovePoints = nearbyPoints(p);
         Iterator<Point> iterator = validMovePoints.iterator();
@@ -153,7 +148,6 @@ public class Board {
     public void moveSoldier(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
-        game.registerAction(new pendingDrawing(origin, dest, getSoldier(origin), ActionType.MOVEMENT));
     }
 
     public void removeDeadFromBoard(Soldier s) {
@@ -183,11 +177,10 @@ public class Board {
 
             Hero h = currentPlayer.getHero();
             if( h != null)
-                availablePoints.add(game.searchSoldier(h));
+                availablePoints.add(searchSoldier(h));
         }
 
         return availablePoints;
-
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {
