@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.HashSet;
 
 import static front.Board.CELLSIZE;
 
@@ -139,7 +140,7 @@ public class GraphicSoldier {
         }
 
         if(soldier instanceof back.Hero) {
-            DropShadow borderGlow= new DropShadow();
+            DropShadow borderGlow = new DropShadow();
             borderGlow.setOffsetY(0f);
             borderGlow.setOffsetX(0f);
 
@@ -149,16 +150,36 @@ public class GraphicSoldier {
             borderGlow.setHeight(70);
 
             gc.setEffect(borderGlow);
-        } else
-            gc.setEffect(null);
+        }
 
         gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
+
+        HashSet<String> states = soldier.GetAffectedBy();
+        for(String s: states) {
+            if(s == "Poison") {
+                DropShadow borderGlow = new DropShadow();
+                borderGlow.setOffsetY(0f);
+                borderGlow.setOffsetX(0f);
+
+                borderGlow.setColor(Color.rgb(94, 134, 9));
+
+                borderGlow.setWidth(70);
+                borderGlow.setHeight(70);
+
+                gc.setEffect(borderGlow);
+            }
+
+        }
+
+
 
         gc.setLineWidth(4);
         gc.setStroke(Color.grayRgb(25, 0.5922));
         gc.strokeLine(15 + xCoord, 95 + yCoord, 85 + xCoord, 95 + yCoord);
         if(!mine) gc.setStroke(Color.rgb(255,0,0,0.9)); else gc.setStroke(Color.rgb(27, 255, 108,0.9));
         gc.strokeLine(15 + xCoord, 95 + yCoord, 15 + soldier.getHealthPercent() + xCoord, 95 + yCoord);
+
+        gc.setEffect(null);
 
     }
 

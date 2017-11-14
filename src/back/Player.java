@@ -37,6 +37,13 @@ public class Player {
 
     }
 
+    public Hero getHero() {
+        for(Soldier s: aliveCards)
+            if( s instanceof Hero ) return (Hero) s;
+
+        return null;
+    }
+
     public void registerAction(pendingDrawing pd) {
         actionRegistry.add(pd);
     }
@@ -52,19 +59,14 @@ public class Player {
         return true;
     }
 
-    public void cardsToHand() {
-        cardsToHand(1);
-    }
-
-    public void cardsToHand(int ammount) {
-        int i = 0;
-        while(i <= ammount) {
-            if(!deck.empty())
-                hand.add(deck.pop());
-            else
-                i = ammount;
-            i++;
+    public Card cardsToHand() {
+        Card c = null;
+        if(!deck.empty()) {
+            c = deck.pop();
+            hand.add(c);
         }
+
+        return c;
     }
 
     public ArrayList<Card> getHand() {
@@ -78,13 +80,12 @@ public class Player {
     }
 
     /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */
-    public boolean playCard(Soldier m) {
-        if(hand.remove(m) || m instanceof Hero){
+    public void playSoldier(Soldier m) {
             aliveCards.add(m);
-            takeCard();
-            return true;
-        }
-        return false;
+    }
+
+    public void discardCard(Card c) {
+        hand.remove(c);
     }
 
     public boolean canPlay() {

@@ -1,5 +1,6 @@
 package back;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,7 +64,22 @@ public class Board {
 
     public void addSoldier(Soldier s, Point p) {
         board[p.x][p.y] = s;
-        game.registerAction(new pendingDrawing(null, p, s, 0));
+        game.registerAction(new pendingDrawing(null, p, s, ActionType.MOVEMENT));
+    }
+
+    public ArrayList<Soldier> affectedBySpell(Point p) {
+        ArrayList<Point> spellArea = nearbyPoints(p);
+        ArrayList<Soldier> affectedBySpell = new ArrayList<>();
+
+        Iterator<Point> iterator = spellArea.iterator();
+        while (iterator.hasNext()) {
+
+            Soldier s = getSoldier(iterator.next());
+            if( s != null )
+                affectedBySpell.add(s);
+        }
+
+        return affectedBySpell;
     }
 
     public Soldier getSoldier(Point p) {
@@ -137,7 +153,7 @@ public class Board {
     public void moveSoldier(Point origin, Point dest) {
         board[dest.x][dest.y] = board[origin.x][origin.y];
         board[origin.x][origin.y] = null;
-        game.registerAction(new pendingDrawing(origin, dest, getSoldier(origin), 0));
+        game.registerAction(new pendingDrawing(origin, dest, getSoldier(origin), ActionType.MOVEMENT));
     }
 
     public void removeDeadFromBoard(Soldier s) {
@@ -155,13 +171,23 @@ public class Board {
         return null; //Meter una excepcion
     }
 
-    public ArrayList<Point> availableSpawns(Player currentPlayer) {
+    public ArrayList<Point> availableSpawns(Player currentPlayer, Card c) {
         ArrayList<Point> availablePoints = new ArrayList<>();
-        int spawnRow = currentPlayer.getCastleRow();
-        for (int j = 0; j < 7; j++)
-            if (board[spawnRow][j] == null)
-                availablePoints.add(new Point(spawnRow, j));
+
+        if(c instanceof Soldier) {
+            int spawnRow = currentPlayer.getCastleRow();
+            for (int j = 0; j < 7; j++)
+                if (board[spawnRow][j] == null)
+                    availablePoints.add(new Point(spawnRow, j));
+        } else if(c instanceof Magic) {
+
+            Hero h = currentPlayer.getHero();
+            if( h != null)
+                availablePoints.add(game.searchSoldier(h));
+        }
+
         return availablePoints;
+
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {

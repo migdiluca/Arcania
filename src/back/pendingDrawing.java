@@ -7,9 +7,9 @@ public class pendingDrawing {
     private Point destination;
     private Card card;
 
-    private int actionType; //0 mover, 1 atacar, 2 conjuro
+    private ActionType actionType; //0 mover, 1 atacar, 2 conjuro
 
-    pendingDrawing(Point origin, Point destination, Card card, int actionType) {
+    pendingDrawing(Point origin, Point destination, Card card, ActionType actionType) {
         this.origin = origin;
         this.destination = destination;
         this.card = card;
@@ -28,7 +28,7 @@ public class pendingDrawing {
         return card;
     }
 
-    public int getType() {
+    public ActionType getType() {
         return actionType;
     }
 

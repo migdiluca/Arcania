@@ -4,7 +4,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Random;
+import java.util.*;
 
 public class Soldier extends Card {
     private static final long serialVersionUID = 1L;
@@ -13,6 +13,41 @@ public class Soldier extends Card {
     private int fullHealth;
     private int defense;
     private int agility;
+    public boolean alreadyMoved;
+    private Map<Magic, Integer> affectedBy = new HashMap<>();
+
+    public void curse(Magic m) {
+        m.startEffect(this);
+        if (m.getDuration() > 0) {
+            affectedBy.put(m, m.getDuration());
+        }
+    }
+
+    public HashSet<String> GetAffectedBy() {
+        HashSet<String> GetAffectedBy = new HashSet<>();
+        for(Magic m: affectedBy.keySet())
+            GetAffectedBy.add(m.getClass().toString());
+
+        return GetAffectedBy;
+    }
+
+    public Map<Magic, Integer> getAffectedBy () {
+        return affectedBy;
+    }
+
+    public void applyMagic() {
+        for (Magic m: affectedBy.keySet()) {
+            m.effect(this);
+
+            int turnsLeft = affectedBy.get(m);
+            if (affectedBy.get(m) == 0) {
+                m.lift(this);
+                affectedBy.remove(m);
+            } else {
+                affectedBy.replace(m, turnsLeft - 1);
+            }
+        }
+    }
 
     public Soldier(String name, int id, int attack, int health, int defense, int agility, String description) {
         super(name, id, description);
@@ -20,6 +55,19 @@ public class Soldier extends Card {
         this.agility = agility;
         this.fullHealth = this.health = health;
         this.defense = defense;
+        this.alreadyMoved = false;
+    }
+
+    public void enableMovement() {
+        alreadyMoved = false;
+    }
+
+    public void disableMovement() {
+        alreadyMoved = true;
+    }
+
+    public boolean canMove() {
+        return !alreadyMoved;
     }
 
     public int getAgility() {
@@ -50,6 +98,8 @@ public class Soldier extends Card {
 
     public void setHealth(int health){
        this.health = health;
+       if (this.health > fullHealth)
+           this.health = fullHealth;
     }
 
     // Estructura de ataque.
@@ -59,7 +109,7 @@ public class Soldier extends Card {
         int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
 
         if(missChance < 85) {
-            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)), this);
+            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
             return 1;
         } else {
             return 0;
@@ -71,10 +121,8 @@ public class Soldier extends Card {
         c.getAttacked(this.attack);
     }
 
-    private void getAttacked(int damage, Soldier attacker) {
-
-
-                 setHealth(this.health - damage);
+    private void getAttacked(int damage) {
+        setHealth(this.health - damage);
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {

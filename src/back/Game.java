@@ -21,8 +21,10 @@ public class Game implements Serializable{
         board = new Board(this);
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
-        player1.cardsToHand(5);
-        player2.cardsToHand(5);
+        for(int i = 0; i < 5; i++) {
+            player1.cardsToHand();
+            player2.cardsToHand();
+        }
 
         Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h1.setOwner(player1);
@@ -32,18 +34,15 @@ public class Game implements Serializable{
 
         /* esto no va a ser asi, es para testear */
         currentPlayer = player1;
-        addSoldier(h1,new Point(player1.getCastleRow(), 3));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 4));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 5));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 1));
-        addSoldier((Soldier)player1.hand.get(0), new Point(player1.getCastleRow(), 0));
+
+        player1.playSoldier(h1);
+        player2.playSoldier(h2);
+
+        board.addSoldier(h1,new Point(player1.getCastleRow(), 3));
 
         currentPlayer = player2;
-        addSoldier(h2,new Point(player2.getCastleRow(), 3));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 6));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 4));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 0));
-        addSoldier((Soldier)player2.hand.get(0), new Point(player2.getCastleRow(), 1));
+        board.addSoldier(h2,new Point(player2.getCastleRow(), 3));
+
         currentPlayer = player1;
         actionsLeft = 5;
     }
@@ -51,7 +50,7 @@ public class Game implements Serializable{
     private void removeDead(Soldier s) {
         player1.aliveCards.remove(s);
         player2.aliveCards.remove(s);
-        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, 0));
+        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
 
@@ -70,6 +69,12 @@ public class Game implements Serializable{
         for(int i = 0; i < 5; i++)
             deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
+        for(int i = 0; i < 5; i++)
+            deck.add(new Heal("Sanación Superior", 5, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Poison("Envenenar", 5, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",false, 10, 3));
+
         Collections.shuffle(deck);
         return deck;
     }
@@ -83,6 +88,11 @@ public class Game implements Serializable{
         return null;
     }
 
+    private void performAction() {
+        actionsLeft--;
+        if(actionsLeft == 0)
+            endTurn();
+    }
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
             Castle castleToAttack = castleToAttack(s);
@@ -92,13 +102,13 @@ public class Game implements Serializable{
                 Soldier m2 = board.enemyToAttack(board.searchSoldier(s));
                 if(m2 != null) {
                     if(s.attack(m2) == 1) {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 1));
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.STRIKE));
                         if(!m2.isAlive()) {
                             removeDead(m2);
                         }
 
                     } else {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, 2));
+                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.EVADE));
                     }
 
                 }
@@ -134,7 +144,8 @@ public class Game implements Serializable{
     pero no me acuerdo porque era playedBy y no currentPlayer
      */
     public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
-        if(windowOwner != currentPlayer) {
+        Soldier s = board.getSoldier(p);
+        if(s == null || windowOwner != currentPlayer || !s.canMove()) {
             return new HashMap<>();
         }
         return board.validMovePoints(p,currentPlayer);
@@ -144,48 +155,61 @@ public class Game implements Serializable{
         return board.getSoldier(p);
     }
 
-    public void addSoldier(Soldier s, Point p) {
-        if(s.getOwner() == currentPlayer /*&& actionsLeft != 0*/) {
-            invokeSoldier(s, p);
-            currentPlayer.playCard(s);
-            actionsLeft--;
+    public void playCard(Card c, Point p) {
+        if( c instanceof Soldier ) {
+            board.addSoldier((Soldier) c, p);
+            currentPlayer.playSoldier((Soldier) c);
+        } else if( c instanceof Magic ) {
+            ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
+
+            for(Soldier s: affectedBySpell)
+                s.curse((Magic) c);
+
         }
+        currentPlayer.discardCard(c);
+        performAction();
     }
 
     public int getActionsLeft() {
         return actionsLeft;
     }
 
-    public void invokeSoldier(Soldier s, Point p) {
-        board.addSoldier(s, p);
-    }
-
     public void moveSoldier(Point origin, Point dest) {
-        //if(actionsLeft != 0) {
+        Soldier s = board.getSoldier(origin);
+        if(s.canMove()) {
             board.moveSoldier(origin, dest);
-        /*    actionsLeft--;
-        }*/
+            s.disableMovement();
+            performAction();
+        }
     }
 
     /* no se si corroborar que es el current player por como se llamaria desde el front */
-    public void flipCard(Player player) {
+    public Card flipCard(Player player) {
+        Card c = null;
         if(player == currentPlayer) {
-            currentPlayer.cardsToHand();
-            actionsLeft--;
+            c = currentPlayer.cardsToHand();
+            performAction();
         }
+        return c;
     }
 
     public Point searchSoldier(Soldier s) {
         return board.searchSoldier(s);
     }
 
-    public ArrayList<Point> availableSpawns() {
-        return board.availableSpawns(currentPlayer);
+    public ArrayList<Point> availableSpawns(Card c) {
+        return board.availableSpawns(currentPlayer, c);
     }
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
     public String endTurn() {
         performAttack(currentPlayer.aliveCards);
+
+        for(Soldier s: currentPlayer.aliveCards) {
+            s.enableMovement();
+            s.applyMagic();
+        }
+
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.aliveCards);
 
