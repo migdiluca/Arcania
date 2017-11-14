@@ -5,20 +5,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game implements Serializable{
     private Player player1;
     private static final long serialVersionUID = 1L;
     private Player player2;
-    protected Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
+    private Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
                              para tomar puntos de spawn etc..*/
     private Player currentPlayer;
     private int actionsLeft;
 
     public Game(String player1Name, String player2Name) {
-        board = new Board(this);
+        board = new Board();
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
         for(int i = 0; i < 5; i++) {
@@ -93,6 +92,10 @@ public class Game implements Serializable{
         if(actionsLeft == 0)
             endTurn();
     }
+
+    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
+    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
+     */
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
             Castle castleToAttack = castleToAttack(s);
@@ -103,10 +106,8 @@ public class Game implements Serializable{
                 if(m2 != null) {
                     if(s.attack(m2) == 1) {
                         registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.STRIKE));
-                        if(!m2.isAlive()) {
+                        if(!m2.isAlive())
                             removeDead(m2);
-                        }
-
                     } else {
                         registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.EVADE));
                     }
@@ -116,13 +117,10 @@ public class Game implements Serializable{
         }
     }
 
-    protected void registerAction(pendingDrawing pd) {
+    private void registerAction(pendingDrawing pd) {
         getPlayer1().registerAction(pd);
         getPlayer2().registerAction(pd);
     }
-    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
-    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
-     */
 
     public Player getPlayer1() {
         return player1;
@@ -136,13 +134,22 @@ public class Game implements Serializable{
         return currentPlayer;
     }
 
-    public HashMap<Point, Boolean> askPosibleMovements(Point p) {
-        return board.validMovePoints(p, currentPlayer);
+    public Soldier getSoldier(Point p) {
+        return board.getSoldier(p);
     }
 
-    /* Aca no se si playedBy se lo tenes que pasar porque los jugadores los tiene game
-    pero no me acuerdo porque era playedBy y no currentPlayer
-     */
+    public int getActionsLeft() {
+        return actionsLeft;
+    }
+
+    public Point searchSoldier(Soldier s) {
+        return board.searchSoldier(s);
+    }
+
+    public ArrayList<Point> availableSpawns(Card c) {
+        return board.availableSpawns(currentPlayer, c);
+    }
+
     public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
         Soldier s = board.getSoldier(p);
         if(s == null || windowOwner != currentPlayer || !s.canMove()) {
@@ -151,14 +158,30 @@ public class Game implements Serializable{
         return board.validMovePoints(p,currentPlayer);
     }
 
-    public Soldier getSoldier(Point p) {
-        return board.getSoldier(p);
+    public void moveSoldier(Point origin, Point dest) {
+        Soldier s = board.getSoldier(origin);
+        if(s.canMove()) {
+            board.moveSoldier(origin, dest);
+            s.disableMovement();
+            performAction();
+            registerAction(new pendingDrawing(origin, dest, getSoldier(origin), ActionType.MOVEMENT));
+        }
+    }
+
+    public Card flipCard(Player player) {
+        Card c = null;
+        if(player == currentPlayer) {
+            c = currentPlayer.cardsToHand();
+            performAction();
+        }
+        return c;
     }
 
     public void playCard(Card c, Point p) {
         if( c instanceof Soldier ) {
             board.addSoldier((Soldier) c, p);
             currentPlayer.playSoldier((Soldier) c);
+            registerAction(new pendingDrawing(null, p, c, ActionType.MOVEMENT));
         } else if( c instanceof Magic ) {
             ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
 
@@ -170,39 +193,8 @@ public class Game implements Serializable{
         performAction();
     }
 
-    public int getActionsLeft() {
-        return actionsLeft;
-    }
-
-    public void moveSoldier(Point origin, Point dest) {
-        Soldier s = board.getSoldier(origin);
-        if(s.canMove()) {
-            board.moveSoldier(origin, dest);
-            s.disableMovement();
-            performAction();
-        }
-    }
-
-    /* no se si corroborar que es el current player por como se llamaria desde el front */
-    public Card flipCard(Player player) {
-        Card c = null;
-        if(player == currentPlayer) {
-            c = currentPlayer.cardsToHand();
-            performAction();
-        }
-        return c;
-    }
-
-    public Point searchSoldier(Soldier s) {
-        return board.searchSoldier(s);
-    }
-
-    public ArrayList<Point> availableSpawns(Card c) {
-        return board.availableSpawns(currentPlayer, c);
-    }
-
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
-    public String endTurn() {
+    public void endTurn() {
         performAttack(currentPlayer.aliveCards);
 
         for(Soldier s: currentPlayer.aliveCards) {
@@ -214,13 +206,12 @@ public class Game implements Serializable{
         performAttack(otherPlayer.aliveCards);
 
         if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay())
-            return currentPlayer.getName();
+            //agregar pending
         if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay())
-            return otherPlayer.getName();
+            //agregar pending
 
         currentPlayer = otherPlayer;
         actionsLeft = 5;
-        return null;
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {

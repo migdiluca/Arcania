@@ -14,7 +14,6 @@ public class Player {
     protected ArrayList<Soldier> aliveCards;
     protected Castle castle;
     private int castleRow;
-    private int actionsLeft;
     private static final long serialVersionUID = 1L;
 
     private ArrayDeque<pendingDrawing> actionRegistry;
@@ -39,7 +38,8 @@ public class Player {
 
     public Hero getHero() {
         for(Soldier s: aliveCards)
-            if( s instanceof Hero ) return (Hero) s;
+            if(s instanceof Hero)
+                return (Hero) s;
 
         return null;
     }
@@ -50,13 +50,6 @@ public class Player {
 
     public pendingDrawing getActionRegistry() {
         return actionRegistry.poll();
-    }
-
-    private boolean takeCard() {
-        if (deck.empty())
-            return false;
-        hand.add(deck.pop());
-        return true;
     }
 
     public Card cardsToHand() {
@@ -79,9 +72,9 @@ public class Player {
         return castleRow;
     }
 
-    /* Automaticamente levanta una carta del mazo cuando juega, despues lo cambiamos */
-    public void playSoldier(Soldier m) {
-            aliveCards.add(m);
+
+    public void playSoldier(Soldier s) {
+        aliveCards.add(s);
     }
 
     public void discardCard(Card c) {
