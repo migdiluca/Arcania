@@ -144,7 +144,5 @@ public class Soldier extends Card implements Serializable{
         affectedBy = (Map<Magic,Integer>) ois.readObject();
 
     }
-
-
 }
 

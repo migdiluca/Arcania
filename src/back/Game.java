@@ -203,13 +203,25 @@ public class Game implements Serializable{
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.aliveCards);
 
-        if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay())
+        if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay()) {
+
+        }
             //agregar pending
-        if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay())
+        if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay()) {
+
+        }
             //agregar pending
 
+
+        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
+
         currentPlayer = otherPlayer;
+
+        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
         actionsLeft = 5;
+
+
+
     }
 
     File file;
