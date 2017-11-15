@@ -167,7 +167,7 @@ public class Board extends Pane {
         endTurnBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                endTurn();
+                game.endTurn();
             }
         });
 
@@ -493,15 +493,16 @@ public class Board extends Pane {
 
         timeLeft = new Timer();
         if (game.getCurrentPlayer() == owner) {
-            startTurn();
+            ReflectStartTurn();
         }
 
         timer.start();
     }
 
-    private void startTurn() {
+    private void ReflectStartTurn() {
         drawCardBtn.setDisable(false);
         endTurnBtn.setDisable(false);
+        scrollTimeLeft.setDisable(false);
 
         timeLeft = new Timer();
 
@@ -513,7 +514,7 @@ public class Board extends Pane {
                 scrollTimeLeft.setProgress((double)remainingTime/30);
                 if (remainingTime-- == 0) {
                     remainingTime = 30;
-                    endTurn();
+                    game.endTurn();
                 }
             }
         };
@@ -521,12 +522,11 @@ public class Board extends Pane {
         timeLeft.scheduleAtFixedRate(task, 0, 1000);
     }
 
-    private void endTurn() {
+    private void ReflectEndTurn() {
         drawCardBtn.setDisable(true);
         endTurnBtn.setDisable(true);
         scrollTimeLeft.setDisable(true);
         timeLeft.cancel();
-        game.endTurn();
     }
 
     private Point getPointFromCoordinates(int x, int y) {
@@ -583,6 +583,13 @@ public class Board extends Pane {
                                 origin.setWhosHere(null);
                             }
                             break;
+                        case ENDTURN:
+                            System.out.println("END");
+                            ReflectEndTurn();
+                            break;
+                        case STARTTURN:
+                            System.out.println("START");
+                            ReflectStartTurn();
                     }
                 }
                 draw();
