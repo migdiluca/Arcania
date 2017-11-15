@@ -20,47 +20,16 @@ public class Test extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
 
-        File file = null;
-
-        back.Game game = new back.Game("Eze", "Mike");
-
-        Board board = new Board(game, game.getPlayer1(),primaryStage);
-        Board board2 = new Board(game, game.getPlayer2(),primaryStage);
-
-        Scene scene1 = new Scene(board);
-        Scene scene2 = new Scene(board2);
-
-        scene1.getStylesheets().add("css/scrollbar.css");
-        scene2.getStylesheets().add("css/scrollbar.css");
-
-        Stage secondStage = new Stage();
-        secondStage.setResizable(false);
-        secondStage.setTitle(game.getPlayer2().getName() + " - Arcania");
-        secondStage.setScene(scene2);
-        secondStage.show();
-
-
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-
-        secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
-        });
-
-        primaryStage.setScene(scene1);
+        Stage firstStage = new Stage();
         //primaryStage.setHeight(); PENDIENTE!!!
-        primaryStage.setResizable(false);
-        primaryStage.setTitle(game.getPlayer1().getName() + " - Arcania");
-        primaryStage.show();
+        firstStage.setResizable(false);
+        StartWindow startWindow = new StartWindow(firstStage);
+        Scene scene1 = new Scene(startWindow);
+        firstStage.setScene(scene1);
+
+        firstStage.show();
+
+
 
 
     }

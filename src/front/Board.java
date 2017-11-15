@@ -56,6 +56,10 @@ import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
 
+/**
+ * Clase que representa la ventana de un jugador.
+ */
+
 public class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
@@ -95,6 +99,10 @@ public class Board extends Pane {
     ProgressBar scrollTimeLeft;
 
 
+    /**
+     * Crea los controles de la parte derecha del formulario, (lo que no es el board mismo).
+     * @return Instancia del panel VBox que contiene los elementos del menú de la derecha.
+     */
     private VBox createMenu() {
         VBox v = new VBox(20);
 
@@ -238,6 +246,11 @@ public class Board extends Pane {
         return v;
     }
 
+    /**
+     * Método que genera el canvas que representa a una carta y la agrega a la mano.
+     * @param c instancia del objeto Card del backend de la carta en cuestión
+     */
+
     private void addCardToHand(back.Card c) {
         Canvas cardCanvas = new Canvas(170,170);
         GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
@@ -345,10 +358,16 @@ public class Board extends Pane {
 
     }
 
+    /**
+     * Actualiza el label de movimientos restantes
+     */
     private void updateActionsLeft() {
         movesLeft.setText("Movimientos restantes: " + game.getActionsLeft());
     }
 
+    /**
+     * Reinicia el estado de todos los tiles a default
+     */
     private void resetTileStatus() {
         for (int i = 0; i < NUMROWS; i++) {
             for (int j = 0; j < NUMCOLS; j++) {
@@ -357,7 +376,13 @@ public class Board extends Pane {
         }
     }
 
-    Board(back.Game game, back.Player owner,Stage primaryStage) {
+    /**
+     * Constructor de la ventana
+     * @param game instancia del objeto Game del backend
+     * @param owner instancia del jugador en el back que es dueño de la ventana
+     * @param primaryStage instancia del Stage, requerida para llamar al cuadro de selección de archivo
+     */
+    Board(back.Game game, back.Player owner, Stage primaryStage) {
 
 
         this.primaryStage = primaryStage;
@@ -500,6 +525,9 @@ public class Board extends Pane {
         timer.start();
     }
 
+    /**
+     * Método a ejecutarse cuando inicia un nuevo turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
+     */
     private void ReflectStartTurn() {
         drawCardBtn.setDisable(false);
         endTurnBtn.setDisable(false);
@@ -523,6 +551,10 @@ public class Board extends Pane {
         timeLeft.scheduleAtFixedRate(task, 0, 1000);
     }
 
+
+    /**
+     * Método a ejecutarse cuando termina el turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
+     */
     private void ReflectEndTurn() {
         drawCardBtn.setDisable(true);
         endTurnBtn.setDisable(true);
@@ -530,17 +562,24 @@ public class Board extends Pane {
         timeLeft.cancel();
     }
 
+    /**
+     * Convierte las coordenadas del canvas a un objeto punto que refiere al tile correspondiente.
+     * @param x Abscisa relativa a la esquina superior izquierda del canvas
+     * @param y Ordenada relativa a la esquina superior izquierda del canvas
+     * @return Point que indica el tile sobre el que se clickeó
+     */
     private Point getPointFromCoordinates(int x, int y) {
         int i = x / CELLSIZE;
         int j = y / CELLSIZE;
-        if(i < 0 || i > NUMROWS * CELLSIZE || j < 0 || j > NUMCOLS * CELLSIZE) {
+        /*if(i < 0 || i > NUMROWS * CELLSIZE || j < 0 || j > NUMCOLS * CELLSIZE) {
             throw new IllegalArgumentException();
-        }
+        } HACE FALTA??? */
         return new Point(j, i);
     }
 
-    private int frame = 0;
-
+    /**
+     * Borra el contenido de los canvas y ordena a cada uno de los tiles que se redibuje
+     */
     private void draw() {
         backgroundGC.clearRect(0, 0, backgroundCanvas.getWidth(), backgroundCanvas.getHeight());
         charGC.clearRect(0, 0, charCanvas.getWidth(), charCanvas.getHeight());
@@ -555,6 +594,10 @@ public class Board extends Pane {
 
 
     private int fps = 0;
+    /**
+     * Timer que se accione por cada FPS. La variable fps apunta a regular la frecuencia con la que se redibuja
+     * El cliente pregunta a la instancia del jugador (en el back) que acciones hace falta dibujar en pantalla
+     */
     AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
@@ -603,6 +646,14 @@ public class Board extends Pane {
                             break;
                         case GETHIT:
                             dest.setEffect( new TileEffect(30, 255, 0, 0));
+                            /*try
+                            {
+                                Thread.sleep(4000);
+                            }
+                            catch(InterruptedException ex)
+                            {
+                                Thread.currentThread().interrupt();
+                            }*/
                             break;
                         case EVADE:
                             dest.setEffect( new TileEffect(30, 50, 50, 240 ));

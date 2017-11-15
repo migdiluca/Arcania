@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import static front.Board.CELLSIZE;
 
+/**
+ * Clase que define un tile en el tablero
+ */
 public class Tile {
     private static final Image corpseSprite = new Image("/graphics/soldiers/corpse.png");
 
@@ -30,6 +33,10 @@ public class Tile {
         this.effect = e;
     }
 
+    /**
+     *
+     * @return par (x, y) que indican las coordenadas del Tile en el tablero
+     */
     Point getPos() {
         return new Point(row, col);
     }
@@ -54,29 +61,27 @@ public class Tile {
         return whosHere;
     }
 
+    /**
+     * Aumenta la cantidad de cadáveres que deben dibujarse en el Tile
+     */
     public void addCorpse() {
         this.corpseCount++;
     }
 
-    public ArrayList<Point> getAvailableMovements() {
-
-        //back.Game.canMove(getPos());
-        ArrayList<Point> list = new ArrayList<>();
-        list.add(new Point(row - 1, col));
-        list.add(new Point(row - 1, col - 1));
-        list.add(new Point(row, col - 1));
-        list.add(new Point(row + 1, col));
-        list.add(new Point(row + 1, col + 1));
-        list.add(new Point(row, col + 1));
-        list.add(new Point(row - 1, col + 1));
-        list.add(new Point(row + 1, col - 1));
-        return list;
-    }
-
+    /**
+     * Indica al GraphicSoldier que se ubica en el tile hacia donde moverse
+     * @param dir
+     */
     void moveSoldier(Point dir) {
         whosHere.move(dir);
     }
 
+    /**
+     * Dibuja el tile
+     * @param backgroundGC GraphicContext correspondiente al canvas en donde se dibujarán las líneas separadoras de tiles y los cadáveres.
+     * @param charGC GraphicContext correspondiente al canvas donde se dibujan el GraphicSoldier, el TileEffect, y el GraphicSpell
+     * @param player1 instancia del jugador 1 en el back. Requerido para el correcto dibujado del soldado en la dirección que corresponda.
+     */
     void draw(GraphicsContext backgroundGC, GraphicsContext charGC, back.Player player1) {
         Color color = Color.TRANSPARENT;
         switch (status) {
@@ -103,10 +108,10 @@ public class Tile {
             whosHere.drawMyself(getPos(), charGC, player1);
 
         if (spell != null)
-            if(spell.draw(getPos(), charGC) == true) spell = null;
+            if(spell.draw(getPos(), charGC)) spell = null;
 
         if(effect != null)
-            if(effect.draw(getPos(), charGC) == true) effect = null;
+            if(effect.draw(getPos(), charGC)) effect = null;
 
 
     }

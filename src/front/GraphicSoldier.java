@@ -15,6 +15,10 @@ import java.util.Map;
 
 import static front.Board.CELLSIZE;
 
+/**
+ * Clase que contiene la información necesaria para dibujar un Soldier en un Tile
+ */
+
 public class GraphicSoldier {
     private static final int ANIMFPS = 6;
     private static final int SPRITESIZE = 100;
@@ -26,6 +30,11 @@ public class GraphicSoldier {
 
     private boolean mine;
 
+    /**
+     * Constructor. Asigna las variables y genera el objeto image según el ID del Soldier en el back.
+     * @param s instancia del Soldier (en el back)
+     * @param mine define si el dueño de la ventana es a su vez dueño del Soldado
+     */
     GraphicSoldier(back.Soldier s, boolean mine) {
         this.soldier = s;
         this.mine = mine;
@@ -71,6 +80,12 @@ public class GraphicSoldier {
         moveDir = 0;
     }
 
+    /**
+     * Calcula la dirección en la que el soldado debe mirar, y lo dubuja, junto a los efectos graficos correspondientes a su estado
+     * @param p punto que contiene la dupla (x, y) que indican el Tile sobre el cual se ha de dibujar
+     * @param gc GraphicContext correspondiente al canvas sobre el que se dibuja el jugador (charCanvas)
+     * @param player1 instancia del Jugador 1, necesaria para garantizar la correcta determinación de la dirección hacia la que mira el soldado.
+     */
     void drawMyself(Point p, GraphicsContext gc, back.Player player1) {
 
         frame++;

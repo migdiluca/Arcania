@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Game implements Serializable{
     private Player player1;
@@ -50,6 +51,7 @@ public class Game implements Serializable{
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
+
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
