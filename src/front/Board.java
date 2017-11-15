@@ -1,6 +1,7 @@
 package front;
 
 import back.ActionType;
+import back.Magic;
 import back.Soldier;
 import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
@@ -561,21 +562,20 @@ public class Board extends Pane {
                 back.pendingDrawing action;
 
                 while((action = owner.getActionRegistry()) != null) {
+
+                    Tile origin = (action.getOrigin() != null) ? tiles[action.getOrigin().x][action.getOrigin().y] : null;
+                    Tile dest = (action.getDestination() != null) ? tiles[action.getDestination().x][action.getDestination().y] : null;
+
                     switch(action.getType()) {
                         case MOVEMENT: //movimiento
-                            if(action.getOrigin() == null) { //invocar
-                                Tile dest = tiles[action.getDestination().x][action.getDestination().y];
+                            if(origin == null) { //invocar
                                 dest.setWhosHere(new GraphicSoldier((back.Soldier) action.getCard(), action.getCard().getOwner().equals(owner)));
 
-                            } else if(action.getDestination() == null) { //morir
-                                Tile origin = tiles[action.getOrigin().x][action.getOrigin().y];
+                            } else if(dest == null) { //morir
                                 origin.addCorpse();
                                 origin.setWhosHere(null);
 
                             } else { //mover
-                                Tile origin = tiles[action.getOrigin().x][action.getOrigin().y];
-                                Tile dest = tiles[action.getDestination().x][action.getDestination().y];
-
                                 dest.setWhosHere( origin.getWhosHere() );
 
                                 dest.moveSoldier(new Point(dest.getPos().x - origin.getPos().x, dest.getPos().y - origin.getPos().y));
@@ -590,8 +590,25 @@ public class Board extends Pane {
                             ReflectStartTurn();
                             break;
                         case RECIVESPELL:
-                            tiles[action.getDestination().x][action.getDestination().y].setMagic((back.Magic) action.getCard());
+
+                            back.Magic c = (back.Magic) action.getCard();
+
+                            dest.setMagic(c);
+
+                            if(c.getIsNegative())
+                                dest.setEffect( new TileEffect(30, 255, 0, 0));
+                            else
+                                dest.setEffect( new TileEffect(30, 220, 220, 255));
+
                             break;
+                        case GETHIT:
+                            dest.setEffect( new TileEffect(30, 255, 0, 0));
+                            break;
+                        case EVADE:
+                            dest.setEffect( new TileEffect(30, 50, 50, 240 ));
+                            break;
+                        case STRIKE:
+                            dest.setEffect( new TileEffect(30, 150, 20, 150 ));
                     }
                 }
                 draw();

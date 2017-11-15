@@ -18,11 +18,16 @@ public class Tile {
     private GraphicSoldier whosHere = null;
     private GraphicSpell spell = null;
     private int corpseCount = 0;
+    private TileEffect effect;
 
 
     Tile(int row, int col) {
         this.row = row;
         this.col = col;
+    }
+
+    public void setEffect(TileEffect e) {
+        this.effect = e;
     }
 
     Point getPos() {
@@ -94,11 +99,15 @@ public class Tile {
 
 
 
-        if (whosHere != null) {
+        if (whosHere != null)
             whosHere.drawMyself(getPos(), charGC, player1);
-        }
-        if (spell != null) {
+
+        if (spell != null)
             if(spell.draw(getPos(), charGC) == true) spell = null;
-        }
+
+        if(effect != null)
+            if(effect.draw(getPos(), charGC) == true) effect = null;
+
+
     }
 }

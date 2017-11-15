@@ -22,11 +22,7 @@ public class GraphicSpell {
 
         gc.drawImage(sprite, FRAMEWIDTH * frameCount, 0, FRAMEWIDTH, FRAMEHEIGHT, p.y * CELLSIZE,p.x * CELLSIZE, FRAMEWIDTH, FRAMEHEIGHT);
 
-
-        if(frameCount == FRAMETOTAL)
-            return true;
-        else
-            return false;
+        return(frameCount == FRAMETOTAL);
     }
 
 }
