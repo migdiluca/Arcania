@@ -2,9 +2,12 @@ package front;
 
 import back.Game;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
 
@@ -35,6 +38,23 @@ public class Test extends Application {
         secondStage.setTitle(game.getPlayer2().getName() + " - Arcania");
         secondStage.setScene(scene2);
         secondStage.show();
+
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+        secondStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
 
         primaryStage.setScene(scene1);
         //primaryStage.setHeight(); PENDIENTE!!!
