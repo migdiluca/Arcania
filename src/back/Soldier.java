@@ -102,9 +102,7 @@ public class Soldier extends Card implements Serializable{
     public int attack(Soldier m){
 
         int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
-
-        System.out.println(missChance);
-
+        
         if(missChance < 85) {
             m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
             return 1;
