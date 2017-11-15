@@ -119,6 +119,7 @@ public class Soldier extends Card implements Serializable{
     }
 
     public void writeObject(ObjectOutputStream out) throws IOException {
+        super.writeObject(out);
         out.defaultWriteObject();
         out.writeInt(attack);
         out.writeInt(health);
@@ -128,6 +129,7 @@ public class Soldier extends Card implements Serializable{
     }
 
     public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        super.readObject(ois);
         ois.defaultReadObject();
         attack =  ois.readInt();
         health =  ois.readInt();

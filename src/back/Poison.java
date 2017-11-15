@@ -1,6 +1,12 @@
 package back;
 
-public class Poison extends Magic {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+
+public class Poison extends Magic implements Serializable{
     private int damage;
 
     public Poison(String name, int id, String description, boolean isNegative, int damage, int duration) {
@@ -11,5 +17,17 @@ public class Poison extends Magic {
     @Override
     public void effect(Soldier s){
         s.setHealth(s.getHealth() - damage);
+    }
+
+
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(damage);
+    }
+
+    public void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        ois.defaultReadObject();
+        damage =  ois.readInt();
+
     }
 }

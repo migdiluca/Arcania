@@ -98,6 +98,9 @@ public class Board extends Pane {
 
     ProgressBar scrollTimeLeft;
 
+    ProgressBar castle1Indicator;
+    ProgressBar castle2Indicator;
+
 
     /**
      * Crea los controles de la parte derecha del formulario, (lo que no es el board mismo).
@@ -393,7 +396,22 @@ public class Board extends Pane {
         hb.setLayoutX(78);
         hb.setLayoutY(75);
 
-        getChildren().addAll(background, hb);
+
+        castle1Indicator = new ProgressBar();
+        castle1Indicator.setProgress(1);
+        castle1Indicator.setLayoutX(70);
+        castle1Indicator.setLayoutY(790);
+        //castle1Indicator.prefHeight(200);
+        castle1Indicator.setPrefSize(250, 15);
+
+        castle2Indicator = new ProgressBar();
+        castle2Indicator.setProgress(1);
+        castle2Indicator.setLayoutX(70);
+        castle2Indicator.setLayoutY(30);
+        castle2Indicator.setPrefSize(250, 15);
+
+
+        getChildren().addAll(background, hb, castle1Indicator, castle2Indicator);
 
 
         this.game = game;
@@ -443,6 +461,9 @@ public class Board extends Pane {
 
         VBox menu = createMenu();
         menu.setTranslateY(-60);
+
+
+
         hb.getChildren().addAll(pBoard, menu);
 
 

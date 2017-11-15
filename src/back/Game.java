@@ -252,6 +252,7 @@ public class Game implements Serializable{
         out.writeObject(player1);
         out.writeObject(player2);
         out.writeObject(currentPlayer);
+        out.writeInt(actionsLeft);
         out.writeObject(board);
     }
 
@@ -261,6 +262,7 @@ public class Game implements Serializable{
         player1 = (Player) ois.readObject();
         player2 = (Player) ois.readObject();
         currentPlayer = (Player) ois.readObject();
+        actionsLeft = ois.readInt();
         board = (Board) ois.readObject();
     }
 

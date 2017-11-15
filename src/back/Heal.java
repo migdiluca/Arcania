@@ -1,9 +1,13 @@
 package back;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Heal extends Magic {
+public class Heal extends Magic implements Serializable {
     private int points;
 
     public Heal(String name, int id, String description, boolean isNegative, int points, int duration){
@@ -24,5 +28,15 @@ public class Heal extends Magic {
                 i.remove();
             }
         }
+    }
+
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(points);
+    }
+
+    public void readObject(ObjectInputStream ois) throws IOException , ClassNotFoundException {
+        ois.defaultReadObject();
+        points = ois.readInt();
     }
 }

@@ -1,8 +1,9 @@
 package back;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class pendingDrawing {
+public class pendingDrawing implements Serializable {
     private Point origin;
     private Point destination;
     private Card card;
