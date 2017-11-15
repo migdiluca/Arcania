@@ -181,10 +181,13 @@ public class Game implements Serializable{
             currentPlayer.playSoldier((Soldier) c);
             registerAction(new pendingDrawing(null, p, c, ActionType.MOVEMENT));
         } else if( c instanceof Magic ) {
+            registerAction(new pendingDrawing(p, null, c, ActionType.CASTSPELL));
             ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
 
-            for(Soldier s: affectedBySpell)
+            for(Soldier s: affectedBySpell) {
                 s.curse((Magic) c);
+                registerAction(new pendingDrawing(null, board.searchSoldier(s), c, ActionType.RECIVESPELL));
+            }
 
         }
         currentPlayer.discardCard(c);

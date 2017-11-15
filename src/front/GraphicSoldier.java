@@ -1,5 +1,6 @@
 package front;
 
+import back.Magic;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
@@ -8,7 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import static front.Board.CELLSIZE;
 
@@ -152,11 +155,9 @@ public class GraphicSoldier {
             gc.setEffect(borderGlow);
         }
 
-        gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
-
-        HashSet<String> states = soldier.GetAffectedBy();
-        for(String s: states) {
-            if(s == "Poison") {
+        HashMap<Magic, Integer> states = soldier.getAffectedBy();
+        for(Magic m: states.keySet()) {
+            if(m instanceof back.Poison) {
                 DropShadow borderGlow = new DropShadow();
                 borderGlow.setOffsetY(0f);
                 borderGlow.setOffsetX(0f);
@@ -170,6 +171,8 @@ public class GraphicSoldier {
             }
 
         }
+
+        gc.drawImage(sprite, xSprite, ySprite, SPRITESIZE, SPRITESIZE, xCoord,yCoord - 10, CELLSIZE, CELLSIZE);
 
 
 

@@ -15,7 +15,7 @@ public class Soldier extends Card implements Serializable{
     private int defense;
     private int agility;
     public boolean alreadyMoved;
-    private Map<Magic, Integer> affectedBy = new HashMap<>();
+    private HashMap<Magic, Integer> affectedBy = new HashMap<>();
 
     public void curse(Magic m) {
         m.startEffect(this);
@@ -24,15 +24,7 @@ public class Soldier extends Card implements Serializable{
         }
     }
 
-    public HashSet<String> GetAffectedBy() {
-        HashSet<String> GetAffectedBy = new HashSet<>();
-        for(Magic m: affectedBy.keySet())
-            GetAffectedBy.add(m.getClass().toString());
-
-        return GetAffectedBy;
-    }
-
-    public Map<Magic, Integer> getAffectedBy () {
+    public HashMap<Magic, Integer> getAffectedBy () {
         return affectedBy;
     }
 
@@ -141,7 +133,7 @@ public class Soldier extends Card implements Serializable{
         health =  ois.readInt();
         defense = ois.readInt();
         agility = ois.readInt();
-        affectedBy = (Map<Magic,Integer>) ois.readObject();
+        affectedBy = (HashMap<Magic,Integer>) ois.readObject();
 
     }
 }

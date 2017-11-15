@@ -584,12 +584,14 @@ public class Board extends Pane {
                             }
                             break;
                         case ENDTURN:
-                            System.out.println("END");
                             ReflectEndTurn();
                             break;
                         case STARTTURN:
-                            System.out.println("START");
                             ReflectStartTurn();
+                            break;
+                        case RECIVESPELL:
+                            tiles[action.getDestination().x][action.getDestination().y].setMagic((back.Magic) action.getCard());
+                            break;
                     }
                 }
                 draw();

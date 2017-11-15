@@ -16,7 +16,9 @@ public class Tile {
     private int col;
     private TileStates status = TileStates.INACTIVE;
     private GraphicSoldier whosHere = null;
+    private GraphicSpell spell = null;
     private int corpseCount = 0;
+
 
     Tile(int row, int col) {
         this.row = row;
@@ -33,6 +35,10 @@ public class Tile {
 
     TileStates getStatus() {
         return status;
+    }
+
+    public void setMagic(back.Magic m) {
+        this.spell = new GraphicSpell(m);
     }
 
     public void setWhosHere(GraphicSoldier soldier) {
@@ -90,6 +96,9 @@ public class Tile {
 
         if (whosHere != null) {
             whosHere.drawMyself(getPos(), charGC, player1);
+        }
+        if (spell != null) {
+            if(spell.draw(getPos(), charGC) == true) spell = null;
         }
     }
 }
