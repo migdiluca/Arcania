@@ -15,6 +15,9 @@ public class Soldier extends Card implements Serializable{
     private int defense;
     private int agility;
     public boolean alreadyMoved;
+
+    private static Random r = new Random();
+
     private HashMap<Magic, Integer> affectedBy = new HashMap<>();
 
     public void curse(Magic m) {
@@ -98,8 +101,9 @@ public class Soldier extends Card implements Serializable{
     // Estructura de ataque.
     public int attack(Soldier m){
 
-        Random r = new Random();
         int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
+
+        System.out.println(missChance);
 
         if(missChance < 85) {
             m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
