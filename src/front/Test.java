@@ -28,10 +28,6 @@ public class Test extends Application {
         firstStage.setScene(scene1);
 
         firstStage.show();
-
-
-
-
     }
 
 }
