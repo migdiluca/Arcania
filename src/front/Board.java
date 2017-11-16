@@ -123,10 +123,7 @@ public class Board extends Pane {
         info.add(infoHelp, 1, 2);
 
         h = new FlowPane();
-
-
-        h.setMaxSize(350, 1200);
-        h.setMinSize(350, 1200);
+        h.setPrefWidth(350);
 
         ArrayList<back.Card> cardsAux = owner.getHand();
 
