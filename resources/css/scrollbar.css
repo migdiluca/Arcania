@@ -26,3 +26,20 @@
     -fx-background-color: derive(black,30%);
     -fx-background-radius: 1em;
 }
+
+.progress-bar > .bar {
+    -fx-background-insets: 0;
+    -fx-background-radius: 0, 0, 0, 0;
+    -fx-padding: 0.1em;
+}
+
+.progress-bar > .track {
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.progress-bar.myCastle > .bar {
+    -fx-background-color: limegreen;
+}
+.progress-bar.notMyCastle > .bar {
+    -fx-background-color: red;
+}

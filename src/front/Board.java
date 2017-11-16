@@ -189,7 +189,7 @@ public class Board extends Pane {
 
         scrollTimeLeft = new ProgressBar();
         scrollTimeLeft.setProgress(0.9);
-        scrollTimeLeft.setPrefWidth(150);
+        scrollTimeLeft.setPrefSize(150, 15);
 
 
         HBox buttonBox = new HBox(5);
@@ -415,7 +415,7 @@ public class Board extends Pane {
         castle1Indicator = new ProgressBar();
         castle1Indicator.setProgress(1);
         castle1Indicator.setLayoutX(70);
-        castle1Indicator.setLayoutY(790);
+        castle1Indicator.setLayoutY(795);
         //castle1Indicator.prefHeight(200);
         castle1Indicator.setPrefSize(250, 15);
 
@@ -424,6 +424,15 @@ public class Board extends Pane {
         castle2Indicator.setLayoutX(70);
         castle2Indicator.setLayoutY(30);
         castle2Indicator.setPrefSize(250, 15);
+
+        if (owner == game.getPlayer1()) {
+            castle1Indicator.getStyleClass().add("myCastle");
+            castle2Indicator.getStyleClass().add("notMyCastle");
+        } else {
+            castle1Indicator.getStyleClass().add("notMyCastle");
+            castle2Indicator.getStyleClass().add("myCastle");
+        }
+
 
 
         getChildren().addAll(background, hb, castle1Indicator, castle2Indicator, lblAnuncios);
