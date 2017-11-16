@@ -234,14 +234,16 @@ public class Board extends Pane {
         Canvas cardCanvas = new Canvas(170,170);
         GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
 
+        cardGC.drawImage(new Image("graphics/avatars/" + c.getID() + ".png", 110, 110, true, true), 40, 30);
         cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
-        cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
+
+
 
         cardGC.setFill(Color.WHITE);
-        //cardGC.setFont(titleHelp.getFont());
 
 
         if( c instanceof back.Soldier ) {
+            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
             back.Soldier s = (back.Soldier) c;
             cardGC.fillText(String.valueOf(s.getAttack()), 53, 24);
             cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
@@ -250,8 +252,11 @@ public class Board extends Pane {
 
         }
 
+
+
+
         cardGC.setFont(titleHelp.getFont());
-        cardGC.fillText(c.getName(), 43, 145);
+        cardGC.fillText(c.getName(), 45, 145);
 
         h.getChildren().add(cardCanvas);
 

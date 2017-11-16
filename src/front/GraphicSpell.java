@@ -18,7 +18,7 @@ public class GraphicSpell {
     private static final int FRAMEHEIGHT = 100;
 
     GraphicSpell(back.Magic m) {
-        sprite = new Image("graphics/soldiers/1.png");
+        sprite = new Image("graphics/spells/900.png");
     }
 
     /**

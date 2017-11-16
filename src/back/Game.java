@@ -70,10 +70,15 @@ public class Game implements Serializable{
             deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Heal("Sanación Superior", 5, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
+            deck.add(new Heal("Sanación Superior", 501, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Poison("Envenenar", 5, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",false, 10, 3));
+            deck.add(new MagicDamage("Tormenta de Fuego", 501, "Inflinge 25 puntos de daño a las unidades aledañas.",false, 25));
+
+        deck.add(new MagicDamage("Juicio", 502, "Inflinge 40 puntos de daño a las unidades aledañas.",false, 40));
+
+        for(int i = 0; i < 5; i++)
+            deck.add(new Poison("Envenenar", 503, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",false, 10, 3));
 
         Collections.shuffle(deck);
         return deck;
