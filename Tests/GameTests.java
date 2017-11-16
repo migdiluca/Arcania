@@ -1,7 +1,5 @@
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import java.awt.*;
-import java.lang.annotation.Retention;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +12,7 @@ public class GameTests {
     Point p= new Point(1,2);
     Point r = new Point(2,2);
     back.Poison poison = new back.Poison("veneno",1,"saca vida",true,5,5);
-    back.Inspiration inspiration = new back.Inspiration("inspiracion",1,"agrega ataque",false);
+    back.Inspiration inspiration = new back.Inspiration("inspiracion",1,"agrega ataque",false, 5);
 
     @Test
     public void addSoldierTest(){
@@ -55,6 +53,4 @@ public class GameTests {
         inspiration.lift(s3);
         assertTrue(s3.getAttack() == 10);
     }
-
-
 }

@@ -81,6 +81,9 @@ public class Game implements Serializable {
         for(int i = 0; i < 5; i++)
             deck.add(new Poison("Envenenar", 503, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",true, 10, 3));
 
+        //for(int i = 0; i < 5; i++)
+            //deck.add(new Inspiration("Inspiración", 505, "Aumenta en 5 puntos el ataque durante 5 turnos.",true, 5));
+
         Collections.shuffle(deck);
         return deck;
     }

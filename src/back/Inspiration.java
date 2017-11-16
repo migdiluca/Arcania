@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 public class Inspiration extends Magic {
     private int buff;
 
-    public Inspiration(String name, int id, String description, boolean isNegative){
+    public Inspiration(String name, int id, String description, boolean isNegative, int buff){
         super(name, id, description, 5, isNegative);
         this.buff = buff;
     }
