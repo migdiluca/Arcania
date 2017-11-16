@@ -117,8 +117,8 @@ public class Board extends Pane {
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         infoHelp.setPrefWidth(300);
-        infoHelp.setMinHeight(40);
-        infoHelp.setMaxHeight(40);
+        infoHelp.setMinHeight(60);
+        infoHelp.setMaxHeight(60);
         infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
 
