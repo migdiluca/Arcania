@@ -26,6 +26,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -100,6 +101,8 @@ public class Board extends Pane {
 
     ProgressBar castle1Indicator;
     ProgressBar castle2Indicator;
+
+    Label lblAnuncios;
 
 
     /**
@@ -189,7 +192,17 @@ public class Board extends Pane {
         scrollTimeLeft.setPrefWidth(150);
 
 
-        v.getChildren().addAll(movesLeft, scrollTimeLeft, drawCardBtn, endTurnBtn);
+        HBox buttonBox = new HBox(5);
+        buttonBox.getChildren().addAll(drawCardBtn, endTurnBtn);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        HBox turnBox = new HBox(5);
+        turnBox.getChildren().addAll(scrollTimeLeft, movesLeft);
+        turnBox.setAlignment(Pos.CENTER);
+
+        v.setAlignment(Pos.CENTER);
+
+        v.getChildren().addAll(turnBox, buttonBox);
 
 
 
@@ -203,43 +216,6 @@ public class Board extends Pane {
             GridPane.setMargin(options[i], new Insets(0, 0, 0, 8));
             v.add(options[i], i, 2);
         }*/
-
-
-        MenuBar mainMenu = new MenuBar();
-        Menu file = new Menu("File");
-        MenuItem save = new MenuItem("Save");
-        MenuItem load = new MenuItem("Load");
-
-        file.getItems().addAll(load,save);
-        mainMenu.getMenus().add(file);
-        getChildren().add(mainMenu);
-
-        load.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    File selectedFile = fileChooser.showOpenDialog(Board.this.primaryStage);
-                    game.loadGame(selectedFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        save.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    File selectedFile = fileChooser.showSaveDialog(Board.this.primaryStage);
-                    game.writeGame(selectedFile);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
 
 
@@ -379,6 +355,14 @@ public class Board extends Pane {
         }
     }
 
+    private void showAlertText(String text) {
+        lblAnuncios.setText(text);
+        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(lblAnuncios.opacityProperty(), 1.0));
+        KeyFrame endFadeText = new KeyFrame(Duration.seconds(3), new KeyValue(lblAnuncios.opacityProperty(), 0.0));
+        Timeline timelineText = new Timeline(startFadeText, endFadeText);
+        timelineText.playFromStart();
+    }
+
     /**
      * Constructor de la ventana
      * @param game instancia del objeto Game del backend
@@ -397,6 +381,37 @@ public class Board extends Pane {
         hb.setLayoutY(75);
 
 
+        lblAnuncios = new Label();
+
+        lblAnuncios.setFont(new Font("Arial", 40));
+        lblAnuncios.setTextFill(Color.WHITE);
+        lblAnuncios.setLayoutX(150);
+        lblAnuncios.setLayoutY(60);
+        lblAnuncios.setFont(Font.loadFont("file:resources/fonts/Barbarian.ttf", 60));
+        InnerShadow is = new InnerShadow();
+        is.setOffsetX(2);
+        is.setOffsetY(2);
+        is.setColor(Color.rgb(50, 50, 50));
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.rgb(50, 50, 50));
+        ds.setInput(is);
+        lblAnuncios.setEffect(ds);
+        lblAnuncios.setMouseTransparent(true);
+
+        showAlertText("Tu turno");
+
+        ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
+
+        im.setX(80);
+        im.setY(90);
+
+        KeyFrame startFadeOut = new KeyFrame(Duration.seconds(0), new KeyValue(im.opacityProperty(), 1.0));
+        KeyFrame endFadeOut = new KeyFrame(Duration.seconds(5), new KeyValue(im.opacityProperty(), 0.0));
+        Timeline timelineOn = new Timeline(startFadeOut, endFadeOut);
+
+        timelineOn.playFromStart();
+
         castle1Indicator = new ProgressBar();
         castle1Indicator.setProgress(1);
         castle1Indicator.setLayoutX(70);
@@ -411,7 +426,7 @@ public class Board extends Pane {
         castle2Indicator.setPrefSize(250, 15);
 
 
-        getChildren().addAll(background, hb, castle1Indicator, castle2Indicator);
+        getChildren().addAll(background, hb, castle1Indicator, castle2Indicator, lblAnuncios);
 
 
         this.game = game;
@@ -434,18 +449,9 @@ public class Board extends Pane {
         pBoard.setMinSize(700, 700);
 
 
-        ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
 
-        im.setX(80);
-        im.setY(90);
 
-        pBoard.getChildren().addAll(backgroundCanvas, charCanvas, im);
-
-        KeyFrame startFadeOut = new KeyFrame(Duration.seconds(0), new KeyValue(im.opacityProperty(), 1.0));
-        KeyFrame endFadeOut = new KeyFrame(Duration.seconds(5), new KeyValue(im.opacityProperty(), 0.0));
-        Timeline timelineOn = new Timeline(startFadeOut, endFadeOut);
-
-        timelineOn.playFromStart();
+        pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
 
 
 
@@ -539,9 +545,6 @@ public class Board extends Pane {
         endTurnBtn.setDisable(true);
 
         timeLeft = new Timer();
-        if (game.getCurrentPlayer() == owner) {
-            ReflectStartTurn();
-        }
 
         timer.start();
     }
@@ -550,6 +553,9 @@ public class Board extends Pane {
      * Método a ejecutarse cuando inicia un nuevo turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
      */
     private void ReflectStartTurn() {
+        showAlertText("Comienza tu turno");
+        updateActionsLeft();
+
         drawCardBtn.setDisable(false);
         endTurnBtn.setDisable(false);
         scrollTimeLeft.setDisable(false);
@@ -577,6 +583,7 @@ public class Board extends Pane {
      * Método a ejecutarse cuando termina el turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
      */
     private void ReflectEndTurn() {
+        showAlertText("Turno de " + game.getCurrentPlayer().getName());
         drawCardBtn.setDisable(true);
         endTurnBtn.setDisable(true);
         scrollTimeLeft.setDisable(true);

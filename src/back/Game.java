@@ -13,7 +13,7 @@ public class Game implements Serializable{
     private Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
                              para tomar puntos de spawn etc..*/
     private Player currentPlayer;
-    private int actionsLeft;
+    private int actionsLeft = 5;
 
     public Game(String player1Name, String player2Name) {
         board = new Board();
@@ -42,7 +42,8 @@ public class Game implements Serializable{
         board.addSoldier(h2,new Point(player2.getCastleRow(), 3));
 
         currentPlayer = player1;
-        actionsLeft = 5;
+        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
+        player2.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
     }
 
     private void removeDead(Soldier s) {
