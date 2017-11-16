@@ -33,16 +33,18 @@ public class StartWindow extends StackPane {
     private Stage myStage;
     private final Random RNG = new Random();
     private static final int WINDOWSIZE = 500;
+    private static final int WINDOWWIDTH = 1294;
+    private static final int WINDOWHEIGHT = 816;
 
     StartWindow(Stage myStage) {
 
         this.myStage = myStage;
 
-        myStage.setWidth(WINDOWSIZE);
-        myStage.setHeight(WINDOWSIZE);
+        myStage.setWidth(WINDOWWIDTH);
+        myStage.setHeight(WINDOWHEIGHT);
         myStage.setTitle("Arcania");
 
-        ImageView background = new ImageView(new Image("/graphics/ui/login.png", WINDOWSIZE, WINDOWSIZE, false, true));
+        ImageView background = new ImageView(new Image("/graphics/ui/login2.png", WINDOWWIDTH, WINDOWHEIGHT, false, true));
         TextField hidden = new TextField();
 
         getChildren().addAll(hidden, background, createFog());
@@ -167,7 +169,7 @@ public class StartWindow extends StackPane {
 
     public Pane createFog() {
         Pane fog = new Pane();
-        Rectangle rect = new Rectangle(0, 0, WINDOWSIZE, WINDOWSIZE);
+        Rectangle rect = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
         rect.setFill(Color.rgb(0xe0, 0xe0, 0xe0, 0.5));
 
         fog.getChildren().add(rect);
@@ -176,12 +178,12 @@ public class StartWindow extends StackPane {
             fog.getChildren().add(createFogElement());
         }
 
-        fog.setEffect(new GaussianBlur((2 * WINDOWSIZE) / 2.5));
+        fog.setEffect(new GaussianBlur((2 * WINDOWWIDTH) / 2.5));
         return fog;
     }
 
     private Circle createFogElement() {
-        Circle circle = new Circle(RNG.nextInt(WINDOWSIZE - 50) + 25, RNG.nextInt(WINDOWSIZE - 50) + 25, 15 + RNG.nextInt(50));
+        Circle circle = new Circle(RNG.nextInt(WINDOWWIDTH - 50) + 25, RNG.nextInt(WINDOWHEIGHT - 50) + 25, 15 + RNG.nextInt(50));
         int shade = 0xcf + RNG.nextInt(0x20);
         circle.setFill(Color.rgb(shade, shade, shade, 0.8));
         AnimationTimer anim = new AnimationTimer() {
@@ -197,10 +199,10 @@ public class StartWindow extends StackPane {
                     double elapsedSeconds = (now - lastUpdate) / 1_000_000_000.0 ;
                     double x = circle.getCenterX() ;
                     double y = circle.getCenterY() ;
-                    if ( x + elapsedSeconds * xVel > WINDOWSIZE || x + elapsedSeconds * xVel < 0) {
+                    if ( x + elapsedSeconds * xVel > WINDOWWIDTH || x + elapsedSeconds * xVel < 0) {
                         xVel = - xVel ;
                     }
-                    if ( y + elapsedSeconds * yVel > WINDOWSIZE || y + elapsedSeconds * yVel < 0) {
+                    if ( y + elapsedSeconds * yVel > WINDOWWIDTH || y + elapsedSeconds * yVel < 0) {
                         yVel = - yVel ;
                     }
                     circle.setCenterX(x + elapsedSeconds*xVel);
