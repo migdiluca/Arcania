@@ -172,7 +172,8 @@ public class Game implements Serializable{
         Card c = null;
         if(player == currentPlayer) {
             c = currentPlayer.cardsToHand();
-            performAction();
+            if (c != null)
+                performAction();
         }
         return c;
     }

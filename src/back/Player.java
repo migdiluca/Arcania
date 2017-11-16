@@ -59,7 +59,6 @@ public class Player implements Serializable {
             c = deck.pop();
             hand.add(c);
         }
-
         return c;
     }
 
