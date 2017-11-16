@@ -205,6 +205,8 @@ public class Game implements Serializable {
                 if(!s.isAlive())
                     removeDead(s);
                 registerAction(new pendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
+                if(!s.isAlive())
+                    removeDead(s);
             }
 
         }
