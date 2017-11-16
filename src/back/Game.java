@@ -2,6 +2,7 @@ package back;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -123,6 +124,14 @@ public class Game implements Serializable {
         }
     }
 
+    private void applyMagicToSoldiers(ArrayList<Soldier> soldiers) {
+        for (Soldier s : soldiers) {
+            s.applyMagic();
+            if(!s.isAlive())
+                removeDead(s);
+        }
+    }
+
     private void registerAction(pendingDrawing pd) {
         getPlayer1().registerAction(pd);
         getPlayer2().registerAction(pd);
@@ -189,8 +198,12 @@ public class Game implements Serializable {
             registerAction(new pendingDrawing(p, null, c, ActionType.CASTSPELL));
             ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
 
+            applyMagicToSoldiers(currentPlayer.getAliveCards());
+
             for(Soldier s: affectedBySpell) {
                 s.curse((Magic) c);
+                if(!s.isAlive())
+                    removeDead(s);
                 registerAction(new pendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
             }
 
@@ -199,26 +212,29 @@ public class Game implements Serializable {
         performAction();
     }
 
+    public void enableMovement(ArrayList<Soldier> soldiers) {
+        for(Soldier s: soldiers)
+            s.enableMovement();
+    }
+
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
     public void endTurn() {
         performAttack(currentPlayer.getAliveCards());
+        applyMagicToSoldiers(currentPlayer.getAliveCards());
+        enableMovement(currentPlayer.getAliveCards());
 
-        for(Soldier s: currentPlayer.getAliveCards()) {
-            s.enableMovement();
-            s.applyMagic();
-        }
 
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.getAliveCards());
 
         if(otherPlayer.getCastle().getLife() <= 0 || !otherPlayer.canPlay()) {
-
+            otherPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.LOSE) );
+            currentPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.WIN) );
         }
-            //agregar pending
         if(currentPlayer.getCastle().getLife() <= 0 || !currentPlayer.canPlay()) {
-
+            otherPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.WIN) );
+            currentPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.LOSE) );
         }
-            //agregar pending
 
 
         currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));

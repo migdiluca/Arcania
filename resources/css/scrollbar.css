@@ -24,7 +24,7 @@
 
 .scroll-bar:vertical .thumb {
     -fx-background-color: derive(black,30%);
-    -fx-background-radius: 1em;
+    -fx-background-radius: 0.1em;
 }
 
 .progress-bar > .bar {

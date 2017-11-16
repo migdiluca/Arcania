@@ -1,27 +1,18 @@
 package front;
 
-import back.ActionType;
-import back.Magic;
-import back.Soldier;
-import com.sun.javafx.image.BytePixelSetter;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.*;
 import javafx.scene.image.Image;
@@ -30,29 +21,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.List;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
 
 
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.omg.PortableInterceptor.INACTIVE;
-import sun.font.GraphicComponent;
 import static back.Castle.CASTLELIFE;
 
 /**
@@ -92,12 +73,16 @@ public class Board extends Pane {
 
     private Timer timeLeft;
 
-    ProgressBar scrollTimeLeft;
+    private ProgressBar scrollTimeLeft;
 
-    ProgressBar castle1Indicator;
-    ProgressBar castle2Indicator;
+    private ProgressBar castle1Indicator;
+    private ProgressBar castle2Indicator;
 
-    Label lblAnuncios;
+    private Label lblAlerts;
+
+    private MediaPlayer mp;
+    private final AudioClip changeTurnSound = new AudioClip(ClassLoader.getSystemResource("sounds/endturn.wav").toString());
+    private boolean silent;
 
 
     /**
@@ -216,7 +201,6 @@ public class Board extends Pane {
 
         cardGC.setFill(Color.WHITE);
 
-
         if( c instanceof back.Soldier ) {
             cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
             back.Soldier s = (back.Soldier) c;
@@ -224,14 +208,14 @@ public class Board extends Pane {
             cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
             cardGC.fillText(String.valueOf(s.getAgility()), 53, 56);
             cardGC.fillText(String.valueOf(s.getDefense()), 53, 72);
-
         }
 
 
 
 
         cardGC.setFont(new Font(12));
-        cardGC.fillText(c.getName(), 45, 147);
+        cardGC.setTextAlign(TextAlignment.CENTER);
+        cardGC.fillText(c.getName(), 90, 147);
 
         h.getChildren().add(cardCanvas);
 
@@ -336,9 +320,9 @@ public class Board extends Pane {
     }
 
     private void showAlertText(String text) {
-        lblAnuncios.setText(text);
-        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(lblAnuncios.opacityProperty(), 1.0));
-        KeyFrame endFadeText = new KeyFrame(Duration.seconds(3), new KeyValue(lblAnuncios.opacityProperty(), 0.0));
+        lblAlerts.setText(text);
+        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(lblAlerts.opacityProperty(), 1.0));
+        KeyFrame endFadeText = new KeyFrame(Duration.seconds(3), new KeyValue(lblAlerts.opacityProperty(), 0.0));
         Timeline timelineText = new Timeline(startFadeText, endFadeText);
         timelineText.playFromStart();
     }
@@ -348,7 +332,22 @@ public class Board extends Pane {
      * @param game instancia del objeto Game del backend
      * @param owner instancia del jugador en el back que es dueño de la ventana
      */
-    Board(back.Game game, back.Player owner) {
+    Board(back.Game game, back.Player owner, boolean silent) {
+
+        this.silent = silent;
+
+        if(!silent) {
+            Media bgSong = new Media(ClassLoader.getSystemResource("sounds/Battle.mp3").toString());
+            mp = new MediaPlayer(bgSong);
+            mp.setOnEndOfMedia(new Runnable() {
+                public void run() {
+                    mp.seek(Duration.ZERO);
+                }
+            });
+            mp.play();
+        }
+
+
 
         ImageView background = new ImageView(new Image("/graphics/map/fondo.png", 1300, 820, false, false));
 
@@ -358,23 +357,32 @@ public class Board extends Pane {
         hb.setLayoutY(60);
 
 
-        lblAnuncios = new Label();
+        lblAlerts = new Label();
 
-        lblAnuncios.setFont(new Font("Arial", 40));
-        lblAnuncios.setTextFill(Color.WHITE);
-        lblAnuncios.setLayoutX(150);
-        lblAnuncios.setLayoutY(60);
-        lblAnuncios.setFont(Font.loadFont("file:resources/fonts/Barbarian.ttf", 60));
-        InnerShadow is = new InnerShadow();
-        is.setOffsetX(2);
-        is.setOffsetY(2);
-        is.setColor(Color.rgb(50, 50, 50));
-        DropShadow ds = new DropShadow();
-        ds.setOffsetY(3.0f);
-        ds.setColor(Color.rgb(50, 50, 50));
-        ds.setInput(is);
-        lblAnuncios.setEffect(ds);
-        lblAnuncios.setMouseTransparent(true);
+        lblAlerts.setTextFill(Color.WHITE);
+        lblAlerts.setMaxWidth(700);
+        lblAlerts.setMinWidth(700);
+        lblAlerts.setAlignment(Pos.CENTER);
+        lblAlerts.setFont(Font.loadFont("file:resources/fonts/Barbarian.ttf", 60));
+
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(2.0);
+        shadow.setOffsetY(2.0);
+        shadow.setColor(Color.BLACK);
+
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(-135.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+        shadow.setInput(lighting);
+
+        lblAlerts.setEffect(shadow);
+
+
+
+        lblAlerts.setMouseTransparent(true);
 
         castle1Indicator = new ProgressBar();
         castle1Indicator.setProgress(1);
@@ -398,7 +406,7 @@ public class Board extends Pane {
 
 
 
-        getChildren().addAll(background, hb, castle1Indicator, castle2Indicator, lblAnuncios);
+        getChildren().addAll(background, hb, castle1Indicator, castle2Indicator);
 
 
         this.game = game;
@@ -421,7 +429,7 @@ public class Board extends Pane {
         pBoard.setMinSize(700, 700);
 
 
-        pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
+        pBoard.getChildren().addAll(backgroundCanvas, charCanvas, lblAlerts);
 
 
 
@@ -443,17 +451,6 @@ public class Board extends Pane {
         hb.getChildren().addAll(pBoard, menu);
 
 
-        /*Música
-        MediaPlayer mp = new MediaPlayer(new Media(getClass().getResource("sounds/bg-music.mp3").toString()));
-        mp.setOnEndOfMedia(new Runnable() {
-            public void run() {
-                mp.seek(Duration.ZERO);
-            }
-        });
-        mp.play();*/
-
-
-        //setStyle("-fx-background-color: #5490ff");
         charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -523,6 +520,7 @@ public class Board extends Pane {
      * Método a ejecutarse cuando inicia un nuevo turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
      */
     private void ReflectStartTurn() {
+        if(!silent) changeTurnSound.play();
         showAlertText("Comienza tu turno");
         updateActionsLeft();
 
@@ -553,11 +551,13 @@ public class Board extends Pane {
      * Método a ejecutarse cuando termina el turno del jugador dueño de la ventana. Pone los controles en el estado apropiado.
      */
     private void ReflectEndTurn() {
+        if(!silent) changeTurnSound.play();
         showAlertText("Turno de " + game.getCurrentPlayer().getName());
         drawCardBtn.setDisable(true);
         endTurnBtn.setDisable(true);
         scrollTimeLeft.setDisable(true);
         timeLeft.cancel();
+        resetTileStatus();
     }
 
     /**
