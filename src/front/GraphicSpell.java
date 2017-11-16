@@ -1,5 +1,7 @@
 package front;
 
+import back.MagicDamage;
+import back.Poison;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -18,7 +20,14 @@ public class GraphicSpell {
     private static final int FRAMEHEIGHT = 100;
 
     GraphicSpell(back.Magic m) {
-        sprite = new Image("graphics/spells/501.png");
+        if (m instanceof back.Inspiration)
+            sprite = new Image("graphics/spells/505.png");
+        else if (m instanceof back.Poison)
+            sprite = new Image("graphics/spells/502.png");
+        else if (m instanceof back.MagicDamage)
+            sprite = new Image("graphics/spells/507.png");
+        else if (m instanceof back.Heal)
+            sprite = new Image("graphics/spells/501.png");
     }
 
     /**
