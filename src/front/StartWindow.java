@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -32,22 +33,6 @@ public class StartWindow extends StackPane {
     private Stage myStage;
     private final Random RNG = new Random();
     private static final int WINDOWSIZE = 500;
-
-
-    public Pane createFog() {
-        Pane fog = new Pane();
-        Rectangle rect = new Rectangle(0, 0, WINDOWSIZE, WINDOWSIZE);
-        rect.setFill(Color.rgb(0xe0, 0xe0, 0xe0, 0.5));
-
-        fog.getChildren().add(rect);
-
-        for (int i = 0; i < 50; i++) {
-            fog.getChildren().add(createFogElement());
-        }
-
-        fog.setEffect(new GaussianBlur((2 * WINDOWSIZE) / 2.5));
-        return fog;
-    }
 
     StartWindow(Stage myStage) {
 
@@ -93,14 +78,19 @@ public class StartWindow extends StackPane {
             }
         });
 
-        form.getChildren().addAll(name1, name2, startBtn, loadBtn);
+        HBox h = new HBox(19);
+        h.getChildren().addAll(startBtn, loadBtn);
+        h.setAlignment(Pos.CENTER);
+
+        form.getChildren().addAll(name1, name2, h);
         form.setAlignment(Pos.CENTER);
         getChildren().add(form);
     }
 
     private void loadScenes(String name1, String name2, back.Game game) {
         Stage firstStage = new Stage();
-        //primaryStage.setHeight(); PENDIENTE!!!
+        firstStage.setHeight(845);
+        firstStage.setWidth(1300);
         firstStage.setResizable(false);
         firstStage.setTitle(name1 + " - Arcania");
         Board board = new Board(game, game.getPlayer1());
@@ -113,6 +103,8 @@ public class StartWindow extends StackPane {
 
         Stage secondStage = new Stage();
         secondStage.setResizable(false);
+        secondStage.setHeight(845);
+        secondStage.setWidth(1300);
         secondStage.setTitle(name2 + " - Arcania");
         Board board2 = new Board(game, game.getPlayer2());
         Scene scene2 = new Scene(board2);
@@ -175,14 +167,29 @@ public class StartWindow extends StackPane {
 
     }
 
+    public Pane createFog() {
+        Pane fog = new Pane();
+        Rectangle rect = new Rectangle(0, 0, WINDOWSIZE, WINDOWSIZE);
+        rect.setFill(Color.rgb(0xe0, 0xe0, 0xe0, 0.5));
+
+        fog.getChildren().add(rect);
+
+        for (int i = 0; i < 70; i++) {
+            fog.getChildren().add(createFogElement());
+        }
+
+        fog.setEffect(new GaussianBlur((2 * WINDOWSIZE) / 2.5));
+        return fog;
+    }
+
     private Circle createFogElement() {
         Circle circle = new Circle(RNG.nextInt(WINDOWSIZE - 50) + 25, RNG.nextInt(WINDOWSIZE - 50) + 25, 15 + RNG.nextInt(50));
         int shade = 0xcf + RNG.nextInt(0x20);
         circle.setFill(Color.rgb(shade, shade, shade, 0.8));
         AnimationTimer anim = new AnimationTimer() {
 
-            double xVel = RNG.nextDouble()*40 - 20 ;
-            double yVel = RNG.nextDouble()*40 - 20 ;
+            double xVel = RNG.nextDouble()*40;
+            double yVel = RNG.nextDouble()*40;
 
             long lastUpdate = 0 ;
 

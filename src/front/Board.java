@@ -353,8 +353,6 @@ public class Board extends Pane {
 
         HBox hb = new HBox(80);
 
-        hb.setAlignment(Pos.CENTER);
-
         hb.setLayoutX(78);
         hb.setLayoutY(75);
 
@@ -638,21 +636,13 @@ public class Board extends Pane {
                             dest.setMagic(c);
 
                             if(c.getIsNegative())
-                                dest.setEffect( new TileEffect(30, 255, 0, 0));
+                                dest.setEffect( new TileEffect(30, 148, 0, 211));
                             else
-                                dest.setEffect( new TileEffect(30, 220, 220, 255));
+                                dest.setEffect( new TileEffect(30, 127, 255, 211));
 
                             break;
                         case GETHIT:
                             dest.setEffect( new TileEffect(30, 255, 0, 0));
-                            /*try
-                            {
-                                Thread.sleep(4000);
-                            }
-                            catch(InterruptedException ex)
-                            {
-                                Thread.currentThread().interrupt();
-                            }*/
                             break;
                         case EVADE:
                             dest.setEffect( new TileEffect(30, 50, 50, 240 ));

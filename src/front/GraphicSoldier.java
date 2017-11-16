@@ -177,7 +177,7 @@ public class GraphicSoldier {
                 borderGlow.setOffsetY(0f);
                 borderGlow.setOffsetX(0f);
 
-                borderGlow.setColor(Color.rgb(94, 134, 9));
+                borderGlow.setColor(Color.rgb(169, 205, 9));
 
                 borderGlow.setWidth(70);
                 borderGlow.setHeight(70);
