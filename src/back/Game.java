@@ -2,11 +2,11 @@ package back;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
-public class Game implements Serializable{
+public class Game implements Serializable {
     private Player player1;
     private static final long serialVersionUID = 1L;
     private Player player2;
@@ -146,10 +146,6 @@ public class Game implements Serializable{
 
     public int getActionsLeft() {
         return actionsLeft;
-    }
-
-    public Point searchSoldier(Soldier s) {
-        return board.searchSoldier(s);
     }
 
     public ArrayList<Point> availableSpawns(Card c) {

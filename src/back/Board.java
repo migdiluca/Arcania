@@ -120,21 +120,6 @@ public class Board implements Serializable {
         return validMoveMapPoints;
     }
 
-    /* Despues vemos si la necesitamos
-    public HashMap<Point, Soldier> returnToMap() {
-        HashMap<Point,Soldier> map= new HashMap<>();
-        for(int i = 0; i < 6; i++) {
-            for(int j = 0; j < 6; j++) {
-                if(board[i][j] != null)
-                    map.put(new Point(i,j), board[i][j]);
-            }
-        }
-        return map;
-    }*/
-
-    /*ESTO NO SE SI LO TIENE QUE HACER GAME O BOARD, me daria lo mismo pero hay que ponerlo donde tiene que ir.
-    Se fija en todos los puntos validos de ataque cual es el de menor vida
-     */
     public Soldier enemyToAttack(Point p) {
         ArrayList<Point> validAttackPoints = validAttackPoints(p, getSoldier(p));
         Soldier SoldierToAttack = null;
