@@ -185,7 +185,7 @@ class StartWindow extends StackPane {
 
         myStage.close();
         mp.stop();
-        mp.dispose();
+        //mp.dispose();
     }
 
     private void handleClosing(Stage stage, back.Game game) {
