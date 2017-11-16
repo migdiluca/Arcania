@@ -27,7 +27,7 @@ public class Game implements Serializable {
         Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h1.setOwner(player1);
 
-        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 300,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h2.setOwner(player2);
 
         /* esto no va a ser asi, es para testear */
