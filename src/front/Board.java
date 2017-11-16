@@ -23,10 +23,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
-import javafx.scene.effect.InnerShadow;
+import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -126,6 +123,8 @@ public class Board extends Pane {
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         infoHelp.setPrefWidth(300);
+        infoHelp.setMinHeight(40);
+        infoHelp.setMaxHeight(40);
         //infoHelp.setPrefHeight(80);
         infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
@@ -204,24 +203,6 @@ public class Board extends Pane {
 
         v.getChildren().addAll(turnBox, buttonBox);
 
-
-
-        /*Hyperlink options[] = new Hyperlink[] {
-                new Hyperlink("Sales"),
-                new Hyperlink("Marketing"),
-                new Hyperlink("Distribution"),
-                new Hyperlink("Costs")};
-
-        for (int i=0; i<4; i++) {
-            GridPane.setMargin(options[i], new Insets(0, 0, 0, 8));
-            v.add(options[i], i, 2);
-        }*/
-
-
-
-
-
-
         return v;
     }
 
@@ -234,9 +215,19 @@ public class Board extends Pane {
         Canvas cardCanvas = new Canvas(170,170);
         GraphicsContext cardGC = cardCanvas.getGraphicsContext2D();
 
-        cardGC.drawImage(new Image("graphics/avatars/" + c.getID() + ".png", 110, 110, true, true), 40, 30);
-        cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
 
+        cardGC.drawImage(new Image("graphics/avatars/" + c.getID() + ".png", 110, 110, true, true), 40, 30);
+
+        if( c instanceof back.Magic ) {
+            ColorAdjust ca = new ColorAdjust();
+            if( ((back.Magic) c).getIsNegative() )
+                ca.setHue(-0.2);
+            else
+                ca.setHue(0.2);
+            cardGC.setEffect(ca);
+        }
+        cardGC.drawImage(new Image("graphics/ui/MARCO.png", 160, 160, true, true), 10, 10);
+        cardGC.setEffect(null);
 
 
         cardGC.setFill(Color.WHITE);
@@ -255,8 +246,8 @@ public class Board extends Pane {
 
 
 
-        cardGC.setFont(titleHelp.getFont());
-        cardGC.fillText(c.getName(), 45, 145);
+        cardGC.setFont(new Font(12));
+        cardGC.fillText(c.getName(), 45, 147);
 
         h.getChildren().add(cardCanvas);
 
@@ -376,11 +367,11 @@ public class Board extends Pane {
      */
     Board(back.Game game, back.Player owner, Stage primaryStage) {
 
-
-        this.primaryStage = primaryStage;
         ImageView background = new ImageView(new Image("/graphics/map/fondo.png", 1300, 820, false, false));
 
         HBox hb = new HBox(80);
+
+        hb.setAlignment(Pos.CENTER);
 
         hb.setLayoutX(78);
         hb.setLayoutY(75);
@@ -404,24 +395,10 @@ public class Board extends Pane {
         lblAnuncios.setEffect(ds);
         lblAnuncios.setMouseTransparent(true);
 
-        showAlertText("Tu turno");
-
-        ImageView im = new ImageView(new Image("/graphics/ui/sword.png", 100, 100, true, false));
-
-        im.setX(80);
-        im.setY(90);
-
-        KeyFrame startFadeOut = new KeyFrame(Duration.seconds(0), new KeyValue(im.opacityProperty(), 1.0));
-        KeyFrame endFadeOut = new KeyFrame(Duration.seconds(5), new KeyValue(im.opacityProperty(), 0.0));
-        Timeline timelineOn = new Timeline(startFadeOut, endFadeOut);
-
-        timelineOn.playFromStart();
-
         castle1Indicator = new ProgressBar();
         castle1Indicator.setProgress(1);
         castle1Indicator.setLayoutX(70);
         castle1Indicator.setLayoutY(795);
-        //castle1Indicator.prefHeight(200);
         castle1Indicator.setPrefSize(250, 15);
 
         castle2Indicator = new ProgressBar();
@@ -461,8 +438,6 @@ public class Board extends Pane {
         pBoard = new Pane();
         pBoard.setMaxSize(700, 700);
         pBoard.setMinSize(700, 700);
-
-
 
 
         pBoard.getChildren().addAll(backgroundCanvas, charCanvas);
