@@ -78,7 +78,7 @@ public class StartWindow extends StackPane {
             @Override
             public void handle(ActionEvent event) {
 
-                if(name1.getText() != "" && name2.getText() != "") createNewGame(name1.getText(), name2.getText());
+                if(!name1.getText().equals("") && !name2.getText().equals("")) createNewGame(name1.getText(), name2.getText());
 
             }
         });
@@ -88,7 +88,7 @@ public class StartWindow extends StackPane {
             @Override
             public void handle(ActionEvent event) {
 
-                if(name1.getText() != "" && name2.getText() != "") loadGame(name1.getText(), name2.getText());
+                if(!name1.getText().equals("") && !name2.getText().equals("")) loadGame(name1.getText(), name2.getText());
 
             }
         });
@@ -140,7 +140,7 @@ public class StartWindow extends StackPane {
         myStage.close();
     }
 
-    public void handleClosing(Stage stage, back.Game game) {
+    private void handleClosing(Stage stage, back.Game game) {
         try {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showSaveDialog(stage);
@@ -167,9 +167,7 @@ public class StartWindow extends StackPane {
             if(selectedFile == null) return;
 
             game.loadGame(selectedFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException|ClassNotFoundException e) {
             e.printStackTrace();
         }
 
