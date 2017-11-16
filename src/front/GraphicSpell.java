@@ -28,9 +28,10 @@ public class GraphicSpell {
      * @return falso si la animación no terminó. Verdadero caso contrario.
      */
     public boolean draw(Point p, GraphicsContext gc) {
-        frameCount++;
 
         gc.drawImage(sprite, FRAMEWIDTH * frameCount, 0, FRAMEWIDTH, FRAMEHEIGHT, p.y * CELLSIZE,p.x * CELLSIZE, FRAMEWIDTH, FRAMEHEIGHT);
+
+        frameCount++;
 
         return(frameCount == FRAMETOTAL);
     }
