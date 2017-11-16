@@ -629,7 +629,7 @@ public class Board extends Pane {
                         case STARTTURN:
                             ReflectStartTurn();
                             break;
-                        case RECIVESPELL:
+                        case RECEIVESPELL:
 
                             back.Magic c = (back.Magic) action.getCard();
 
