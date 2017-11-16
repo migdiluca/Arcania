@@ -53,6 +53,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.omg.PortableInterceptor.INACTIVE;
 import sun.font.GraphicComponent;
+import static back.Castle.CASTLELIFE;
 
 /**
  * Clase que representa la ventana de un jugador.
@@ -652,9 +653,9 @@ public class Board extends Pane {
                     }
                 }
                 draw();
-
+                castle1Indicator.setProgress((double)game.getPlayer1().getCastle().getLife() / CASTLELIFE);
+                castle2Indicator.setProgress((double)game.getPlayer2().getCastle().getLife() / CASTLELIFE);
                 fps = 0;
-
             }
             fps++;
         }

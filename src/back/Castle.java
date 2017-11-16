@@ -7,12 +7,13 @@ import java.io.Serializable;
 
 public class Castle implements Serializable{
     private int life;
-    private static final int defaultLife = 1000;
+    public static final int CASTLELIFE = 1000;
     private static final long serialVersionUID = 1L;
 
     public Castle() {
-        this.life = defaultLife;
+        this.life = CASTLELIFE;
     }
+
     public void getAttacked(int damage) {
         life -= damage;
     }
