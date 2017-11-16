@@ -117,8 +117,8 @@ public class Board extends Pane {
         infoHelp = new Label("Seleccione una carta para ver información de la misma.");
         infoHelp.setWrapText(true);
         infoHelp.setPrefWidth(380);
-        infoHelp.setMinHeight(60);
-        infoHelp.setMaxHeight(60);
+        infoHelp.setPrefHeight(60);
+        infoHelp.setAlignment(Pos.TOP_LEFT);
         infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
 
@@ -178,7 +178,7 @@ public class Board extends Pane {
         buttonBox.getChildren().addAll(drawCardBtn, endTurnBtn);
         buttonBox.setAlignment(Pos.CENTER);
 
-        HBox turnBox = new HBox(5);
+        HBox turnBox = new HBox(20);
         turnBox.getChildren().addAll(scrollTimeLeft, movesLeft);
         turnBox.setAlignment(Pos.CENTER);
 
@@ -354,7 +354,7 @@ public class Board extends Pane {
         HBox hb = new HBox(80);
 
         hb.setLayoutX(78);
-        hb.setLayoutY(34);
+        hb.setLayoutY(60);
 
 
         lblAnuncios = new Label();
@@ -378,13 +378,13 @@ public class Board extends Pane {
         castle1Indicator = new ProgressBar();
         castle1Indicator.setProgress(1);
         castle1Indicator.setLayoutX(70);
-        castle1Indicator.setLayoutY(795);
+        castle1Indicator.setLayoutY(790);
         castle1Indicator.setPrefSize(250, 15);
 
         castle2Indicator = new ProgressBar();
         castle2Indicator.setProgress(1);
         castle2Indicator.setLayoutX(70);
-        castle2Indicator.setLayoutY(10);
+        castle2Indicator.setLayoutY(15);
         castle2Indicator.setPrefSize(250, 15);
 
         if (owner == game.getPlayer1()) {
@@ -435,7 +435,7 @@ public class Board extends Pane {
             }
 
         VBox menu = createMenu();
-        menu.setTranslateY(-20);
+        menu.setTranslateY(-45);
 
 
 
