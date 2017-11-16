@@ -19,28 +19,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-
-import java.awt.*;
-import java.util.*;
-
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-
-
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import java.awt.*;
+import java.util.*;
+
 import static back.Castle.CASTLELIFE;
 
 /**
  * Clase que representa la ventana de un jugador.
  */
 
-public class Board extends Pane {
+class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
     static final int CELLSIZE = 100;

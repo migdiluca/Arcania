@@ -5,14 +5,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import static front.Board.CELLSIZE;
 
 /**
  * Clase que define un tile en el tablero
  */
-public class Tile {
+class Tile {
     private static final Image corpseSprite = new Image("/graphics/soldiers/corpse.png");
 
     private int row;
@@ -49,22 +48,22 @@ public class Tile {
         return status;
     }
 
-    public void setMagic(back.Magic m) {
+    void setMagic(back.Magic m) {
         this.spell = new GraphicSpell(m);
     }
 
-    public void setWhosHere(GraphicSoldier soldier) {
+    void setWhosHere(GraphicSoldier soldier) {
         whosHere = soldier;
     }
 
-    public GraphicSoldier getWhosHere() {
+    GraphicSoldier getWhosHere() {
         return whosHere;
     }
 
     /**
      * Aumenta la cantidad de cadáveres que deben dibujarse en el Tile
      */
-    public void addCorpse() {
+    void addCorpse() {
         this.corpseCount++;
     }
 
@@ -94,7 +93,7 @@ public class Tile {
         //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLSIZE, row*CELLSIZE);
 
         for(int i = 0; i < corpseCount; i++)
-            backgroundGC.drawImage(new Image("graphics/soldiers/corpse.png"), col*CELLSIZE + 10 * i, row*CELLSIZE + 10 * i);
+            backgroundGC.drawImage(corpseSprite, col*CELLSIZE + 10 * i, row*CELLSIZE + 10 * i);
 
         backgroundGC.setFill(color);
         backgroundGC.setStroke(Color.rgb(0,0,0,0.3));

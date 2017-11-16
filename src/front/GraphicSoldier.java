@@ -3,16 +3,11 @@ package front;
 import back.Magic;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
 import static front.Board.CELLSIZE;
 
 /**
@@ -75,7 +70,7 @@ public class GraphicSoldier {
         frame = 0;
     }
 
-    void stop() {
+    private void stop() {
         frame = 0;
         moveDir = 0;
     }

@@ -1,7 +1,5 @@
 package front;
 
-import back.MagicDamage;
-import back.Poison;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -12,7 +10,7 @@ import static front.Board.CELLSIZE;
  * Clase que contiene la información de una animación de hechizo que debe dibujarse sobre un tile
  */
 
-public class GraphicSpell {
+class GraphicSpell {
     private Image sprite;
     private int frameCount = 0;
     private static final int FRAMETOTAL = 15;
@@ -29,7 +27,7 @@ public class GraphicSpell {
      * @param gc GraphicContext del canvas sobre el que se dibuja (charGC)
      * @return falso si la animación no terminó. Verdadero caso contrario.
      */
-    public boolean draw(Point p, GraphicsContext gc) {
+    boolean draw(Point p, GraphicsContext gc) {
 
         gc.drawImage(sprite, FRAMEWIDTH * frameCount, 0, FRAMEWIDTH, FRAMEHEIGHT, p.y * CELLSIZE,p.x * CELLSIZE, FRAMEWIDTH, FRAMEHEIGHT);
 

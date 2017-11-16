@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,7 +35,7 @@ import java.io.IOException;
 import java.util.Random;
 
 
-public class StartWindow extends StackPane {
+class StartWindow extends StackPane {
 
     private Stage myStage;
     private final Random RNG = new Random();
@@ -224,7 +223,7 @@ public class StartWindow extends StackPane {
 
     }
 
-    public Pane createFog() {
+    private Pane createFog() {
         Pane fog = new Pane();
         Rectangle rect = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
         rect.setFill(Color.rgb(0xe0, 0xe0, 0xe0, 0.5));

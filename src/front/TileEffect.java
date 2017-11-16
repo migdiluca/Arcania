@@ -2,15 +2,15 @@ package front;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import static front.Board.CELLSIZE;
-
 import java.awt.*;
+
+import static front.Board.CELLSIZE;
 
 /**
  * Clase encargada de definir y dibujar, durante el período establecido, un efecto gráfico sobre un Tile.
  */
 
-public class TileEffect {
+class TileEffect {
 
     private int framesCount;
     private int framesTotal;
@@ -39,7 +39,7 @@ public class TileEffect {
      * @return falso si la animación no terminó. Verdadero cuando termina.
      */
 
-    public boolean draw(Point p, GraphicsContext gc) {
+    boolean draw(Point p, GraphicsContext gc) {
         framesCount--;
 
         gc.setFill(Color.rgb(colorRed, colorGreen, colorBlue, (double)framesCount / framesTotal));
