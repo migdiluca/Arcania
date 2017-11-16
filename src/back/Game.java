@@ -47,8 +47,8 @@ public class Game implements Serializable{
     }
 
     private void removeDead(Soldier s) {
-        player1.aliveCards.remove(s);
-        player2.aliveCards.remove(s);
+        player1.getAliveCards().remove(s);
+        player2.getAliveCards().remove(s);
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
@@ -89,7 +89,7 @@ public class Game implements Serializable{
         Player enemy = s.getOwner() == player1 ? player2 : player1;
 
         if(attackerPosition.x == enemy.getCastleRow())
-            return enemy.castle;
+            return enemy.getCastle();
         return null;
     }
 
@@ -205,21 +205,21 @@ public class Game implements Serializable{
 
     /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
     public void endTurn() {
-        performAttack(currentPlayer.aliveCards);
+        performAttack(currentPlayer.getAliveCards());
 
-        for(Soldier s: currentPlayer.aliveCards) {
+        for(Soldier s: currentPlayer.getAliveCards()) {
             s.enableMovement();
             s.applyMagic();
         }
 
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
-        performAttack(otherPlayer.aliveCards);
+        performAttack(otherPlayer.getAliveCards());
 
-        if(otherPlayer.castle.getLife() <= 0 || !otherPlayer.canPlay()) {
+        if(otherPlayer.getCastle().getLife() <= 0 || !otherPlayer.canPlay()) {
 
         }
             //agregar pending
-        if(currentPlayer.castle.getLife() <= 0 || !currentPlayer.canPlay()) {
+        if(currentPlayer.getCastle().getLife() <= 0 || !currentPlayer.canPlay()) {
 
         }
             //agregar pending
