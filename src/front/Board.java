@@ -62,13 +62,10 @@ public class Board extends Pane {
     private static final int NUMROWS = 7;
     private static final int NUMCOLS = 7;
     static final int CELLSIZE = 100;
-    private Stage primaryStage;
-    private FileChooser fileChooser = new FileChooser();
 
     private Map<Canvas, back.Card> cardsInHand = new HashMap<>();
     private Canvas selectedCard = null;
 
-    private HashSet<GraphicSoldier> gSoldiers = new HashSet<>();
     private Tile[][] tiles = new Tile[NUMROWS][NUMCOLS];
 
     private Canvas backgroundCanvas;
@@ -107,10 +104,7 @@ public class Board extends Pane {
      * @return Instancia del panel VBox que contiene los elementos del menú de la derecha.
      */
     private VBox createMenu() {
-        VBox v = new VBox(20);
-
-        /*Background vBackground = new Background(new BackgroundFill(Color.web("#000000"), CornerRadii.EMPTY, Insets.EMPTY));
-        v.backgroundProperty().setValue(vBackground);*/
+        VBox v = new VBox(15);
 
         v.setPadding(new Insets(10));
 
@@ -125,28 +119,17 @@ public class Board extends Pane {
         infoHelp.setPrefWidth(300);
         infoHelp.setMinHeight(40);
         infoHelp.setMaxHeight(40);
-        //infoHelp.setPrefHeight(80);
         infoHelp.setTextFill(Color.grayRgb(180));
         info.add(infoHelp, 1, 2);
 
-
-        //Text title = new Text("Mano");
-        //title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        //v.getChildren().add(title);
-
         h = new FlowPane();
 
-        /*Background hBackground = new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY));
-        h.backgroundProperty().setValue(hBackground);*/
 
         h.setMaxSize(350, 1200);
         h.setMinSize(350, 1200);
 
-        //Background bHand = new Background(new BackgroundImage(new Image("graphics/ui/hand.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
-
         ArrayList<back.Card> cardsAux = owner.getHand();
 
-        int count = 0;
         for(back.Card c: cardsAux)
             addCardToHand(c);
 
@@ -363,9 +346,8 @@ public class Board extends Pane {
      * Constructor de la ventana
      * @param game instancia del objeto Game del backend
      * @param owner instancia del jugador en el back que es dueño de la ventana
-     * @param primaryStage instancia del Stage, requerida para llamar al cuadro de selección de archivo
      */
-    Board(back.Game game, back.Player owner, Stage primaryStage) {
+    Board(back.Game game, back.Player owner) {
 
         ImageView background = new ImageView(new Image("/graphics/map/fondo.png", 1300, 820, false, false));
 

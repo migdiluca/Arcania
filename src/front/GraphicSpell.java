@@ -13,12 +13,12 @@ import static front.Board.CELLSIZE;
 public class GraphicSpell {
     private Image sprite;
     private int frameCount = 0;
-    private static final int FRAMETOTAL = 6;
+    private static final int FRAMETOTAL = 15;
     private static final int FRAMEWIDTH = 100;
     private static final int FRAMEHEIGHT = 100;
 
     GraphicSpell(back.Magic m) {
-        sprite = new Image("graphics/spells/900.png");
+        sprite = new Image("graphics/spells/501.png");
     }
 
     /**

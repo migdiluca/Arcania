@@ -24,10 +24,10 @@ public class Game implements Serializable{
             player2.cardsToHand();
         }
 
-        Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h1.setOwner(player1);
 
-        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 300,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h2.setOwner(player2);
 
         /* esto no va a ser asi, es para testear */
@@ -73,7 +73,7 @@ public class Game implements Serializable{
             deck.add(new Heal("Sanación Superior", 501, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new MagicDamage("Tormenta de Fuego", 501, "Inflinge 25 puntos de daño a las unidades aledañas.",true, 25));
+            deck.add(new MagicDamage("Tormenta de Fuego", 504, "Inflinge 25 puntos de daño a las unidades aledañas.",true, 25));
 
         deck.add(new MagicDamage("Juicio", 502, "Inflinge 40 puntos de daño a las unidades aledañas.",true, 40));
 

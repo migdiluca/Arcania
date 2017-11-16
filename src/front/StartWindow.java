@@ -102,8 +102,8 @@ public class StartWindow extends StackPane {
         Stage firstStage = new Stage();
         //primaryStage.setHeight(); PENDIENTE!!!
         firstStage.setResizable(false);
-        firstStage.setTitle(game.getPlayer1().getName() + " - Arcania");
-        Board board = new Board(game, game.getPlayer1(),firstStage);
+        firstStage.setTitle(name1 + " - Arcania");
+        Board board = new Board(game, game.getPlayer1());
         Scene scene1 = new Scene(board);
         firstStage.setScene(scene1);
         scene1.getStylesheets().add("css/scrollbar.css");
@@ -114,7 +114,7 @@ public class StartWindow extends StackPane {
         Stage secondStage = new Stage();
         secondStage.setResizable(false);
         secondStage.setTitle(name2 + " - Arcania");
-        Board board2 = new Board(game, game.getPlayer2(),secondStage);
+        Board board2 = new Board(game, game.getPlayer2());
         Scene scene2 = new Scene(board2);
         secondStage.setScene(scene2);
         scene2.getStylesheets().add("css/scrollbar.css");
