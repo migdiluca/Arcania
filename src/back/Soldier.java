@@ -14,7 +14,7 @@ public class Soldier extends Card implements Serializable{
     private int fullHealth;
     private int defense;
     private int agility;
-    public boolean alreadyMoved;
+    private boolean alreadyMoved;
 
     private static Random r = new Random();
 

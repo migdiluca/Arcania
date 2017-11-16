@@ -11,9 +11,9 @@ import java.util.Stack;
 public class Player implements Serializable {
     private String name;
     private Stack<Card> deck ;
-    protected ArrayList<Card> hand;
-    protected ArrayList<Soldier> aliveCards;
-    protected Castle castle;
+    private ArrayList<Card> hand;
+    private ArrayList<Soldier> aliveCards;
+    private Castle castle;
     private int castleRow;
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +45,13 @@ public class Player implements Serializable {
         return null;
     }
 
+    public Castle getCastle() {
+        return castle;
+    }
+
+    public ArrayList<Soldier> getAliveCards() {
+        return aliveCards;
+    }
     public void registerAction(pendingDrawing pd) {
         actionRegistry.add(pd);
     }
