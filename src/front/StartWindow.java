@@ -109,8 +109,6 @@ public class StartWindow extends StackPane {
         scene1.getStylesheets().add("css/scrollbar.css");
 
 
-
-
         Stage secondStage = new Stage();
         secondStage.setResizable(false);
         secondStage.setTitle(name2 + " - Arcania");
