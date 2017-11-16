@@ -227,9 +227,6 @@ public class Game implements Serializable {
 
         currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
         actionsLeft = 5;
-
-
-
     }
 
 
@@ -247,7 +244,9 @@ public class Game implements Serializable {
        this.player1 = saveGame.player1;
        this.player2 = saveGame.player2;
        this.board = saveGame.board;
+       this.actionsLeft = saveGame.actionsLeft;
        ois.close();
+       currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
    }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

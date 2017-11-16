@@ -143,8 +143,10 @@ public class Board extends Pane {
 
         v.getChildren().add(info);
 
-        movesLeft = new Label("Movimientos restantes: 5");
+
+        movesLeft = new Label();
         movesLeft.setTextFill(Color.WHITE);
+        updateActionsLeft();
 
         drawCardBtn = new Button("Sacar carta");
         drawCardBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -169,6 +171,7 @@ public class Board extends Pane {
         scrollTimeLeft = new ProgressBar();
         scrollTimeLeft.setProgress(0.9);
         scrollTimeLeft.setPrefSize(150, 15);
+        scrollTimeLeft.setDisable(true);
 
 
         HBox buttonBox = new HBox(5);
