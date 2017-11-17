@@ -90,8 +90,6 @@ class Tile {
             case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.4); break;
         }
 
-        //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLSIZE, row*CELLSIZE);
-
         for(int i = 0; i < corpseCount; i++)
             backgroundGC.drawImage(corpseSprite, col*CELLSIZE + 10 * i, row*CELLSIZE + 10 * i);
 
