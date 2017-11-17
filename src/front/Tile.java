@@ -68,7 +68,7 @@ class Tile {
     }
 
     /**
-     * Indica al GraphicSoldier que se ubica en el tile hacia donde moverse
+     * Indica al GraphicSoldier que se ubica en el tile hacia donde moverse.
      * @param dir
      */
     void moveSoldier(Point dir) {
@@ -89,8 +89,6 @@ class Tile {
             case MOVABLE: case INVOKABLE: color = Color.rgb(0, 17, 170, 0.3); break;
             case ATTACKABLE: color = Color.rgb(170, 30, 27, 0.4); break;
         }
-
-        //backgroundGC.drawImage(new Image("graphics/map/pasto.png"), col*CELLSIZE, row*CELLSIZE);
 
         for(int i = 0; i < corpseCount; i++)
             backgroundGC.drawImage(corpseSprite, col*CELLSIZE + 10 * i, row*CELLSIZE + 10 * i);
