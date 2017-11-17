@@ -176,7 +176,7 @@ public class Game implements Serializable {
 
     /**
      * Indica a los clientes de ambos jugadores que reflejen la acción correspondiente
-     * @param pd
+     * @param pd la PendingAction
      */
     private void registerAction(PendingDrawing pd) {
         getPlayer1().registerAction(pd);
@@ -283,10 +283,12 @@ public class Game implements Serializable {
             applyMagicToSoldiers(currentPlayer.getAliveCards());
 
             for(Soldier s: affectedBySpell) {
-                s.curse((Magic) c);
-                registerAction(new PendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
-                if(!s.isAlive())
-                    removeDead(s);
+                if(!(s instanceof Hero)) {
+                    s.curse((Magic) c);
+                    registerAction(new PendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
+                    if(!s.isAlive())
+                        removeDead(s);
+                }
             }
 
         }
@@ -299,7 +301,7 @@ public class Game implements Serializable {
      * Vuelve a permitir el movimiento en los soldados.
      * @param soldiers Arreglo de soldados a los cuales se les activara la posibilidad de moverse.
      */
-    public void enableMovement(ArrayList<Soldier> soldiers) {
+    private void enableMovement(ArrayList<Soldier> soldiers) {
         for(Soldier s: soldiers)
             s.enableMovement();
     }
