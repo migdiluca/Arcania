@@ -69,7 +69,7 @@ public class Game implements Serializable {
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
 
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 1; i++)
             deck.add(new Soldier("Caballero Negro", 1, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo."));
 
         for(int i = 0; i < 5; i++)

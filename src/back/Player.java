@@ -105,10 +105,22 @@ public class Player implements Serializable {
         hand.remove(c);
     }
 
+    /**
+     * Se fija si el jugador tiene jugadores para poder continuar el juego.
+     * @return True si puede jugar, false si no puede.
+     */
     public boolean canPlay() {
-        if(aliveCards.isEmpty() && hand.isEmpty() && deck.isEmpty())
-            return false;
-        return true;
+        for(Card c : hand) {
+            if(c instanceof Soldier)
+                return true;
+        }
+        for(Card c : deck) {
+            if(c instanceof Soldier)
+                return true;
+        }
+        if(!aliveCards.isEmpty())
+            return true;
+        return false;
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
