@@ -365,6 +365,9 @@ class Board extends Pane {
 
         //Button btnEnd = new Button("Volver al menu");
 
+        timer.stop();
+        timeLeft.purge();
+
         AudioClip endSound;
         if(won) {
             lblEndGame.setText("Has triunfado sobre tu adversario!");
@@ -373,7 +376,7 @@ class Board extends Pane {
             lblEndGame.setText("Has sido derrotado!");
             endSound = new AudioClip(ClassLoader.getSystemResource("sounds/defeat.wav").toString());
         }
-        
+
         endSound.play();
 
         getChildren().addAll(lblEndGame);
