@@ -1,6 +1,5 @@
 package back;
 
-import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,7 +7,6 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Soldier extends Card implements Serializable{
-    private static final long serialVersionUID = 1L;
     private int attack;
     private int health;
     private int fullHealth;
@@ -16,9 +14,28 @@ public class Soldier extends Card implements Serializable{
     private int agility;
     private boolean alreadyMoved;
 
+    private static final long serialVersionUID = 1L;
     private static Random r = new Random();
-
     private HashMap<Magic, Integer> affectedBy = new HashMap<>();
+
+    /**
+     * Crea una nueva instancia de soldado.
+     * @param name Nombre del soldado.
+     * @param id ID del soldado.
+     * @param attack Puntos de ataque.
+     * @param health Vida.
+     * @param defense Puntos de defensa.
+     * @param agility Puntos de agilidad.
+     * @param description Descripcion del soldado.
+     */
+    public Soldier(String name, int id, int attack, int health, int defense, int agility, String description) {
+        super(name, id, description);
+        this.attack = attack;
+        this.agility = agility;
+        this.fullHealth = this.health = health;
+        this.defense = defense;
+        this.alreadyMoved = false;
+    }
 
     public void curse(Magic m) {
         m.startEffect(this);
@@ -43,15 +60,6 @@ public class Soldier extends Card implements Serializable{
                 affectedBy.replace(m, turnsLeft - 1);
             }
         }
-    }
-
-    public Soldier(String name, int id, int attack, int health, int defense, int agility, String description) {
-        super(name, id, description);
-        this.attack = attack;
-        this.agility = agility;
-        this.fullHealth = this.health = health;
-        this.defense = defense;
-        this.alreadyMoved = false;
     }
 
     public void enableMovement() {
@@ -98,24 +106,31 @@ public class Soldier extends Card implements Serializable{
            this.health = fullHealth;
     }
 
-    // Estructura de ataque.
-    public int attack(Soldier m){
+    /**
+     * Realiza el ataque a un soldado que se le envia como parametro.
+     * @param s Soldado a atacar.
+     * @return Retorna 1 si lo puedo atacar, si no retorna 0.
+     */
+    public int attack(Soldier s){
 
-        int missChance = r.nextInt((100 - m.getAgility()) + 1) + m.getAgility();
+        int missChance = r.nextInt((100 - s.getAgility()) + 1) + s.getAgility();
 
         if(missChance < 85) {
-            m.getAttacked(this.attack -  (this.attack * (m.getDefense() / 100)));
+            s.getAttacked(this.attack -  (this.attack * (s.getDefense() / 100)));
             return 1;
         } else {
             return 0;
         }
-
     }
 
     public void attackCastle(Castle c){
         c.getAttacked(this.attack);
     }
 
+    /**
+     * Reduce su vida de acuerdo al daño recibido.
+     * @param damage Daño recibido.
+     */
     private void getAttacked(int damage) {
         setHealth(this.health - damage);
     }
