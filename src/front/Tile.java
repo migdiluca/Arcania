@@ -68,7 +68,7 @@ class Tile {
     }
 
     /**
-     * Indica al GraphicSoldier que se ubica en el tile hacia donde moverse
+     * Indica al GraphicSoldier que se ubica en el tile hacia donde moverse.
      * @param dir
      */
     void moveSoldier(Point dir) {
