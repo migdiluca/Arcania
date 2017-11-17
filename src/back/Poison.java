@@ -5,6 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * Clase que modela un hechizo de tipo veneno.
+ * Los hechizos de tipo veneno infligen un faño por turno durante un número de turnos definido por la variable duration.
+ */
+
 public class Poison extends Magic implements Serializable{
     private int damage;
 

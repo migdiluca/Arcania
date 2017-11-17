@@ -154,6 +154,10 @@ public class Game implements Serializable {
     }
 
 
+    /**
+     * Aplica a los soldados afectados el efecto de magia por turno que tengan
+     * @param soldiers Lista de soldados que desencadenarán el evento applyMagic
+     */
     private void applyMagicToSoldiers(ArrayList<Soldier> soldiers) {
         Iterator<Soldier> iterator = soldiers.iterator();
         while(iterator.hasNext()) {
@@ -167,6 +171,10 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Indica a los clientes de ambos jugadores que reflejen la acción correspondiente
+     * @param pd
+     */
     private void registerAction(pendingDrawing pd) {
         getPlayer1().registerAction(pd);
         getPlayer2().registerAction(pd);

@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Clase que modela un hechizo de buff al atributo fuerza
+ */
+
 public class Inspiration extends Magic {
     private int buff;
 

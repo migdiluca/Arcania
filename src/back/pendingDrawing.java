@@ -4,14 +4,14 @@ import java.awt.*;
 import java.io.Serializable;
 
 /**
- * Clase que representa
+ * Clase que representa un elemento pendiente de dibujado que posteriormente el cliente levantará.
  */
 public class pendingDrawing implements Serializable {
     private Point origin;
     private Point destination;
     private Card card;
 
-    private ActionType actionType; //0 mover, 1 atacar, 2 conjuro
+    private ActionType actionType;
 
     pendingDrawing(Point origin, Point destination, Card card, ActionType actionType) {
         this.origin = origin;
