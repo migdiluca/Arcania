@@ -3,6 +3,9 @@ package back;
 import java.awt.*;
 import java.io.Serializable;
 
+/**
+ * Clase que representa
+ */
 public class pendingDrawing implements Serializable {
     private Point origin;
     private Point destination;
