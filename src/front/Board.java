@@ -365,7 +365,6 @@ class Board extends Pane {
 
         //Button btnEnd = new Button("Volver al menu");
 
-        mp.stop();
         timer.stop();
         timeLeft.purge();
 
