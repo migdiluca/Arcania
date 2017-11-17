@@ -2,20 +2,26 @@ package back;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Game implements Serializable {
     private Player player1;
     private static final long serialVersionUID = 1L;
     private Player player2;
-    private Board board; /*esta protected para que directamente puedan hacer game.board.getPoints
-                             para tomar puntos de spawn etc..*/
+    private Board board;
     private Player currentPlayer;
-    private int actionsLeft = 5;
+    private int actionsLeft;
 
+    /**
+     * Crea una nueva instancia de Board y de los dos jugadores. Asigna las cartas
+     * al mazo de ambos jugadores. Crea los heroes, los asigna a ambos jugadores, y
+     * al tablero. Asigna como jugador actual al jugador uno y le establece cinco acciones.
+     * @param player1Name Nombre del jugador uno.
+     * @param player2Name Nombre del jugador dos.
+     */
     public Game(String player1Name, String player2Name) {
         board = new Board();
         player1 = new Player(player1Name, createDeck(),6);
@@ -31,30 +37,32 @@ public class Game implements Serializable {
         Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
         h2.setOwner(player2);
 
-        /* esto no va a ser asi, es para testear */
-        currentPlayer = player1;
-
         player1.playSoldier(h1);
         player2.playSoldier(h2);
 
         board.addSoldier(h1,new Point(player1.getCastleRow(), 3));
-
-        currentPlayer = player2;
         board.addSoldier(h2,new Point(player2.getCastleRow(), 3));
 
         currentPlayer = player1;
+        actionsLeft = 5;
         currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
         player2.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
     }
 
+    /**
+     * Remueve al soldado s de las cartas vivas de su dueño y del tablero.
+     * @param s Soldado a remover
+     */
     private void removeDead(Soldier s) {
-        player1.getAliveCards().remove(s);
-        player2.getAliveCards().remove(s);
+        s.getOwner().getAliveCards().remove(s);
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
 
-
+    /**
+     * Crea todas las cartas que se utilizaran en el juego.
+     * @return ArrayList con todas las cartas.
+     */
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
 
@@ -88,6 +96,11 @@ public class Game implements Serializable {
         return deck;
     }
 
+    /**
+     * Se fija si el jugador puede atacar al castillo contrario.
+     * @param s Soldado que realizara el ataque.
+     * @return Retorna el castillo a atacar, o nulo si no puede atacar un castillo.
+     */
     private Castle castleToAttack(Soldier s){
         Point attackerPosition = board.searchSoldier(s);
         Player enemy = s.getOwner() == player1 ? player2 : player1;
@@ -97,6 +110,9 @@ public class Game implements Serializable {
         return null;
     }
 
+    /**
+     * Reduce las acciones restantes y si llego a cero finaliza el turno.
+     */
     private void performAction() {
         actionsLeft--;
         if(actionsLeft == 0)
@@ -128,10 +144,15 @@ public class Game implements Serializable {
     }
 
     private void applyMagicToSoldiers(ArrayList<Soldier> soldiers) {
-        for (Soldier s : soldiers) {
+        Iterator<Soldier> iterator = soldiers.iterator();
+        while(iterator.hasNext()) {
+            Soldier s = iterator.next();
             s.applyMagic();
-            if(!s.isAlive())
-                removeDead(s);
+            if(!s.isAlive()) {
+                iterator.remove();
+                registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
+                board.removeDeadFromBoard(s);
+            }
         }
     }
 
@@ -166,10 +187,10 @@ public class Game implements Serializable {
 
     public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
         Soldier s = board.getSoldier(p);
-        if(s == null || windowOwner != currentPlayer || !s.canMove()) {
+        if(s == null || windowOwner != currentPlayer || !s.canMove() || s.getOwner() != currentPlayer) {
             return new HashMap<>();
         }
-        return board.validMovePoints(p,currentPlayer);
+        return board.validMovePoints(p);
     }
 
     public void moveSoldier(Point origin, Point dest) {

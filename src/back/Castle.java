@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Castle implements Serializable{
     private int life;
-    public static final int CASTLELIFE = 1000;
+    public static final int CASTLELIFE = 300;
     private static final long serialVersionUID = 1L;
 
     public Castle() {
