@@ -15,8 +15,6 @@ public abstract class Magic extends Card implements Serializable {
         this.isNegative = isNegative;
     }
 
-    public void effect(){}
-
     public boolean getIsNegative() {
         return isNegative;
     }

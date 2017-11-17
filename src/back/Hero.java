@@ -7,10 +7,6 @@ public class Hero extends Soldier implements Serializable {
         super(name,id,attack,health,defense,agility, description);
     }
 
-    public void throwMagic(Magic m){
-        m.effect();
-    }
-
     @Override
     public void curse (Magic m) {}
 
