@@ -1,5 +1,6 @@
 package front;
 
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,6 +24,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -92,6 +94,7 @@ class Board extends Pane {
         v.setPadding(new Insets(10));
 
         GridPane info = new GridPane();
+
         titleHelp = new Text("Información de selección");
         titleHelp.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         titleHelp.setFill(Color.WHITE);
@@ -157,11 +160,11 @@ class Board extends Pane {
         scrollTimeLeft.setDisable(true);
 
 
-        HBox buttonBox = new HBox(5);
+        HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(drawCardBtn, endTurnBtn);
         buttonBox.setAlignment(Pos.CENTER);
 
-        HBox turnBox = new HBox(20);
+        HBox turnBox = new HBox(10);
         turnBox.getChildren().addAll(scrollTimeLeft, movesLeft);
         turnBox.setAlignment(Pos.CENTER);
 
@@ -199,12 +202,16 @@ class Board extends Pane {
         cardGC.setFill(Color.WHITE);
 
         if( c instanceof back.Soldier ) {
-            cardGC.drawImage(new Image("graphics/ui/BANDERA.png", 100, 100, true, true), 25, 10);
+            cardGC.drawImage(new Image("graphics/ui/banner.png", 115,115, true, false), 22, 10);
             back.Soldier s = (back.Soldier) c;
-            cardGC.fillText(String.valueOf(s.getAttack()), 53, 24);
-            cardGC.fillText(String.valueOf(s.getHealth()), 53, 40);
-            cardGC.fillText(String.valueOf(s.getAgility()), 53, 56);
-            cardGC.fillText(String.valueOf(s.getDefense()), 53, 72);
+            cardGC.drawImage(new Image("graphics/ui/attack.png", 14,14, true, true), 36, 16);
+            cardGC.fillText(String.valueOf(s.getAttack()), 58, 27);
+            cardGC.drawImage(new Image("graphics/ui/life.png", 14,14, true, true), 36, 33);
+            cardGC.fillText(String.valueOf(s.getHealth()), 58, 44);
+            cardGC.drawImage(new Image("graphics/ui/agility.png", 14,14, true, true), 36, 50);
+            cardGC.fillText(String.valueOf(s.getAgility()), 58, 61);
+            cardGC.drawImage(new Image("graphics/ui/defense.png", 14,14, true, true), 36, 67);
+            cardGC.fillText(String.valueOf(s.getDefense()), 58, 78);
         }
 
 
@@ -318,11 +325,61 @@ class Board extends Pane {
 
     private void showAlertText(String text) {
         lblAlerts.setText(text);
-        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(lblAlerts.opacityProperty(), 1.0));
-        KeyFrame endFadeText = new KeyFrame(Duration.seconds(3), new KeyValue(lblAlerts.opacityProperty(), 0.0));
+    }
+
+
+    private void endGame(boolean won) {
+        charCanvas.setOnMouseClicked(null);
+        Rectangle r = new Rectangle(1300, 845);
+        r.setFill(Color.rgb(0,0,0));
+
+        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(r.opacityProperty(), 0.0));
+        KeyFrame endFadeText = new KeyFrame(Duration.seconds(3), new KeyValue(r.opacityProperty(), 1.0));
         Timeline timelineText = new Timeline(startFadeText, endFadeText);
         timelineText.playFromStart();
+
+        getChildren().add(r);
+        Label lblEndGame = new Label();
+        lblEndGame.setMinWidth(1300);
+        lblEndGame.setFont(Font.loadFont("file:resources/fonts/StraightToHellSinnerBB.ttf", 80));
+        lblEndGame.setWrapText(true);
+        lblEndGame.setMinHeight(400);
+
+        DropShadow shadow = new DropShadow();
+        shadow.setOffsetX(2.0);
+        shadow.setOffsetY(2.0);
+        shadow.setColor(Color.BLACK);
+
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(-135.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+        shadow.setInput(lighting);
+
+        lblEndGame.setTextFill(Color.WHITE);
+        lblEndGame.setAlignment(Pos.CENTER);
+
+        lblEndGame.setEffect(shadow);
+
+        //Button btnEnd = new Button("Volver al menu");
+
+        AudioClip endSound;
+        if(won) {
+            lblEndGame.setText("Has triunfado sobre tu adversario!");
+            endSound = new AudioClip(ClassLoader.getSystemResource("sounds/victory.wav").toString());
+        } else {
+            lblEndGame.setText("Has sido derrotado!");
+            endSound = new AudioClip(ClassLoader.getSystemResource("sounds/defeat.wav").toString());
+        }
+        
+        endSound.play();
+
+        getChildren().addAll(lblEndGame);
+
     }
+
 
     /**
      * Constructor de la ventana
@@ -608,7 +665,6 @@ class Board extends Pane {
                         case MOVEMENT: //movimiento
                             if(origin == null) { //invocar
                                 dest.setWhosHere(new GraphicSoldier((back.Soldier) action.getCard(), action.getCard().getOwner().equals(owner)));
-
                             } else if(dest == null) { //morir
                                 origin.addCorpse();
                                 origin.setWhosHere(null);
@@ -632,12 +688,12 @@ class Board extends Pane {
                             back.Magic c = (back.Magic) action.getCard();
 
                             dest.setMagic(c);
-
+/*
                             if(c.getIsNegative())
-                                dest.setEffect( new TileEffect(30, 148, 0, 211));
+                                dest.setEffect( new TileEffect(0, 148, 0, 211));
                             else
                                 dest.setEffect( new TileEffect(30, 127, 255, 211));
-
+*/
                             break;
                         case GETHIT:
                             dest.setEffect( new TileEffect(30, 255, 0, 0));
@@ -647,6 +703,13 @@ class Board extends Pane {
                             break;
                         case STRIKE:
                             dest.setEffect( new TileEffect(30, 150, 20, 150 ));
+                            break;
+                        case WIN:
+                            endGame(true);
+                            break;
+                        case LOSE:
+                            endGame(false);
+                            break;
                     }
                 }
                 draw();
