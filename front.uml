@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>front</OriginalElement>
+  <nodes>
+    <node x="368.0" y="978.0">front.GraphicSpell</node>
+    <node x="998.0" y="978.0">front.TileStates</node>
+    <node x="683.0" y="978.0">front.TileEffect</node>
+    <node x="0.0" y="0.0">front.Board</node>
+    <node x="1153.0" y="978.0">front.Test</node>
+    <node x="0.0" y="978.0">front.GraphicSoldier</node>
+    <node x="324.0" y="0.0">front.Tile</node>
+    <node x="716.0" y="0.0">front.StartWindow</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.6713070378963649" x="661.0" y="636.5000000000001" />
+  <SelectedNodes>
+    <node>front.GraphicSpell</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

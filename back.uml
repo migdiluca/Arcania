@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>back</OriginalElement>
+  <nodes>
+    <node x="953.0" y="1075.0">back.Heal</node>
+    <node x="797.75" y="554.0">back.Magic</node>
+    <node x="743.0" y="1272.0">back.ActionType</node>
+    <node x="1273.0" y="1272.0">back.Castle</node>
+    <node x="0.0" y="345.0">back.Soldier</node>
+    <node x="1254.0" y="1075.0">back.Poison</node>
+    <node x="900.0" y="1272.0">back.PendingDrawing</node>
+    <node x="12.0" y="1108.5">back.Hero</node>
+    <node x="358.0" y="1272.0">back.Board</node>
+    <node x="1592.0" y="0.0">back.Game</node>
+    <node x="619.0" y="1075.0">back.MagicDamage</node>
+    <node x="306.0" y="1064.0">back.Inspiration</node>
+    <node x="483.0625" y="0.0">back.Card</node>
+    <node x="0.0" y="1272.0">back.Player</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="back.Heal" target="back.Magic">
+      <point x="0.0" y="-70.5" />
+      <point x="1093.5" y="1044.0" />
+      <point x="969.0" y="1044.0" />
+      <point x="34.25" y="125.5" />
+    </edge>
+    <edge source="back.Hero" target="back.Soldier">
+      <point x="0.0" y="-37.0" />
+      <point x="0.0" y="334.5" />
+    </edge>
+    <edge source="back.Poison" target="back.Magic">
+      <point x="0.0" y="-70.5" />
+      <point x="1400.5" y="1034.0" />
+      <point x="1037.5" y="1034.0" />
+      <point x="102.75" y="125.5" />
+    </edge>
+    <edge source="back.Soldier" target="back.Card">
+      <point x="0.0" y="-334.5" />
+      <point x="149.0" y="320.0" />
+      <point x="551.5625" y="320.0" />
+      <point x="-68.5" y="147.5" />
+    </edge>
+    <edge source="back.MagicDamage" target="back.Magic">
+      <point x="0.0" y="-70.5" />
+      <point x="776.0" y="1044.0" />
+      <point x="900.5" y="1044.0" />
+      <point x="-34.25" y="125.5" />
+    </edge>
+    <edge source="back.Inspiration" target="back.Magic">
+      <point x="0.0" y="-81.5" />
+      <point x="452.5" y="1034.0" />
+      <point x="832.0" y="1034.0" />
+      <point x="-102.75" y="125.5" />
+    </edge>
+    <edge source="back.Magic" target="back.Card">
+      <point x="0.0" y="-125.5" />
+      <point x="934.75" y="320.0" />
+      <point x="688.5625" y="320.0" />
+      <point x="68.5" y="147.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.40000000000000013" x="625.0" y="904.5" />
+  <SelectedNodes>
+    <node>back.Card</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
