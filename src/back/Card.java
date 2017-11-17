@@ -6,16 +6,20 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * Clase que modela las cartas. El campo graphicID cumple la función de permitir al cliente identificar los graficos
+ */
+
 public abstract class Card implements Serializable {
     private String name;
     private String description;
-    private int id;
+    private int graphicID;
     private Player owner;
 
 
-    public Card(String name, int id, String description) {
+    public Card(String name, int graphicID, String description) {
           this.name = name;
-          this.id = id;
+          this.graphicID = graphicID;
           this.description = description;
     }
 
@@ -24,7 +28,7 @@ public abstract class Card implements Serializable {
     }
 
     public int getID() {
-        return id;
+        return graphicID;
     }
 
     public void setOwner(Player owner) {
@@ -41,7 +45,7 @@ public abstract class Card implements Serializable {
         out.defaultWriteObject();
         out.writeObject(name);
         out.writeObject(description);
-        out.writeInt(id);
+        out.writeInt(graphicID);
         out.writeObject(owner);
     }
 
@@ -49,7 +53,7 @@ public abstract class Card implements Serializable {
         ois.defaultReadObject();
         name = (String) ois.readObject();
         description = (String) ois.readObject();
-        id = ois.readInt();
+        graphicID = ois.readInt();
         owner = (Player) ois.readObject();
     }
 

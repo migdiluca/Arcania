@@ -7,6 +7,10 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Modela hechizo de tipo curación
+ */
+
 public class Heal extends Magic implements Serializable {
     private int points;
 
@@ -15,6 +19,10 @@ public class Heal extends Magic implements Serializable {
         this.points = points;
     }
 
+    /**
+     * El conjuro cura y remueve todos los estados negativos
+     * @param s soldado sobre el que se aplica
+     */
     @Override
     public void startEffect(Soldier s){
         s.setHealth(s.getHealth() + points);
