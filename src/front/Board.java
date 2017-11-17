@@ -135,7 +135,7 @@ class Board extends Pane {
         updateActionsLeft();
 
         drawCardBtn = new Button("Sacar carta");
-        drawCardBtn.setOnAction(new EventHandler<ActionEvent>() {
+        drawCardBtn.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 back.Card c = game.flipCard(owner);
@@ -146,7 +146,7 @@ class Board extends Pane {
         });
 
         endTurnBtn = new Button("Finalizar turno");
-        endTurnBtn.setOnAction(new EventHandler<ActionEvent>() {
+        endTurnBtn.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 game.endTurn();
@@ -225,7 +225,7 @@ class Board extends Pane {
 
         cardsInHand.put(cardCanvas, c);
 
-        cardCanvas.setOnMouseEntered(new EventHandler<MouseEvent>() {
+        cardCanvas.setOnMouseEntered(new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
 
@@ -242,7 +242,7 @@ class Board extends Pane {
             }
         });
 
-        cardCanvas.setOnMouseExited(new EventHandler<MouseEvent>() {
+        cardCanvas.setOnMouseExited(new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
                 Canvas e = (Canvas) event.getSource();
@@ -257,7 +257,7 @@ class Board extends Pane {
             }
         });
 
-        cardCanvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        cardCanvas.setOnMouseClicked(new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
                 if(game.getCurrentPlayer() != owner) return;
@@ -512,7 +512,7 @@ class Board extends Pane {
         hb.getChildren().addAll(pBoard, menu);
 
 
-        charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        charCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
                 Point point = getPointFromCoordinates((int) event.getX(), (int) event.getY());
@@ -630,9 +630,7 @@ class Board extends Pane {
     private Point getPointFromCoordinates(int x, int y) {
         int i = x / CELLSIZE;
         int j = y / CELLSIZE;
-        /*if(i < 0 || i > NUMROWS * CELLSIZE || j < 0 || j > NUMCOLS * CELLSIZE) {
-            throw new IllegalArgumentException();
-        } HACE FALTA??? */
+
         return new Point(j, i);
     }
 
@@ -657,7 +655,7 @@ class Board extends Pane {
      * Timer que se accione por cada FPS. La variable fps apunta a regular la frecuencia con la que se redibuja
      * El cliente pregunta a la instancia del jugador (en el back) que acciones hace falta dibujar en pantalla
      */
-    AnimationTimer timer = new AnimationTimer() {
+    private AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
             if (fps == 0 || fps == 5) {
