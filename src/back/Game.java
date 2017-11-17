@@ -279,7 +279,6 @@ public class Game implements Serializable {
             }
 
         }
-        currentPlayer.getHand().remove(c);
         currentPlayer.discardCard(c);
         performAction();
     }
