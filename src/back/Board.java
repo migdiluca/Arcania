@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Tablero del juego que contiene los jugadores vivos.
+ */
 public class Board implements Serializable {
     private Soldier board[][];
     private static final long serialVersionUID = 1L;

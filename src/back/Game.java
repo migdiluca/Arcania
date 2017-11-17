@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * Clase administradora del juego.
+ */
 public class Game implements Serializable {
     private Player player1;
     private static final long serialVersionUID = 1L;
@@ -46,8 +49,8 @@ public class Game implements Serializable {
 
         currentPlayer = player1;
         actionsLeft = 5;
-        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
-        player2.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
+        currentPlayer.registerAction(new PendingDrawing(null, null, null, ActionType.STARTTURN));
+        player2.registerAction(new PendingDrawing(null, null, null, ActionType.ENDTURN));
     }
 
 
@@ -57,7 +60,7 @@ public class Game implements Serializable {
      */
     private void removeDead(Soldier s) {
         s.getOwner().getAliveCards().remove(s);
-        registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
+        registerAction(new PendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
 
@@ -141,11 +144,11 @@ public class Game implements Serializable {
                 Soldier m2 = board.enemyToAttack(board.searchSoldier(s));
                 if(m2 != null) {
                     if(s.attack(m2) == 1) {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.STRIKE));
+                        registerAction(new PendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.STRIKE));
                         if(!m2.isAlive())
                             removeDead(m2);
                     } else {
-                        registerAction(new pendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.EVADE));
+                        registerAction(new PendingDrawing(board.searchSoldier(s), board.searchSoldier(m2), s, ActionType.EVADE));
                     }
 
                 }
@@ -165,7 +168,7 @@ public class Game implements Serializable {
             s.applyMagic();
             if(!s.isAlive()) {
                 iterator.remove();
-                registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
+                registerAction(new PendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
                 board.removeDeadFromBoard(s);
             }
         }
@@ -175,7 +178,7 @@ public class Game implements Serializable {
      * Indica a los clientes de ambos jugadores que reflejen la acción correspondiente
      * @param pd
      */
-    private void registerAction(pendingDrawing pd) {
+    private void registerAction(PendingDrawing pd) {
         getPlayer1().registerAction(pd);
         getPlayer2().registerAction(pd);
     }
@@ -241,7 +244,7 @@ public class Game implements Serializable {
             board.moveSoldier(origin, dest);
             s.disableMovement();
             performAction();
-            registerAction(new pendingDrawing(origin, dest, getSoldier(origin), ActionType.MOVEMENT));
+            registerAction(new PendingDrawing(origin, dest, getSoldier(origin), ActionType.MOVEMENT));
         }
     }
 
@@ -272,16 +275,16 @@ public class Game implements Serializable {
         if( c instanceof Soldier ) {
             board.addSoldier((Soldier) c, p);
             currentPlayer.playSoldier((Soldier) c);
-            registerAction(new pendingDrawing(null, p, c, ActionType.MOVEMENT));
+            registerAction(new PendingDrawing(null, p, c, ActionType.MOVEMENT));
         } else if( c instanceof Magic ) {
-            registerAction(new pendingDrawing(p, null, c, ActionType.CASTSPELL));
+            registerAction(new PendingDrawing(p, null, c, ActionType.CASTSPELL));
             ArrayList<Soldier> affectedBySpell = board.affectedBySpell(p);
 
             applyMagicToSoldiers(currentPlayer.getAliveCards());
 
             for(Soldier s: affectedBySpell) {
                 s.curse((Magic) c);
-                registerAction(new pendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
+                registerAction(new PendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
                 if(!s.isAlive())
                     removeDead(s);
             }
@@ -317,20 +320,20 @@ public class Game implements Serializable {
         performAttack(otherPlayer.getAliveCards());
 
         if(otherPlayer.getCastle().getLife() <= 0 || !otherPlayer.canPlay()) {
-            otherPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.LOSE) );
-            currentPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.WIN) );
+            otherPlayer.registerAction( new PendingDrawing(null, null, null, ActionType.LOSE) );
+            currentPlayer.registerAction( new PendingDrawing(null, null, null, ActionType.WIN) );
         }
         if(currentPlayer.getCastle().getLife() <= 0 || !currentPlayer.canPlay()) {
-            otherPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.WIN) );
-            currentPlayer.registerAction( new pendingDrawing(null, null, null, ActionType.LOSE) );
+            otherPlayer.registerAction( new PendingDrawing(null, null, null, ActionType.WIN) );
+            currentPlayer.registerAction( new PendingDrawing(null, null, null, ActionType.LOSE) );
         }
 
 
-        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
+        currentPlayer.registerAction(new PendingDrawing(null, null, null, ActionType.ENDTURN));
 
         currentPlayer = otherPlayer;
 
-        currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
+        currentPlayer.registerAction(new PendingDrawing(null, null, null, ActionType.STARTTURN));
         actionsLeft = 5;
     }
 
@@ -351,7 +354,7 @@ public class Game implements Serializable {
        this.board = saveGame.board;
        this.actionsLeft = saveGame.actionsLeft;
        ois.close();
-       currentPlayer.registerAction(new pendingDrawing(null, null, null, ActionType.STARTTURN));
+       currentPlayer.registerAction(new PendingDrawing(null, null, null, ActionType.STARTTURN));
    }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

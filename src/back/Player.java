@@ -8,6 +8,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Stack;
 
+
+/**
+ * Clase del jugador, contiene sus cartas, su castillo y la posicion del castillo.
+ */
 public class Player implements Serializable {
     private String name;
     private Stack<Card> deck ;
@@ -17,7 +21,7 @@ public class Player implements Serializable {
     private int castleRow;
     private static final long serialVersionUID = 1L;
 
-    private ArrayDeque<pendingDrawing> actionRegistry;
+    private ArrayDeque<PendingDrawing> actionRegistry;
 
 
     /** Crea un nuevo mazo, el arrayList en el que se encontraran las cartas ubicadas en la mano,
@@ -61,11 +65,11 @@ public class Player implements Serializable {
         return aliveCards;
     }
 
-    public void registerAction(pendingDrawing pd) {
+    public void registerAction(PendingDrawing pd) {
         actionRegistry.add(pd);
     }
 
-    public pendingDrawing getActionRegistry() {
+    public PendingDrawing getActionRegistry() {
         return actionRegistry.poll();
     }
 

@@ -1,6 +1,6 @@
 package front;
 
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import back.PendingDrawing;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -657,7 +657,7 @@ class Board extends Pane {
         @Override
         public void handle(long now) {
             if (fps == 0 || fps == 5) {
-                back.pendingDrawing action;
+                PendingDrawing action;
 
                 while((action = owner.getActionRegistry()) != null) {
 

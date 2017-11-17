@@ -6,14 +6,14 @@ import java.io.Serializable;
 /**
  * Clase que representa un elemento pendiente de dibujado que posteriormente el cliente levantará.
  */
-public class pendingDrawing implements Serializable {
+public class PendingDrawing implements Serializable {
     private Point origin;
     private Point destination;
     private Card card;
 
     private ActionType actionType;
 
-    pendingDrawing(Point origin, Point destination, Card card, ActionType actionType) {
+    PendingDrawing(Point origin, Point destination, Card card, ActionType actionType) {
         this.origin = origin;
         this.destination = destination;
         this.card = card;
