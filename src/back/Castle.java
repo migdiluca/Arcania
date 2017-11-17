@@ -7,13 +7,21 @@ import java.io.Serializable;
 
 public class Castle implements Serializable{
     private int life;
-    public static final int CASTLELIFE = 300;
+    public static final int CASTLELIFE = 400;
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Crea una nueva instancia de castillo, le asigna como vida la constante de vida CASTLELIFE.
+     */
     public Castle() {
         this.life = CASTLELIFE;
     }
 
+
+    /**
+     * Se reduce de su vida el daño al ser atacado.
+     * @param damage Daño que se inflinge al castillo.
+     */
     public void getAttacked(int damage) {
         life -= damage;
     }

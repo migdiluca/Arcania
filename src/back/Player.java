@@ -19,6 +19,16 @@ public class Player implements Serializable {
 
     private ArrayDeque<pendingDrawing> actionRegistry;
 
+
+    /** Crea un nuevo mazo, el arrayList en el que se encontraran las cartas ubicadas en la mano,
+     * el ArrayList con las cartas vivas y el castillo del jugador. Le asgina la fila en la que se
+     * encuentra la entrada del castillo. Para todas las cartas que se le asignan a player se les
+     * establece player como su dueño. Se le asigna el nombre a player y se agrega las cartas al mazo.
+     *
+     * @param name Nombre del jugador.
+     * @param cards Cartas que iran al mazo.
+     * @param castleRow Fila en la que se ubica la entrada del castillo.
+     */
     public Player(String name, ArrayList<Card> cards, int castleRow) {
         deck = new Stack<>();
         hand = new ArrayList<>();
@@ -33,8 +43,6 @@ public class Player implements Serializable {
         deck.addAll(cards);
 
         actionRegistry = new ArrayDeque<>();
-
-
     }
 
     public Hero getHero() {
@@ -52,6 +60,7 @@ public class Player implements Serializable {
     public ArrayList<Soldier> getAliveCards() {
         return aliveCards;
     }
+
     public void registerAction(pendingDrawing pd) {
         actionRegistry.add(pd);
     }
@@ -60,7 +69,12 @@ public class Player implements Serializable {
         return actionRegistry.poll();
     }
 
-    public Card cardsToHand() {
+
+    /**
+     * Toma una carta del mazo, la pasa a la mano y la retorna, si no hay mas cartas retorna nulo.
+     * @return Carta que se paso a la mano.
+     */
+    public Card cardToHand() {
         Card c = null;
         if(!deck.empty()) {
             c = deck.pop();
@@ -79,7 +93,10 @@ public class Player implements Serializable {
         return castleRow;
     }
 
-
+    /**
+     * Agrega un jugador a las cartas vivas.
+     * @param s Soldado a agregar.
+     */
     public void playSoldier(Soldier s) {
         aliveCards.add(s);
     }

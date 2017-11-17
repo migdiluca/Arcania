@@ -15,6 +15,7 @@ public class Game implements Serializable {
     private Player currentPlayer;
     private int actionsLeft;
 
+
     /**
      * Crea una nueva instancia de Board y de los dos jugadores. Asigna las cartas
      * al mazo de ambos jugadores. Crea los heroes, los asigna a ambos jugadores, y
@@ -27,8 +28,8 @@ public class Game implements Serializable {
         player1 = new Player(player1Name, createDeck(),6);
         player2 = new Player(player2Name, createDeck(), 0);
         for(int i = 0; i < 5; i++) {
-            player1.cardsToHand();
-            player2.cardsToHand();
+            player1.cardToHand();
+            player2.cardToHand();
         }
 
         Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
@@ -49,6 +50,7 @@ public class Game implements Serializable {
         player2.registerAction(new pendingDrawing(null, null, null, ActionType.ENDTURN));
     }
 
+
     /**
      * Remueve al soldado s de las cartas vivas de su dueño y del tablero.
      * @param s Soldado a remover
@@ -58,6 +60,7 @@ public class Game implements Serializable {
         registerAction(new pendingDrawing(board.searchSoldier(s), null, s, ActionType.MOVEMENT));
         board.removeDeadFromBoard(s);
     }
+
 
     /**
      * Crea todas las cartas que se utilizaran en el juego.
@@ -96,6 +99,7 @@ public class Game implements Serializable {
         return deck;
     }
 
+
     /**
      * Se fija si el jugador puede atacar al castillo contrario.
      * @param s Soldado que realizara el ataque.
@@ -110,6 +114,7 @@ public class Game implements Serializable {
         return null;
     }
 
+
     /**
      * Reduce las acciones restantes y si llego a cero finaliza el turno.
      */
@@ -119,8 +124,13 @@ public class Game implements Serializable {
             endTurn();
     }
 
-    /* Para todos los monstruos del jugador me fijo su posicion y primero si puede atacar al castillo lo ataca.
-    Si no puede, en el tablero se comprueba que exista a quien atacar y lo ataca, si muere el otro lo remueve
+
+    /**
+     * Para todos los soldados en el arreglo se fija si pueden atacar el castillo enemigo,
+     * si pueden lo atacan y pasa al siguiente, si no puede busca a que soldado debe atacar.
+     * Si tiene soldados para atacar lo ataca y se fija si el mismo murio para removerlo del juego.
+     * Si no tiene soldados para atacar no realiza nada.
+     * @param soldiers Arreglo con los solados que realizaran sus ataques.
      */
     private void performAttack(ArrayList<Soldier> soldiers) {
         for (Soldier s : soldiers) {
@@ -142,6 +152,7 @@ public class Game implements Serializable {
             }
         }
     }
+
 
     private void applyMagicToSoldiers(ArrayList<Soldier> soldiers) {
         Iterator<Soldier> iterator = soldiers.iterator();
@@ -181,10 +192,26 @@ public class Game implements Serializable {
         return actionsLeft;
     }
 
+
+    /**
+     * Llama la funcion availableSpawns en board con el jugador actual y la carta recibida.
+     * @param c Carta a analizar.
+     * @return ArrayList con los posibles lugares a invocar la carta.
+     */
     public ArrayList<Point> availableSpawns(Card c) {
         return board.availableSpawns(currentPlayer, c);
     }
 
+
+    /**
+     * Analiza los posibles puntos en los que se puede mover un soldado.
+     * Si el soldado es nulo, si el que lo intenta mover no corresponde al jugador actual, si el soldado
+     * ya movio en ese turno o si no es un soldado del jugador actual, no puede mover. De lo contrario
+     * llama a validMovePoints en board.
+     * @param p Punto en el que se encuentra el soldado a mover.
+     * @param windowOwner Dueño de la ventana que intenta mover.
+     * @return El HashMap que reotrna validMovePoints en board.
+     */
     public HashMap<Point, Boolean> validMovePoints(Point p, Player windowOwner) {
         Soldier s = board.getSoldier(p);
         if(s == null || windowOwner != currentPlayer || !s.canMove() || s.getOwner() != currentPlayer) {
@@ -193,6 +220,13 @@ public class Game implements Serializable {
         return board.validMovePoints(p);
     }
 
+
+    /**
+     * Mueve a un soldado. Si no movio en ese turno lo mueve en el tablero, deshabilita su movimiento, y llama
+     * a performAction. Si ya movio en este turno no hace nada.
+     * @param origin Punto en el que se encuentra el soldado.
+     * @param dest Punto al que se mueve el soldado.
+     */
     public void moveSoldier(Point origin, Point dest) {
         Soldier s = board.getSoldier(origin);
         if(s.canMove()) {
@@ -203,16 +237,29 @@ public class Game implements Serializable {
         }
     }
 
+
+    /**
+     * Toma una carta del mazo y la agrega a la mano. Comprueba que el que intenta sacar la carta sea
+     * el jugador actual, y llama a performAction si puedo sacar una carta.
+     * @param player Jugador que tomara la carta.
+     * @return Carta que se agrego a la mano.
+     */
     public Card flipCard(Player player) {
         Card c = null;
         if(player == currentPlayer) {
-            c = currentPlayer.cardsToHand();
+            c = currentPlayer.cardToHand();
             if (c != null)
                 performAction();
         }
         return c;
     }
 
+
+    /**
+     * Juega una carta magica o invoca a un soldado en un determinado punto.
+     * @param c Carta a jugar.
+     * @param p Punto en la cual se la invoca.
+     */
     public void playCard(Card c, Point p) {
         if( c instanceof Soldier ) {
             board.addSoldier((Soldier) c, p);
@@ -232,21 +279,32 @@ public class Game implements Serializable {
             }
 
         }
+        currentPlayer.getHand().remove(c);
         currentPlayer.discardCard(c);
         performAction();
     }
 
+
+    /**
+     * Vuelve a permitir el movimiento en los soldados.
+     * @param soldiers Arreglo de soldados a los cuales se les activara la posibilidad de moverse.
+     */
     public void enableMovement(ArrayList<Soldier> soldiers) {
         for(Soldier s: soldiers)
             s.enableMovement();
     }
 
-    /* Hace los ataques en orden, se fija si gano alguno y despues cambia el turno */
+
+    /**
+     * Primero realiza los ataques el jugador actual, luego aplica la magia a los soldados del juegador actual y
+     * les activa la posibilidad de moverse. A continuacion realizan sus ataques los soldados del otro jugador.
+     * Ademas, comprueba si la partida finalizo, es decir, si se destruyo el castillo o si el jugador no puede jugar.
+     * Por ultimo, cambia el jugador actual y restaura las acciones restantes.
+     */
     public void endTurn() {
         performAttack(currentPlayer.getAliveCards());
         applyMagicToSoldiers(currentPlayer.getAliveCards());
         enableMovement(currentPlayer.getAliveCards());
-
 
         Player otherPlayer = currentPlayer == player1 ? player2 : player1;
         performAttack(otherPlayer.getAliveCards());
