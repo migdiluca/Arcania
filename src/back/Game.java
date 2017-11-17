@@ -35,10 +35,10 @@ public class Game implements Serializable {
             player2.cardToHand();
         }
 
-        Hero h1 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h1 = new Hero ("Avatar de la Oscuridad (Héroe)", 2, 30,120,20,25, "Antaño príncipe de un próspero imperio, es ahora recipiente de un poder mucho más antiguo.");
         h1.setOwner(player1);
 
-        Hero h2 = new Hero ("Avatar de la Oscuridad", 2, 30,120,20,25, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo.");
+        Hero h2 = new Hero ("Avatar de la Oscuridad (Héroe)", 2, 30,120,20,25, "Antaño príncipe de un próspero imperio, es ahora recipiente de un poder mucho más antiguo.");
         h2.setOwner(player2);
 
         player1.playSoldier(h1);
@@ -73,30 +73,30 @@ public class Game implements Serializable {
         ArrayList<Card> deck = new ArrayList<>();
 
         for(int i = 0; i < 1; i++)
-            deck.add(new Soldier("Caballero Negro", 1, 10,80,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo."));
+            deck.add(new Soldier("Caballero Negro", 1, 10,85,20,0, "Resguardado de todo daño por su monumental coraza, el Caballero Negro es capaz de avanzar por el campo absorbiendo el daño enemigo."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Ogro", 3, 30,60,5,15, "Bestias de gran fuerza física. Leales por sobre todas las cosas, los Ogros que se prestan a tu causa lucharán hasta el último aliento... de sus enemigos."));
+            deck.add(new Soldier("Ogro", 3, 40,40,5,15, "Bestias de gran fuerza física. Leales por sobre todas las cosas, los Ogros que se prestan a tu causa lucharán hasta el último aliento... de sus enemigos."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Gorgona", 4, 20,45,6,45, "Bestia antigua de tiempos ya olvidados, la Gorgona se destaca por su celeridad y su mordida siempre certera."));
+            deck.add(new Soldier("Gorgona", 4, 20,50,6,45, "Bestia antigua de tiempos ya olvidados, la Gorgona se destaca por su celeridad y su mordida siempre certera."));
 
         for(int i = 0; i < 5; i++)
-            deck.add(new Soldier("Guerrero Orco", 5, 25,50,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
+            deck.add(new Soldier("Guerrero Orco", 5, 25,55,8,20, "Incluso con la extinción al acecho, los orcos no le escapan a la batalla y a la posibilidad de grabar sus nombres en la historia."));
 
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 3; i++)
             deck.add(new Heal("Sanación Superior", 501, "Recupera hasta 25 puntos de vida a cada unidad afectada.",false, 25, 0));
 
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 4; i++)
             deck.add(new MagicDamage("Tormenta de Fuego", 504, "Inflinge 25 puntos de daño a las unidades aledañas.",true, 25));
 
         deck.add(new MagicDamage("Juicio", 502, "Inflinge 40 puntos de daño a las unidades aledañas.",true, 40));
 
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 3; i++)
             deck.add(new Poison("Envenenar", 503, "Envenena a las unidades aledañas al héroe, inflingiéndo un daño de 10 puntos por turno durante 3 turnos.",true, 10, 3));
 
-        //for(int i = 0; i < 5; i++)
-            //deck.add(new Inspiration("Inspiración", 505, "Aumenta en 5 puntos el ataque durante 5 turnos.",true, 5));
+        for(int i = 0; i < 4; i++)
+            deck.add(new Inspiration("Inspiración", 505, "Aumenta en 5 puntos el ataque durante 5 turnos.",false, 5));
 
         Collections.shuffle(deck);
         return deck;

@@ -159,24 +159,29 @@ public class GraphicSoldier {
 
             borderGlow.setColor(Color.rgb(255, 228, 34, 0.902));
 
-            borderGlow.setWidth(70);
-            borderGlow.setHeight(70);
+            borderGlow.setWidth(90);
+            borderGlow.setHeight(90);
 
             gc.setEffect(borderGlow);
         }
 
         HashMap<Magic, Integer> states = soldier.getAffectedBy();
+        DropShadow borderGlow = new DropShadow();
+        borderGlow.setOffsetY(0f);
+        borderGlow.setOffsetX(0f);
+
+        borderGlow.setColor(Color.rgb(169, 205, 9));
+
+        borderGlow.setWidth(70);
+        borderGlow.setHeight(70);
         for(Magic m: states.keySet()) {
             if(m instanceof back.Poison) {
-                DropShadow borderGlow = new DropShadow();
-                borderGlow.setOffsetY(0f);
-                borderGlow.setOffsetX(0f);
-
                 borderGlow.setColor(Color.rgb(169, 205, 9));
+                gc.setEffect(borderGlow);
+            }
 
-                borderGlow.setWidth(70);
-                borderGlow.setHeight(70);
-
+            if(m instanceof back.Inspiration) {
+                borderGlow.setColor(Color.rgb(205, 124, 9));
                 gc.setEffect(borderGlow);
             }
 

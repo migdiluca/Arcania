@@ -37,6 +37,10 @@ public class Soldier extends Card implements Serializable{
         this.alreadyMoved = false;
     }
 
+    /**
+     * Aplica el estado inicial del hechizo y lo agrega a la lista de estados, si corresponde
+     * @param m hechizo que se aplica sobre el soldado
+     */
     public void curse(Magic m) {
         m.startEffect(this);
         if (m.getDuration() > 0) {
@@ -48,6 +52,9 @@ public class Soldier extends Card implements Serializable{
         return affectedBy;
     }
 
+    /**
+     * Aplica los efectos por turno de los estados que modifican al soldado.
+     */
     public void applyMagic() {
         for (Magic m: affectedBy.keySet()) {
             m.effect(this);

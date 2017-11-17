@@ -325,6 +325,10 @@ class Board extends Pane {
 
     private void showAlertText(String text) {
         lblAlerts.setText(text);
+        KeyFrame startFadeText = new KeyFrame(Duration.seconds(0), new KeyValue(lblAlerts.opacityProperty(), 1.0));
+        KeyFrame endFadeText = new KeyFrame(Duration.seconds(1.5), new KeyValue(lblAlerts.opacityProperty(), 0.0));
+        Timeline timelineText = new Timeline(startFadeText, endFadeText);
+        timelineText.playFromStart();
     }
 
 
@@ -691,12 +695,12 @@ class Board extends Pane {
                             back.Magic c = (back.Magic) action.getCard();
 
                             dest.setMagic(c);
-/*
+
                             if(c.getIsNegative())
-                                dest.setEffect( new TileEffect(0, 148, 0, 211));
+                                dest.setEffect( new TileEffect(7, 148, 0, 211));
                             else
-                                dest.setEffect( new TileEffect(30, 127, 255, 211));
-*/
+                                dest.setEffect( new TileEffect(7, 127, 255, 211));
+
                             break;
                         case GETHIT:
                             dest.setEffect( new TileEffect(30, 255, 0, 0));
