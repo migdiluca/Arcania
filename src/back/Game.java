@@ -192,6 +192,8 @@ public class Game implements Serializable {
             for(Soldier s: affectedBySpell) {
                 s.curse((Magic) c);
                 registerAction(new pendingDrawing(null, board.searchSoldier(s), c, ActionType.RECEIVESPELL));
+                if(!s.isAlive())
+                    removeDead(s);
             }
 
         }
