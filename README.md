@@ -29,4 +29,4 @@ The game offers five different spells
 * Inspiration: Increase the character damage for a certain number of turns.
 * Judgment: Inflicts damage to neighboring units.
 
-You can watch a short gameplay [here](https://youtu.be/Bc6GQ3W_XSw)
+You can watch a short gameplay [here.](https://youtu.be/Bc6GQ3W_XSw)
